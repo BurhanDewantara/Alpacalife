@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Security.Cryptography;
 using System.Text;
 using System;
