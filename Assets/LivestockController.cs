@@ -16,9 +16,11 @@ public class LivestockController : MonoBehaviour {
 	private bool isJump = false;
 	private Vector2 velocity;
 	private float jumpSpeed;
-	private float drag = 0.89f;
+	private float drag = 0.95f;
 	private float gravity = 1;
-	private float speed = 30;
+
+	[SerializeField] private float maxspeed = 10;
+	[SerializeField] private float minspeed = 15;
 
 	void Awake()
 	{
@@ -36,31 +38,26 @@ public class LivestockController : MonoBehaviour {
 	{
 		if(GUILayout.Button("Jump"))
 		{
-//			Jump(150);
-			isJump = true;
-			jumpSpeed = speed;
+			Jump(maxspeed);
 		}
 			
 	}
 
 
 
-	void Jump(float height)
+	void Jump(float speed)
 	{
-		if(jumpCoroutine == null)
-			jumpCoroutine = StartCoroutine(JumpUpdate(height));
+		isJump = true;
+		jumpSpeed = speed;
 	}
 
 
 
 	void Update()
 	{
-		velocity =  new Vector2 (Input.GetAxis("Horizontal"),Input.GetAxis("Vertical")) * 10;
+		velocity =  new Vector2 (Input.GetAxis("Horizontal"),Input.GetAxis("Vertical")) * maxspeed;
 		if(Input.GetButton("Jump"))
-		{
-			isJump = true;
-			jumpSpeed = speed;
-		}
+			Jump(maxspeed);
 
 
 		this.GetComponent<RectTransform>().anchoredPosition += new Vector2(velocity.x,velocity.y);
@@ -69,10 +66,13 @@ public class LivestockController : MonoBehaviour {
 		gravity /= drag;
 		livestock.GetComponent<RectTransform>().anchoredPosition += new Vector2(0,jumpSpeed);
 		livestock.GetComponent<RectTransform>().anchoredPosition -= new Vector2(0,gravity);
+
+		//landing
 		if(livestock.GetComponent<RectTransform>().anchoredPosition.y < 0)
 		{
+			isJump = false;
 			livestock.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-			gravity =1;
+			gravity = 1;
 		}
 
 //		livestock.GetComponent<RectTransform>().localPosition -= Vector3.down*;
@@ -124,7 +124,6 @@ public class LivestockController : MonoBehaviour {
 			                                                                    livestock.GetComponent<RectTransform>().localPosition.z);
 		}while(velocity < -5.0f);
 
-		anim.SetBool("Jump",false);
 		jumpCoroutine = null;
 	}
 
