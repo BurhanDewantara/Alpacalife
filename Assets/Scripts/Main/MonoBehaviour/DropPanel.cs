@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PaperDropPanel : MonoBehaviour {
+public class DropPanel : MonoBehaviour {
 
 	public List<SOColor> colorTargets = new List<SOColor>();
 	public bool isTrashPanel = false;

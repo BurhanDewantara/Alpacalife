@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 public class LivestockManager : MonoBehaviour {
 
+	public GameObject gatheringPoint;
+
 	public GameObject livestockPrefab;
-	public int displayedLivestock;
+	public int totalLivestock;
 
 	private List<GameObject> queueLivestock;
 
@@ -19,10 +21,16 @@ public class LivestockManager : MonoBehaviour {
 	}
 
 
-	public void GenerateLivestock()
+
+
+
+	public void SpawnLivestock()
 	{
 
+
 	}
+
+
 
 
 
