@@ -9,20 +9,26 @@ public class CharacterCanvasController : MonoBehaviour {
 
 	public GameObject characterObject;
 
-	protected Animator anim;
+	protected Animator anim
+	{
+		get{
+			return this.GetComponent<Animator>();
+		}
+	}
 
-	private bool isJump;
-	private Vector2 velocity;
+
+	protected bool isJump;
+	protected Vector2 velocity;
 
 	[Header("Movement Speed")]
 	protected float minMoveSpeed = 4;
 	protected float maxMoveSpeed = 5;
-	private float moveSpeed;
+	protected float moveSpeed;
 
 	[Header("Jump Power")]
 	protected float minJumpPower = 10;
 	protected float maxJumpPower = 15;
-	private float jumpPower;
+	protected float jumpPower;
 
 
 
@@ -30,7 +36,7 @@ public class CharacterCanvasController : MonoBehaviour {
 	private float gravity = 1;
 
 
-	private bool isInteractable;
+	protected bool isInteractable;
 	public bool IsInteractable
 	{
 		get {
@@ -39,19 +45,13 @@ public class CharacterCanvasController : MonoBehaviour {
 	}
 
 
-
-
-	void Awake()
-	{
-		this.anim = this.GetComponent<Animator>();
-	}
-
 	void Start()
 	{
 		isInteractable = true;
 		isJump = false;
 		moveSpeed = Random.Range (minMoveSpeed, maxMoveSpeed);
 	}
+
 
 
 	public void Move(Vector2 targetPos)
@@ -74,55 +74,6 @@ public class CharacterCanvasController : MonoBehaviour {
 		}
 	}
 
-	protected virtual void MoveLeft()
-	{
-		velocity = Vector2.left * moveSpeed;
-	}
-	void MoveRight()
-	{
-		velocity = Vector2.right * moveSpeed;
-	}
-	void MoveDown()
-	{
-		velocity = Vector2.down * moveSpeed;
-
-	}
-
-	void MoveUp()
-	{
-		velocity = Vector2.up * moveSpeed ;
-
-	}
-
-
-	void InputUpdate()
-	{
-		if (isInteractable) {
-////			velocity = new Vector2 (Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical")) * moveSpeed;
-			if (Input.GetAxisRaw ("Horizontal") == 1) {
-				MoveRight ();
-			}
-			if (Input.GetAxisRaw ("Horizontal") == -1) {
-				MoveLeft ();
-			}
-			if (Input.GetAxisRaw ("Vertical") == -1) {
-				MoveDown ();
-			}
-			if (Input.GetAxisRaw ("Vertical") == 1) {
-				MoveUp ();
-			}
-
-
-//				Vector2 targetPos = this.GetComponent<RectTransform> ().anchoredPosition;
-//				targetPos.x += 200;
-//				Move (targetPos);
-//			velocity
-//			}
-
-		}
-//		if(Input.GetButton("Jump"))
-//			Jump(maxspeed);
-	}
 
 	void UpdateSizeBasedOnPosition()
 	{
@@ -132,11 +83,10 @@ public class CharacterCanvasController : MonoBehaviour {
 
 	}
 
-	void MovementUpdate()
+	protected virtual void MovementUpdate()
 	{
 
 //		velocity.y *= this.GetComponent<RectTransform> ().localScale.y;
-
 		this.GetComponent<RectTransform>().anchoredPosition += new Vector2(velocity.x,velocity.y);
 
 		//Rotation / Facing
@@ -166,8 +116,6 @@ public class CharacterCanvasController : MonoBehaviour {
 
 	void Update()
 	{
-		InputUpdate();
-
 		//movement & jump
 		MovementUpdate();
 	
