@@ -44,25 +44,10 @@ public class CharacterCanvasController : MonoBehaviour {
 		}
 	}
 
-
-	void Start()
-	{
+	void Awake(){
 		isInteractable = true;
 		isJump = false;
 		moveSpeed = Random.Range (minMoveSpeed, maxMoveSpeed);
-	}
-
-
-
-	public void Move(Vector2 targetPos)
-	{
-		if (isInteractable) 
-		{
-			this.GetComponent<RectTransform>().anchoredPosition = Vector2.MoveTowards(this.GetComponent<RectTransform>().anchoredPosition,targetPos,3);
-			isInteractable = false;
-		}
-
-//		velocity = 
 	}
 
 	public void Jump()
@@ -86,7 +71,7 @@ public class CharacterCanvasController : MonoBehaviour {
 	protected virtual void MovementUpdate()
 	{
 
-//		velocity.y *= this.GetComponent<RectTransform> ().localScale.y;
+		//MOVE
 		this.GetComponent<RectTransform>().anchoredPosition += new Vector2(velocity.x,velocity.y);
 
 		//Rotation / Facing

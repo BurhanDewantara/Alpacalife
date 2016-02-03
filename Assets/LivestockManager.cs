@@ -42,6 +42,7 @@ public class LivestockManager : MonoBehaviour {
 		newLivestock.name = counter.ToString();
 		newLivestock.transform.SetParent (this.transform, false);
 		newLivestock.transform.SetAsFirstSibling ();
+
 		newLivestock.GetComponent<LivestockController>().OnLivestockReceivedOrder += delegate(GameObject sender) {
 			queueLivestock.Remove(sender);
 		};
@@ -66,22 +67,20 @@ public class LivestockManager : MonoBehaviour {
 	{
 		//change this input with swipe
 		if (activeLivestock == null) {
-			print (activeLivestock);
-			print (queueLivestock.Count);
 			return;
 		}
 
 		if (Input.GetAxisRaw ("Horizontal") == 1) {
-			print (activeLivestock);
+			print("masok");
 			activeLivestock.GetComponent<LivestockController>().Move (LivestockController.DirectionType.Right);
 		}
-		if (Input.GetAxisRaw ("Horizontal") == -1) {
+		else if (Input.GetAxisRaw ("Horizontal") == -1) {
 			activeLivestock.GetComponent<LivestockController>().Move (LivestockController.DirectionType.Left);
 		}
-		if (Input.GetAxisRaw ("Vertical") == -1) {
+		else if (Input.GetAxisRaw ("Vertical") == -1) {
 			activeLivestock.GetComponent<LivestockController>().Move (LivestockController.DirectionType.Down);
 		}
-		if (Input.GetAxisRaw ("Vertical") == 1) {
+		else if (Input.GetAxisRaw ("Vertical") == 1) {
 			activeLivestock.GetComponent<LivestockController>().Move (LivestockController.DirectionType.Up);
 		}
 	}
@@ -91,13 +90,14 @@ public class LivestockManager : MonoBehaviour {
 	{
 		 
 		Vector2 newPos = RandomWithinArea (gatheringPoint);
-		float baseSpeed = 100;
-		float speed = Mathf.Clamp(counter * 10 + baseSpeed, baseSpeed , baseSpeed + 10 * 50);
+		float speed = 300;
+
+
 		GameObject currLivestock = SpawnLivestock ();
 		currLivestock.GetComponent<LivestockController>().MoveToReadyPosition(newPos,speed);			
 		queueLivestock.Add (currLivestock);
 		counter++;
-		print (queueLivestock.Count);
+
 	}
 
 

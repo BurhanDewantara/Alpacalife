@@ -8,11 +8,15 @@ public class LivestockController : CharacterCanvasController {
 
 	public delegate void LivestockControllerDelegate (GameObject sender);
 	public event LivestockControllerDelegate OnLivestockReceivedOrder;
-
 	public GameObject nameTag;
-	public LivestockColorHandler colorHandler;
 
-	public bool isReady = false;
+	LivestockColorHandler colorHandler
+	{
+		get{
+			return this.GetComponent<LivestockColorHandler>();
+		}
+	}
+
 	public bool isOrdered = false;
 	public enum DirectionType
 	{
@@ -22,7 +26,6 @@ public class LivestockController : CharacterCanvasController {
 
 	public void MoveToReadyPosition(Vector2 position,float speed = 200.0f)
 	{
-		isReady = true;
 		iTween.MoveTo (this.gameObject,
 			iTween.Hash("position",new Vector3(position.x,position.y,0)
 				,"speed",speed
@@ -31,21 +34,23 @@ public class LivestockController : CharacterCanvasController {
 			));
 	}
 
-	private void RemoveNameLabel()
+	public void SetLabel(string text,SOColor color)
 	{
-		this.GetComponent<live
+		
+	}
+
+	private void RemoveLabel()
+	{
+		nameTag.SetActive(false);
 	}
 
 	public void Move(DirectionType direction)
 	{
-		if (!isReady)
-			return;
 		if (isOrdered)
 			return;
-
-
-
+		
 		isOrdered = true;
+		RemoveLabel();
 		iTween.Stop(this.gameObject);
 
 		switch (direction) {
@@ -66,13 +71,6 @@ public class LivestockController : CharacterCanvasController {
 		if (OnLivestockReceivedOrder != null) {
 			OnLivestockReceivedOrder (this.gameObject);
 		}
-	}
-
-
-	void Update()
-	{
-//		InputUpdate();
-		MovementUpdate();
 	}
 
 
