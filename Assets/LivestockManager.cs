@@ -71,7 +71,6 @@ public class LivestockManager : MonoBehaviour {
 		}
 
 		if (Input.GetAxisRaw ("Horizontal") == 1) {
-			print("masok");
 			activeLivestock.GetComponent<LivestockController>().Move (LivestockController.DirectionType.Right);
 		}
 		else if (Input.GetAxisRaw ("Horizontal") == -1) {
