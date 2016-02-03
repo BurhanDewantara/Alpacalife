@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Art/animals/animals_alpaca_orange.png.meta
 guid: fd9b8c291783d6849adaa5a5ca3f459c
 timeCreated: 1454469301
 licenseType: Pro
+=======
+guid: 0516083162b404791abc49eab330c993
+timeCreated: 1454424848
+licenseType: Free
+>>>>>>> 6990e49f7e0dd3b70b93d081a1ba4e70f5d85509:Assets/Art/animals/animals_alpaca_orange.png.meta
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2

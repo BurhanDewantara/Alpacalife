@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Art/animals/animals_alpaca_pink.png.meta
 guid: ceceac6096e332348bf9166965d5a193
 timeCreated: 1454469300
 licenseType: Pro
+=======
+guid: f79d59641c776441fac8bebbeaad2963
+timeCreated: 1454424851
+licenseType: Free
+>>>>>>> 6990e49f7e0dd3b70b93d081a1ba4e70f5d85509:Assets/Art/animals/animals_alpaca_pink.png.meta
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
