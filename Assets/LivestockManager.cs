@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Artoncode.Core;
 
-public class LivestockManager : MonoBehaviour {
 
-	public RectTransform spawnPoint;
-	public RectTransform gatheringPoint;
+public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 
+	public GameObject spawnPoint;
+	public GameObject gatheringPoint;
 
 	public GameObject livestockPrefab;
 	public int totalLivestock;
 
 	private List<GameObject> queueLivestock;
-	private float counter;
+	private int livestockCounter;
+
+
 
 	private GameObject activeLivestock{
 		get{
@@ -30,19 +33,17 @@ public class LivestockManager : MonoBehaviour {
 
 	void Init()
 	{
-		counter = 0;
+		livestockCounter = 0;
 		queueLivestock = new List<GameObject> ();
 	}
 
 
 	private GameObject SpawnLivestock()
 	{
-		Vector2 newPos = Helper.RandomWithinArea (spawnPoint);
+		Vector3 newPos = Helper.RandomWithinArea (spawnPoint.GetComponents<BoxCollider2D>());
 		GameObject newLivestock = Instantiate (livestockPrefab, newPos, Quaternion.identity) as GameObject;
-		newLivestock.name = counter.ToString();
+		newLivestock.name = livestockCounter.ToString();
 		newLivestock.transform.SetParent (this.transform, false);
-		newLivestock.transform.SetAsFirstSibling ();
-
 		newLivestock.GetComponent<LivestockController>().OnLivestockReceivedOrder += delegate(GameObject sender) {
 			queueLivestock.Remove(sender);
 		};
@@ -58,11 +59,25 @@ public class LivestockManager : MonoBehaviour {
 		}
 	}
 
+	void Spawn()
+	{
+		 
+		Vector3 newPos = Helper.RandomWithinArea (gatheringPoint.GetComponents<BoxCollider2D>());
+		float speed = 2.5f;
+
+		GameObject currLivestock = SpawnLivestock ();
+
+		currLivestock.GetComponent<LivestockController>().MoveToReadyPosition(newPos,speed);			
+		queueLivestock.Add (currLivestock);
+		livestockCounter++;
+
+	}
 
 	void Update()
 	{
 		InputUpdate ();
 	}
+
 	void InputUpdate()
 	{
 		//change this input with swipe
@@ -71,32 +86,34 @@ public class LivestockManager : MonoBehaviour {
 		}
 
 		if (Input.GetAxisRaw ("Horizontal") == 1) {
-			activeLivestock.GetComponent<LivestockController> ().Move (LivestockController.DirectionType.Right);
+			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Right);
 		} else if (Input.GetAxisRaw ("Horizontal") == -1) {
-			activeLivestock.GetComponent<LivestockController> ().Move (LivestockController.DirectionType.Left);
+			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Left);
 		} else if (Input.GetAxisRaw ("Vertical") == -1) {
-			activeLivestock.GetComponent<LivestockController> ().Move (LivestockController.DirectionType.Down);
+			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Down);
 		} else if (Input.GetAxisRaw ("Vertical") == 1) {
-			activeLivestock.GetComponent<LivestockController> ().Move (LivestockController.DirectionType.Up);
+			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Up);
 		} else if (Input.GetButtonUp ("Jump")) {
 			WolvesManager.shared ().Charge (activeLivestock);
 		}
 	}
 
-
-	void Spawn()
+	public void Go(DirectionType dir)
 	{
-		 
-		Vector2 newPos = Helper.RandomWithinArea (gatheringPoint);
-		float speed = 300;
+		if (activeLivestock == null) {
+			return;
+		}
 
+		activeLivestock.GetComponent<LivestockController> ().Move (dir);
 
-		GameObject currLivestock = SpawnLivestock ();
-		currLivestock.GetComponent<LivestockController>().MoveToReadyPosition(newPos,speed);			
-		queueLivestock.Add (currLivestock);
-		counter++;
-
+		if(true) //swipe nya bener
+		{
+			Spawn();			
+		}
+		else
+		{
+			WolvesManager.shared ().Charge (activeLivestock);
+		}
 	}
-
 
 }
