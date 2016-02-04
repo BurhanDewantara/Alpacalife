@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class InGameTimerController : MonoBehaviour {
+public class TimerController : MonoBehaviour {
 
 	public GameObject frameObject;
 	public Color frameBlinkColor;
