@@ -9,15 +9,19 @@ public class InGameTimerController : MonoBehaviour {
 	public GameObject fluidObject;
 	public Color fluidBlinkColor;
 
-	private float maxTimer =10.0f;
-	private float minTimer = 1.0f;
+	public bool isStart = false;
 
+	private float maxTimer = 5.0f;
+	private float minTimer = 1.0f;
 
 	private Slider timerSlider {
 		get{
 			return this.GetComponent<Slider>();
 		}
 	}
+
+
+
 	private IEnumerator Blink()
 	{
 		frameObject.GetComponent<Image>().color = frameBlinkColor;
