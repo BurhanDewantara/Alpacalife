@@ -4,12 +4,14 @@ using System.Collections;
 
 public class TimerController : MonoBehaviour {
 
+
+	public delegate void TimerControllerDelegate(GameObject sender);
+	public event TimerControllerDelegate OnTimeReachZero;
+
 	public GameObject frameObject;
 	public Color frameBlinkColor;
 	public GameObject fluidObject;
 	public Color fluidBlinkColor;
-
-	public bool isStart = false;
 
 	private float maxTimer = 5.0f;
 	private float minTimer = 1.0f;
@@ -19,8 +21,6 @@ public class TimerController : MonoBehaviour {
 			return this.GetComponent<Slider>();
 		}
 	}
-
-
 
 	private IEnumerator Blink()
 	{
@@ -48,18 +48,17 @@ public class TimerController : MonoBehaviour {
 		timerSlider.maxValue = Mathf.Clamp(timerSlider.maxValue,minTimer,maxTimer);
 	}
 
-	void Update()
+	public void UpdateTime()
 	{
+
 		timerSlider.value -= Time.deltaTime;
-	}
-
-	void OnGUI()
-	{
-		if(GUI.Button(new Rect(0,20,100,20),"Add Time"))
+		if(timerSlider.value <=0)
 		{
-			AddTimer();
+			if (OnTimeReachZero !=null) {
+				OnTimeReachZero (this.gameObject);
+			}
 		}
-
-
 	}
+
+
 }

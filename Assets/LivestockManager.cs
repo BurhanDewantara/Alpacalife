@@ -6,6 +6,10 @@ using Artoncode.Core;
 
 public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 
+	public delegate void LivestockManagerDelegate(GameObject sender);
+	public event LivestockManagerDelegate OnCorrectDelivery;
+	public event LivestockManagerDelegate OnIncorrectDelivery;
+
 	public GameObject spawnPoint;
 	public GameObject gatheringPoint;
 
@@ -50,16 +54,7 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 		return newLivestock;
 	}
 
-
-	void OnGUI()
-	{
-		if (GUILayout.Button ("spawn"))
-		{
-			Spawn ();
-		}
-	}
-
-	void Spawn()
+	public void Spawn()
 	{
 		 
 		Vector3 newPos = Helper.RandomWithinArea (gatheringPoint.GetComponents<BoxCollider2D>());
@@ -73,31 +68,6 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 
 	}
 
-	void Update()
-	{
-		InputUpdate ();
-	}
-
-	void InputUpdate()
-	{
-		//change this input with swipe
-		if (activeLivestock == null) {
-			return;
-		}
-
-		if (Input.GetAxisRaw ("Horizontal") == 1) {
-			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Right);
-		} else if (Input.GetAxisRaw ("Horizontal") == -1) {
-			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Left);
-		} else if (Input.GetAxisRaw ("Vertical") == -1) {
-			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Down);
-		} else if (Input.GetAxisRaw ("Vertical") == 1) {
-			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Up);
-		} else if (Input.GetButtonUp ("Jump")) {
-			WolvesManager.shared ().Charge (activeLivestock);
-		}
-	}
-
 	public void Go(DirectionType dir)
 	{
 		if (activeLivestock == null) {
@@ -106,14 +76,41 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 
 		activeLivestock.GetComponent<LivestockController> ().Move (dir);
 
-		if(true) //swipe nya bener
-		{
-			Spawn();			
-		}
-		else
-		{
-			WolvesManager.shared ().Charge (activeLivestock);
-		}
+//		if(true) //swipe nya bener
+//		{
+//			Spawn();			
+//		}
+//		else
+//		{
+//			WolvesManager.shared ().Charge (activeLivestock);
+//		}
 	}
+
+
+//	void Update()
+//	{
+//		InputUpdate ();
+//	}
+//
+//	void InputUpdate()
+//	{
+//		//change this input with swipe
+//		if (activeLivestock == null) {
+//			return;
+//		}
+//
+//		if (Input.GetAxisRaw ("Horizontal") == 1) {
+//			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Right);
+//		} else if (Input.GetAxisRaw ("Horizontal") == -1) {
+//			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Left);
+//		} else if (Input.GetAxisRaw ("Vertical") == -1) {
+//			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Down);
+//		} else if (Input.GetAxisRaw ("Vertical") == 1) {
+//			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Up);
+//		} else if (Input.GetButtonUp ("Jump")) {
+//			WolvesManager.shared ().Charge (activeLivestock);
+//		}
+//	}
+
 
 }

@@ -100,7 +100,6 @@ public class LivestockController : CharacterCanvasController {
 
 			Destroy (this.gameObject);
 		}
-
 	}
 
 
