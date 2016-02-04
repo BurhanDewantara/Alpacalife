@@ -3,10 +3,12 @@ using System.Collections;
 
 public class FenceAreaHandler : MonoBehaviour {
 
-	public SOColor colorObject;
+	public DirectionType fencePosition;
+	private SOColor colorObject;
 
 	public void SetColor(SOColor colorObject)
 	{
+		this.colorObject =  colorObject;
 		this.GetComponent<SpriteRenderer>().material.color = colorObject.color;
 	}
 

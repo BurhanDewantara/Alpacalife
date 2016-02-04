@@ -13,13 +13,20 @@ public class TimerController : MonoBehaviour {
 	public GameObject fluidObject;
 	public Color fluidBlinkColor;
 
-	private float maxTimer = 5.0f;
-	private float minTimer = 1.0f;
+	private float maxValue = 10.0f;
+	private float minValue = 2.0f;
 
 	private Slider timerSlider {
 		get{
 			return this.GetComponent<Slider>();
 		}
+	}
+
+	void Awake()
+	{
+		timerSlider.minValue = 0;
+		timerSlider.maxValue = maxValue;
+		timerSlider.value = maxValue;
 	}
 
 	private IEnumerator Blink()
@@ -35,7 +42,7 @@ public class TimerController : MonoBehaviour {
 		fluidObject.GetComponent<Image>().color = Color.white;
 	}
 
-	public void AddTimer(float second = 1.0f)
+	public void AddTime(float second = 1.0f)
 	{
 		timerSlider.value += second;
 		ShortenMaxTimer();
@@ -45,7 +52,7 @@ public class TimerController : MonoBehaviour {
 	private void ShortenMaxTimer()
 	{
 		timerSlider.maxValue -= timerSlider.maxValue/10;
-		timerSlider.maxValue = Mathf.Clamp(timerSlider.maxValue,minTimer,maxTimer);
+		timerSlider.maxValue = Mathf.Clamp(timerSlider.maxValue,minValue,maxValue);
 	}
 
 	public void UpdateTime()

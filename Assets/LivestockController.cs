@@ -16,17 +16,14 @@ public class LivestockController : CharacterCanvasController {
 	public Canvas currCanvas;
 	public bool isOrdered = false;
 
+	[HideInInspector]
+	public SOColor textSOColor;
+	[HideInInspector]
+	public SOColor tintSOColor;
+
 	private SpriteRenderer currSprite{
 		get{
 			return characterObject.GetComponent<SpriteRenderer>();
-		}
-	}
-
-
-	LivestockColorHandler colorHandler
-	{
-		get{
-			return this.GetComponent<LivestockColorHandler>();
 		}
 	}
 
@@ -49,9 +46,12 @@ public class LivestockController : CharacterCanvasController {
 	
 	}
 
-	public void SetLabel(string text,SOColor color)
+	public void SetLabel(SOColor label, SOColor color)
 	{
-		
+		textSOColor = label;
+		tintSOColor = color;
+		nameTag.SetActive (true);
+		nameTag.GetComponent<TMPro.TextMeshProUGUI> ().text = SOColor.TintTextWithColor (textSOColor.colorType.ToString (), tintSOColor.color);
 	}
 
 	private void HideLabel()

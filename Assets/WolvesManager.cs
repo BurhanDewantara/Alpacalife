@@ -17,21 +17,23 @@ public class WolvesManager : SingletonMonoBehaviour<WolvesManager> {
 	}
 
 
-	public void Charge(GameObject livestock)
+	public void Charge(GameObject[] livestocks)
 	{
-		StartCoroutine(SpawnWolves(livestock));
+		StartCoroutine(SpawnWolves(livestocks));
 	}
 
 
-	IEnumerator SpawnWolves(GameObject livestockTransfrom,float delay = 0.1f)
+	IEnumerator SpawnWolves(GameObject[] livestocks,float delay = 0.1f)
 	{
-		float speed = 6;
+		float speed = 10;
+
 		while (wolvesList.Count < wolvesCount) {
 			Vector3 newPos = Helper.RandomWithinArea (WolfSpawnPoints.GetComponents<BoxCollider2D>());
 			
 			GameObject wolf = Instantiate (WolfPrefab,newPos,Quaternion.identity) as GameObject;
 
-			Vector3 targetPos = livestockTransfrom.transform.localPosition + Helper.RandomWithinArea (livestockTransfrom.GetComponents<BoxCollider2D>());
+			GameObject livestockTransform = livestocks.Random ();
+			Vector3 targetPos = livestockTransform.transform.localPosition + Helper.RandomWithinArea (livestockTransform.GetComponents<BoxCollider2D>());
 
 			wolf.GetComponent<WolfContoller> ().Charge (targetPos, speed);
 			wolf.transform.SetParent (this.transform,false);

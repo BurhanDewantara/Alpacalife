@@ -19,26 +19,28 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 	private List<GameObject> queueLivestock;
 	private int livestockCounter;
 
-
-
-	private GameObject activeLivestock{
+	public LivestockController activeLivestock{
 		get{
 			if(queueLivestock != null)
 				if(queueLivestock.Count > 0)
-					return queueLivestock[0];
+					return queueLivestock[0].GetComponent<LivestockController> ();
 			return null;
 		}
 	}
 
-	void Start()
-	{
-		Init ();
-	}
+	private List<SOColor> availableColors;
+	private List<SOColor> inGameColors;
 
-	void Init()
+	void Awake()
 	{
 		livestockCounter = 0;
 		queueLivestock = new List<GameObject> ();
+	}
+
+	public void InitColors(List<SOColor> availableColors, List<SOColor> inGameColors)
+	{
+		this.availableColors = availableColors;
+		this.inGameColors = inGameColors;
 	}
 
 
@@ -62,19 +64,21 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 
 		GameObject currLivestock = SpawnLivestock ();
 
+		currLivestock.GetComponent<LivestockController>().SetLabel(inGameColors.Random (),availableColors.Random ());
 		currLivestock.GetComponent<LivestockController>().MoveToReadyPosition(newPos,speed);			
+
 		queueLivestock.Add (currLivestock);
 		livestockCounter++;
 
 	}
 
-	public void Go(DirectionType dir)
+	public void ActiveLivestockGo(DirectionType dir)
 	{
 		if (activeLivestock == null) {
 			return;
 		}
 
-		activeLivestock.GetComponent<LivestockController> ().Move (dir);
+		activeLivestock.Move (dir);
 
 //		if(true) //swipe nya bener
 //		{
@@ -82,8 +86,13 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 //		}
 //		else
 //		{
-//			WolvesManager.shared ().Charge (activeLivestock);
+
 //		}
+	}
+
+	public void ActiveLivestockEaten()
+	{
+		WolvesManager.shared ().Charge (queueLivestock.ToArray());		
 	}
 
 
