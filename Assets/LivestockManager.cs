@@ -1,114 +1,125 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Artoncode.Core;
 
-public class LivestockManager : MonoBehaviour {
 
-	public RectTransform spawnPoint;
-	public RectTransform gatheringPoint;
+public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 
+	public delegate void LivestockManagerDelegate(GameObject sender);
+	public event LivestockManagerDelegate OnCorrectDelivery;
+	public event LivestockManagerDelegate OnIncorrectDelivery;
+
+	public GameObject spawnPoint;
+	public GameObject gatheringPoint;
 
 	public GameObject livestockPrefab;
 	public int totalLivestock;
 
 	private List<GameObject> queueLivestock;
-	private float counter;
+	private int livestockCounter;
 
-	private GameObject activeLivestock{
+	public LivestockController activeLivestock{
 		get{
 			if(queueLivestock != null)
 				if(queueLivestock.Count > 0)
-					return queueLivestock[0];
+					return queueLivestock[0].GetComponent<LivestockController> ();
 			return null;
 		}
 	}
 
-	void Start()
+	private List<SOColor> availableColors;
+	private List<SOColor> inGameColors;
+
+	void Awake()
 	{
-		Init ();
+		livestockCounter = 0;
+		queueLivestock = new List<GameObject> ();
 	}
 
-	void Init()
+	public void InitColors(List<SOColor> availableColors, List<SOColor> inGameColors)
 	{
-		counter = 0;
-		queueLivestock = new List<GameObject> ();
+		this.availableColors = availableColors;
+		this.inGameColors = inGameColors;
 	}
 
 
 	private GameObject SpawnLivestock()
 	{
-		Vector2 newPos = RandomWithinArea (spawnPoint);
+		Vector3 newPos = Helper.RandomWithinArea (spawnPoint.GetComponents<BoxCollider2D>());
 		GameObject newLivestock = Instantiate (livestockPrefab, newPos, Quaternion.identity) as GameObject;
-		newLivestock.name = counter.ToString();
+		newLivestock.name = livestockCounter.ToString();
 		newLivestock.transform.SetParent (this.transform, false);
-		newLivestock.transform.SetAsFirstSibling ();
-
 		newLivestock.GetComponent<LivestockController>().OnLivestockReceivedOrder += delegate(GameObject sender) {
 			queueLivestock.Remove(sender);
 		};
 		return newLivestock;
 	}
 
-
-	void OnGUI()
+	public void Spawn()
 	{
-		if (GUILayout.Button ("spawn"))
-		{
-			Spawn ();
-		}
+		 
+		Vector3 newPos = Helper.RandomWithinArea (gatheringPoint.GetComponents<BoxCollider2D>());
+		float speed = 2.5f;
+
+		GameObject currLivestock = SpawnLivestock ();
+
+		currLivestock.GetComponent<LivestockController>().SetLabel(inGameColors.Random (),availableColors.Random ());
+		currLivestock.GetComponent<LivestockController>().MoveToReadyPosition(newPos,speed);			
+
+		queueLivestock.Add (currLivestock);
+		livestockCounter++;
+
 	}
 
-
-	void Update()
+	public void ActiveLivestockGo(DirectionType dir)
 	{
-		InputUpdate ();
-	}
-	void InputUpdate()
-	{
-		//change this input with swipe
 		if (activeLivestock == null) {
 			return;
 		}
 
-		if (Input.GetAxisRaw ("Horizontal") == 1) {
-			print("masok");
-			activeLivestock.GetComponent<LivestockController>().Move (LivestockController.DirectionType.Right);
-		}
-		else if (Input.GetAxisRaw ("Horizontal") == -1) {
-			activeLivestock.GetComponent<LivestockController>().Move (LivestockController.DirectionType.Left);
-		}
-		else if (Input.GetAxisRaw ("Vertical") == -1) {
-			activeLivestock.GetComponent<LivestockController>().Move (LivestockController.DirectionType.Down);
-		}
-		else if (Input.GetAxisRaw ("Vertical") == 1) {
-			activeLivestock.GetComponent<LivestockController>().Move (LivestockController.DirectionType.Up);
-		}
+		activeLivestock.Move (dir);
+
+//		if(true) //swipe nya bener
+//		{
+//			Spawn();			
+//		}
+//		else
+//		{
+
+//		}
 	}
 
-
-	void Spawn()
+	public void ActiveLivestockEaten()
 	{
-		 
-		Vector2 newPos = RandomWithinArea (gatheringPoint);
-		float speed = 300;
-
-
-		GameObject currLivestock = SpawnLivestock ();
-		currLivestock.GetComponent<LivestockController>().MoveToReadyPosition(newPos,speed);			
-		queueLivestock.Add (currLivestock);
-		counter++;
-
+		WolvesManager.shared ().Charge (queueLivestock.ToArray());		
 	}
 
 
-	Vector2 RandomWithinArea(RectTransform point)
-	{
-		Vector2 newPos = new Vector2(Random.Range(
-				point.anchoredPosition.x - point.sizeDelta.x/2,
-				point.anchoredPosition.x + point.sizeDelta.x/2),
-			Random.Range(
-				point.anchoredPosition.y - point.sizeDelta.y/2,
-				point.anchoredPosition.y + point.sizeDelta.y/2));
-		return newPos;
-	}
+//	void Update()
+//	{
+//		InputUpdate ();
+//	}
+//
+//	void InputUpdate()
+//	{
+//		//change this input with swipe
+//		if (activeLivestock == null) {
+//			return;
+//		}
+//
+//		if (Input.GetAxisRaw ("Horizontal") == 1) {
+//			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Right);
+//		} else if (Input.GetAxisRaw ("Horizontal") == -1) {
+//			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Left);
+//		} else if (Input.GetAxisRaw ("Vertical") == -1) {
+//			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Down);
+//		} else if (Input.GetAxisRaw ("Vertical") == 1) {
+//			activeLivestock.GetComponent<LivestockController> ().Move (DirectionType.Up);
+//		} else if (Input.GetButtonUp ("Jump")) {
+//			WolvesManager.shared ().Charge (activeLivestock);
+//		}
+//	}
+
+
 }

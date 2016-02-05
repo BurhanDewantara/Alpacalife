@@ -3,43 +3,58 @@ using UnityEngine.UI;
 using System.Collections;
 using Artoncode.Core.Utility;
 
+public enum DirectionType
+{
+	Left,Right,Down,Up
+};
 
 public class LivestockController : CharacterCanvasController {
 
 	public delegate void LivestockControllerDelegate (GameObject sender);
 	public event LivestockControllerDelegate OnLivestockReceivedOrder;
 	public GameObject nameTag;
+	public Canvas currCanvas;
+	public bool isOrdered = false;
 
-	LivestockColorHandler colorHandler
-	{
+	[HideInInspector]
+	public SOColor textSOColor;
+	[HideInInspector]
+	public SOColor tintSOColor;
+
+	private SpriteRenderer currSprite{
 		get{
-			return this.GetComponent<LivestockColorHandler>();
+			return characterObject.GetComponent<SpriteRenderer>();
 		}
 	}
 
-	public bool isOrdered = false;
-	public enum DirectionType
-	{
-		Left,Right,Down,Up
-	};
-
-
-	public void MoveToReadyPosition(Vector2 position,float speed = 200.0f)
+	public void MoveToReadyPosition(Vector3 position,float speed)
 	{
 		iTween.MoveTo (this.gameObject,
-			iTween.Hash("position",new Vector3(position.x,position.y,0)
+			iTween.Hash("position",position
 				,"speed",speed
 				,"isLocal",true
 				,"easeType",iTween.EaseType.linear
 			));
 	}
 
-	public void SetLabel(string text,SOColor color)
+	protected override void UpdateZOrder ()
 	{
+		base.UpdateZOrder ();
+		if(currCanvas.sortingOrder != -Mathf.CeilToInt(this.transform.localPosition.y * 100 ))
+			currCanvas.sortingOrder = -Mathf.CeilToInt(this.transform.localPosition.y * 100 );
 		
+	
 	}
 
-	private void RemoveLabel()
+	public void SetLabel(SOColor label, SOColor color)
+	{
+		textSOColor = label;
+		tintSOColor = color;
+		nameTag.SetActive (true);
+		nameTag.GetComponent<TMPro.TextMeshProUGUI> ().text = SOColor.TintTextWithColor (textSOColor.colorType.ToString (), tintSOColor.color);
+	}
+
+	private void HideLabel()
 	{
 		nameTag.SetActive(false);
 	}
@@ -50,21 +65,21 @@ public class LivestockController : CharacterCanvasController {
 			return;
 		
 		isOrdered = true;
-		RemoveLabel();
+		HideLabel();
 		iTween.Stop(this.gameObject);
 
 		switch (direction) {
 		case DirectionType.Left:
-			velocity = Vector2.left * moveSpeed;
+			velocity = Vector3.left * moveSpeed;
 			break;
 		case DirectionType.Right:
-			velocity = Vector2.right * moveSpeed;
+			velocity = Vector3.right * moveSpeed;
 			break;
 		case DirectionType.Down:
-			velocity = Vector2.down * moveSpeed;
+			velocity = Vector3.down * moveSpeed;
 			break;
 		case DirectionType.Up:
-			velocity = Vector2.up * moveSpeed;
+			velocity = Vector3.up * moveSpeed;
 			break;
 		}
 
@@ -82,10 +97,9 @@ public class LivestockController : CharacterCanvasController {
 		}
 
 		if (col.CompareTag ("Destroyer")) {
-			
+
 			Destroy (this.gameObject);
 		}
-
 	}
 
 

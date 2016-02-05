@@ -3,15 +3,16 @@ using System.Collections;
 
 public enum ColorType
 {
-	Yellow 	= 0, 
 	Red		= 1, 
 	Green	= 2, 
 	Blue	= 3, 
-	Purple	= 4,
-	Brown 	= 5,
+	Yellow 	= 4, 
+	Purple	= 5,
+	Brown 	= 6,
 }
 
-public class SOColor : ScriptableObject{
+public class SOColor : ScriptableObject {
+
 	public ColorType colorType;
 	public Color color;
 
