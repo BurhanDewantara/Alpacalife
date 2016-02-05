@@ -16,13 +16,13 @@ public class WolfContoller : CharacterCanvasController {
 
 	}
 //
-//	void OnTriggerEnter2D(Collider2D col)
-//	{
-//		if (col.CompareTag("Fence"))
-//		{
-//			Jump();				
-//		}
-//	}
+	void OnTriggerEnter2D(Collider2D col)
+	{
+		if (col.CompareTag("Fence"))
+		{
+			Jump();				
+		}
+	}
 
 
 }

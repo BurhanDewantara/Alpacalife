@@ -92,7 +92,8 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 
 	public void ActiveLivestockEaten()
 	{
-		WolvesManager.shared ().Charge (queueLivestock.ToArray());		
+		WolvesManager.shared ().Charge (queueLivestock.ToArray());
+		iTween.Stop(activeLivestock.gameObject);
 	}
 
 

@@ -25,7 +25,7 @@ public class WolvesManager : SingletonMonoBehaviour<WolvesManager> {
 
 	IEnumerator SpawnWolves(GameObject[] livestocks,float delay = 0.1f)
 	{
-		float speed = 10;
+		float speed = 6;
 
 		while (wolvesList.Count < wolvesCount) {
 			Vector3 newPos = Helper.RandomWithinArea (WolfSpawnPoints.GetComponents<BoxCollider2D>());
