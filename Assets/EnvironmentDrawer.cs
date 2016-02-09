@@ -8,6 +8,7 @@ public class EnvironmentDrawer : MonoBehaviour {
 	public void SetSprite(Sprite sprite)
 	{
 		this.GetComponent<SpriteRenderer> ().sprite = sprite;
+		this.GetComponent<SpriteRenderer> ().color = (sprite == null) ? Color.clear : Color.white;
 	}
 
 

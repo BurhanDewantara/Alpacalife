@@ -47,10 +47,7 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 	}
 
 
-	public int GetEnvirontmentLevel()
-	{
-		return environmentLevel;
-	}
+
 
 
 
@@ -121,6 +118,8 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 	public BigInteger GetLivestockUpgradePrice(LivestockSO livestock)
 	{
+		if(livestock == null) return -1;
+
 		if (livestock.upgradePrice == 0) {
 			//LEVEL START FROM 1 not 0
 			int level = livestockList.IndexOf (livestock)+1;
@@ -130,6 +129,11 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		}
 		return livestock.upgradePrice;
 	}
+	public string GetLivestockProgress()
+	{
+		return livestockLevel+ "/" + livestockList.Count ;
+	}
+
 	#endregion
 
 	#region Environment
@@ -166,6 +170,8 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 	public BigInteger GetEnvironmentUpgradePrice(EnvironmentSO environment)
 	{
+		if(environment == null) return -1;
+
 		if (environment.upgradePrice == 0) {
 			//LEVEL START FROM 1 not 0
 			int level = environmentList.IndexOf (environment)+1;
@@ -176,6 +182,10 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		return environment.upgradePrice;
 	}
 
+	public string GetEnvironmentProgress()
+	{
+		return environmentLevel + "/" + environmentList.Count ;
+	}
 	#endregion 
 
 
@@ -192,6 +202,8 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		if (env != null) {
 			if (GUILayout.Button (env.ToString () + " : " + GetEnvironmentUpgradePrice(env).ToStringShort())) {
 				UpgradeEnvironment ();
+				WorldManager.shared().RefreshEnvironment();
+
 			}
 		}
 		LivestockSO lvs = GetNextLivestockUpgrade ();

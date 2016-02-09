@@ -112,6 +112,8 @@ public static class BigIntegerExtension
 
 	public static string ToStringShort (this BigInteger bigInteger)
 	{
+		if (bigInteger == -1 ) return "MAX";
+			 
 		BigInteger tempCoin = new BigInteger (bigInteger.ToString ());
 		int last3Digit = 0;
 		while (tempCoin > THRESHOLD) {
