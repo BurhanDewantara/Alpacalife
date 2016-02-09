@@ -37,7 +37,7 @@ namespace Artoncode.Core.Data {
 			}
 		}
 
-		public DataManager create () {
+		public static DataManager create () {
 			return new DataManager ();	
 		}
 

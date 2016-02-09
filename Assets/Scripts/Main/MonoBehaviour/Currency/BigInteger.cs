@@ -294,6 +294,8 @@ namespace ScottGarland
 	///        }
 	///    </code>
 	/// </example>
+
+	[Serializable]
 	public class BigInteger
 	{
 		private DigitsArray m_digits;
