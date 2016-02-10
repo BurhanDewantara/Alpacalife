@@ -16,8 +16,8 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 	public GameObject livestockPrefab;
 	public int totalLivestock;
 
-	private List<GameObject> queueLivestock;
-	private int livestockCounter;
+	private List<GameObject> queueLivestock = new List<GameObject> ();
+	private int livestockCounter = 0;
 
 	public LivestockController activeLivestock{
 		get{
@@ -30,12 +30,6 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 
 	private List<ColorSO> availableColors;
 	private List<ColorSO> inGameColors;
-
-	void Awake()
-	{
-		livestockCounter = 0;
-		queueLivestock = new List<GameObject> ();
-	}
 
 	public void InitColors(List<ColorSO> availableColors, List<ColorSO> inGameColors)
 	{
@@ -79,15 +73,6 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 		}
 
 		activeLivestock.Move (dir);
-
-//		if(true) //swipe nya bener
-//		{
-//			Spawn();			
-//		}
-//		else
-//		{
-
-//		}
 	}
 
 	public void ActiveLivestockEaten()
@@ -96,6 +81,13 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 		iTween.Stop(activeLivestock.gameObject);
 	}
 
+	public void RemoveAllLivestock()
+	{
+		foreach (GameObject item in queueLivestock) {
+			Destroy(item);
+		}
+		queueLivestock.Clear();
+	}
 
 //	void Update()
 //	{

@@ -44,14 +44,14 @@ public class OwnedLivestockController : CharacterCanvasController {
 
 	protected override void MovementUpdate ()
 	{
+		if(!IsActivated) return;
+
 		base.MovementUpdate ();
 
 		if (!isWaiting) {
-			
-
 			if (Vector3 .Distance (targetPos, this.transform.position) < 0.1) {
 				isWaiting = true;
-				waitTime = Random.Range (4, 7);
+				waitTime = Random.Range (4, 8);
 				velocity = Vector3.zero;
 			}
 		} else {

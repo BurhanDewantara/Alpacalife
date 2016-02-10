@@ -20,19 +20,13 @@ public class GameOverController : MonoBehaviour {
 		Init ();
 	}
 
-	void Start()
-	{
-		SetScore (100, 999);
-	}
-
 	void Init()
 	{
-		//TODO
 		bestScoreText.text = bestScore.ToString();	
 		scoreText.text = "";	
 	}
 
-	void SetScore(int currScore,int bScore)
+	public void SetScore(int currScore,int bScore)
 	{
 		Init ();
 		StartCoroutine(ScoreCounter(scoreText,currScore));

@@ -5,6 +5,11 @@ using Artoncode.Core;
 
 public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 
+	public delegate void WorldManagerDelegate();
+	public event WorldManagerDelegate OnAssembleDone;
+	public event WorldManagerDelegate OnDisassembleDone;
+
+
 	public GameObject worldLivestockPrefab;
 
 	public GameObject worldLivestockPanel;
@@ -109,33 +114,67 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 
 	public void LivestockAssemble()
 	{
-		int randomCounter = 50;
-		float speed = 2.5f;
-		List<Vector3> positions = GenerateAssemblePosition(randomCounter);
 
-		for (int i = 0; i < worldLivestockObject.Count; i++) {
+		int livestockIdx = 0;
+		int randomCounter = 1;
+		float time = 1;
+		List<Vector3> positions = new List<Vector3>();
 
-			iTween.MoveTo(worldLivestockObject[i],
-				iTween.Hash(
-					"position",positions[i]
-					,"speed",speed
-					,"isLocal",true
-					,"easeType",iTween.EaseType.linear
-				));
-		} 
+		while ( livestockIdx < worldLivestockObject.Count)
+		{		
+			positions.Clear();
+			positions = GenerateAssemblePosition(randomCounter);
+
+
+			int counter = 0;
+			while (counter < randomCounter && livestockIdx < worldLivestockObject.Count) 
+			{
+				worldLivestockObject[livestockIdx].GetComponent<OwnedLivestockController>().IsActivated = false;
+				iTween.MoveTo(worldLivestockObject[livestockIdx],
+					iTween.Hash(
+						"position",positions[livestockIdx % randomCounter]
+						,"time",time
+						,"isLocal",true
+						,"easeType",iTween.EaseType.linear
+						,"oncomplete","LivestockDoneAssemble"
+						,"oncompletetarget",this.gameObject
+						,"oncompleteparams",worldLivestockObject[livestockIdx]
+					));
+				counter++;
+				livestockIdx++;
+			}
+		}
+
+
+
+	}
+
+	private void LivestockDoneAssemble(GameObject obj)
+	{
+		if(OnAssembleDone!=null)
+			OnAssembleDone();
+	}
+	private void LivestockDoneDisassemble(GameObject obj)
+	{
+		obj.GetComponent<OwnedLivestockController>().IsActivated = true;
+		if(OnDisassembleDone!=null)
+			OnDisassembleDone();
 	}
 
 
 	public void LivestockDissasemble()
 	{
-		float speed = 2.5f;
+		float time = 1;
 		for (int i = 0; i < worldLivestockObject.Count; i++) {
 			iTween.MoveTo(worldLivestockObject[i],
 				iTween.Hash(
 					"position",Helper.RandomWithinArea(worldLivestockDisassemblePanel.GetComponents<BoxCollider2D>())
-					,"speed",speed
+					,"time",time
 					,"isLocal",true
 					,"easeType",iTween.EaseType.linear
+					,"oncomplete","LivestockDoneDisassemble"
+					,"oncompletetarget",this.gameObject
+					,"oncompleteparams",worldLivestockObject[i]
 				));
 		} 
 	}

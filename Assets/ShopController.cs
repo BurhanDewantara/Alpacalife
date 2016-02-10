@@ -83,15 +83,18 @@ public class ShopController : MonoBehaviour {
 		{
 			currentSelectedObject = null;
 			LivestockSO item = UpgradeManager.shared().GetNextLivestockUpgrade();
-			UpgradeManager.shared().UpgradeLivestock();
+			if(item!= null)
+			{
+				UpgradeManager.shared().UpgradeLivestock();
 
-			Vector3 pos = Camera.main.ScreenToWorldPoint (displayObject.GetComponent<RectTransform> ().position);
-			//remove Z position
-			pos = new Vector3 (pos.x, pos.y, 0);
+				Vector3 pos = Camera.main.ScreenToWorldPoint (displayObject.GetComponent<RectTransform> ().position);
+				//remove Z position
+				pos = new Vector3 (pos.x, pos.y, 0);
 
-			WorldManager.shared ().AddLivestock (item,Vector3.zero, true );
-			RefreshLivestockButton ();
-			ShowLivestock();
+				WorldManager.shared ().AddLivestock (item,Vector3.zero, true );
+				RefreshLivestockButton ();
+				ShowLivestock();
+			}
 		}
 	}
 

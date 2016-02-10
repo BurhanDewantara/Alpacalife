@@ -18,9 +18,7 @@ public class Helper {
 
 	public static Vector3 RandomWithinArea(Collider2D[] areas)
 	{
-		
 		Collider2D area = areas.Random();
-
 		Vector3 newPosition = new Vector3(
 			Random.Range(area.offset.x - area.bounds.size.x/2, area.offset.x + area.bounds.size.x/2),
 			Random.Range(area.offset.y - area.bounds.size.y/2, area.offset.y + area.bounds.size.y/2),

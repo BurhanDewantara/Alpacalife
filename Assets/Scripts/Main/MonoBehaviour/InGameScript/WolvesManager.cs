@@ -22,6 +22,14 @@ public class WolvesManager : SingletonMonoBehaviour<WolvesManager> {
 		StartCoroutine(SpawnWolves(livestocks));
 	}
 
+	public void RemoveAllWolves()
+	{
+		foreach (GameObject item in wolvesList) {
+			Destroy(item);
+		}
+		wolvesList.Clear();
+	}
+
 
 	IEnumerator SpawnWolves(GameObject[] livestocks,float delay = 0.1f)
 	{
