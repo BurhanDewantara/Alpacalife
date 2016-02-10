@@ -82,28 +82,28 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 
 
 
-	public void OnGUI()
-	{
-		if(GUI.Button(new Rect(200,0,100,20),"Livestock Spawn"))
-		{
-			worldLivestockObject.Add(CreateLivestock(UpgradeManager.shared().ownedLivestockList.Random()));
-		}
-
-		if(GUI.Button(new Rect(200,20,100,20),"LVS dateng"))
-		{
-			AddLivestock(UpgradeManager.shared().ownedLivestockList.Random(),new Vector3(0,-1,0),true);
-		}
-
-		if(GUI.Button(new Rect(200,40,100,20),"Assemble"))
-		{
-			LivestockAssemble();
-		}
-		if(GUI.Button(new Rect(200,60,100,20),"Disassemble"))
-		{
-			LivestockDissasemble();
-		}
-	}
-
+//	public void OnGUI()
+//	{
+//		if(GUI.Button(new Rect(200,0,100,20),"Livestock Spawn"))
+//		{
+//			worldLivestockObject.Add(CreateLivestock(UpgradeManager.shared().ownedLivestockList.Random()));
+//		}
+//
+//		if(GUI.Button(new Rect(200,20,100,20),"LVS dateng"))
+//		{
+//			AddLivestock(UpgradeManager.shared().ownedLivestockList.Random(),new Vector3(0,-1,0),true);
+//		}
+//
+//		if(GUI.Button(new Rect(200,40,100,20),"Assemble"))
+//		{
+//			LivestockAssemble();
+//		}
+//		if(GUI.Button(new Rect(200,60,100,20),"Disassemble"))
+//		{
+//			LivestockDissasemble();
+//		}
+//	}
+//
 
 
 

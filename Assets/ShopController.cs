@@ -22,6 +22,7 @@ public class ShopController : MonoBehaviour {
 	{
 		displayObject.GetComponent<Image>().sprite = sprite;
 		displayObject.GetComponent<Image>().color = sprite == null ? Color.clear : Color.white;
+		displayObject.GetComponent<Image> ().SetNativeSize ();
 	}
 
 	public void RefreshEnvironmentButton()
@@ -64,6 +65,7 @@ public class ShopController : MonoBehaviour {
 			currentSelectedObject = null;
 			UpgradeManager.shared().UpgradeEnvironment();
 			WorldManager.shared().RefreshEnvironment();
+			RefreshEnvironmentButton ();
 			ShowEnvironment();
 		}
 	}
@@ -80,7 +82,15 @@ public class ShopController : MonoBehaviour {
 		else
 		{
 			currentSelectedObject = null;
+			LivestockSO item = UpgradeManager.shared().GetNextLivestockUpgrade();
 			UpgradeManager.shared().UpgradeLivestock();
+
+			Vector3 pos = Camera.main.ScreenToWorldPoint (displayObject.GetComponent<RectTransform> ().position);
+			//remove Z position
+			pos = new Vector3 (pos.x, pos.y, 0);
+
+			WorldManager.shared ().AddLivestock (item,Vector3.zero, true );
+			RefreshLivestockButton ();
 			ShowLivestock();
 		}
 	}

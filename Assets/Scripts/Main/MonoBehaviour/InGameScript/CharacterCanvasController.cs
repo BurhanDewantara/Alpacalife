@@ -60,14 +60,17 @@ public class CharacterCanvasController : MonoBehaviour {
 	}
 
 
+	protected virtual void UpdateRotation()
+	{
+		//Rotation / Facing
+		characterObject.transform.eulerAngles = Vector3.up * (velocity.x > 0 ? 180 : 0);
+	}
+
 	protected virtual void MovementUpdate()
 	{
 
 		//MOVE
 		this.transform.localPosition += velocity;
-
-		//Rotation / Facing
-		characterObject.transform.eulerAngles = Vector3.up * (velocity.x > 0 ? 180 : 0);
 
 
 		if(isJump)
@@ -92,8 +95,9 @@ public class CharacterCanvasController : MonoBehaviour {
 	void Update()
 	{
 		//movement & jump
-		MovementUpdate();
-		UpdateZOrder();
+		MovementUpdate ();
+		UpdateRotation ();
+		UpdateZOrder ();
 	}
 
 	protected virtual void UpdateZOrder()

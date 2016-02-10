@@ -191,31 +191,31 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 
 
-	public void OnGUI()
-	{
-		GUILayout.BeginVertical ("Box");
-
-		GUILayout.Label ("Env Level : " + environmentLevel);
-		GUILayout.Label ("Lvs Level : " + livestockLevel);
-
-		EnvironmentSO env = GetNextEnvironmentUpgrade ();
-		if (env != null) {
-			if (GUILayout.Button (env.ToString () + " : " + GetEnvironmentUpgradePrice(env).ToStringShort())) {
-				UpgradeEnvironment ();
-				WorldManager.shared().RefreshEnvironment();
-
-			}
-		}
-		LivestockSO lvs = GetNextLivestockUpgrade ();
-		if (lvs != null) {
-			if (GUILayout.Button (lvs.ToString () + " : " + GetLivestockUpgradePrice(lvs).ToStringShort())) {
-				UpgradeLivestock ();
-			}
-		}
-
-		GUILayout.EndVertical ();
-//		BuyNewEnvironment ();
-	}
+//	public void OnGUI()
+//	{
+//		GUILayout.BeginVertical ("Box");
+//
+//		GUILayout.Label ("Env Level : " + environmentLevel);
+//		GUILayout.Label ("Lvs Level : " + livestockLevel);
+//
+//		EnvironmentSO env = GetNextEnvironmentUpgrade ();
+//		if (env != null) {
+//			if (GUILayout.Button (env.ToString () + " : " + GetEnvironmentUpgradePrice(env).ToStringShort())) {
+//				UpgradeEnvironment ();
+//				WorldManager.shared().RefreshEnvironment();
+//
+//			}
+//		}
+//		LivestockSO lvs = GetNextLivestockUpgrade ();
+//		if (lvs != null) {
+//			if (GUILayout.Button (lvs.ToString () + " : " + GetLivestockUpgradePrice(lvs).ToStringShort())) {
+//				UpgradeLivestock ();
+//			}
+//		}
+//
+//		GUILayout.EndVertical ();
+////		BuyNewEnvironment ();
+//	}
 
 
 
