@@ -9,7 +9,7 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 	public event WorldManagerDelegate OnAssembleDone;
 	public event WorldManagerDelegate OnDisassembleDone;
 
-
+	public GameObject puffPrefab;
 	public GameObject worldLivestockPrefab;
 
 	public GameObject worldLivestockPanel;
@@ -26,11 +26,11 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 
 	public void Start()
 	{
-		RefreshEnvironment();
+		RefreshEnvironment(true);
 		LoadLivestock();
 	}
 
-	public void RefreshEnvironment()
+	public void RefreshEnvironment(bool init = false)
 	{
 		foreach (GameObject item in environmentObject) {
 			EnvironmentDrawer envDrawer = item.GetComponent<EnvironmentDrawer>();
@@ -38,7 +38,15 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 			{
 				EnvironmentSO envSO = UpgradeManager.shared().GetLatestEnvironment(envDrawer.type);
 				if(envSO !=null)
+				{
+					if(!init && envDrawer.sprite!= envSO.sprite)
+					{
+						GameObject obj = Instantiate(puffPrefab,envDrawer.transform.position,Quaternion.identity) as GameObject;
+						Destroy(obj,2);	
+					}
 					envDrawer.SetSprite(envSO.sprite);
+
+				}
 				else
 					envDrawer.SetSprite(null);
 			}
@@ -164,19 +172,24 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 
 	public void LivestockDissasemble()
 	{
-		float time = 1;
+		
 		for (int i = 0; i < worldLivestockObject.Count; i++) {
-			iTween.MoveTo(worldLivestockObject[i],
-				iTween.Hash(
-					"position",Helper.RandomWithinArea(worldLivestockDisassemblePanel.GetComponents<BoxCollider2D>())
-					,"time",time
-					,"isLocal",true
-					,"easeType",iTween.EaseType.linear
-					,"oncomplete","LivestockDoneDisassemble"
-					,"oncompletetarget",this.gameObject
-					,"oncompleteparams",worldLivestockObject[i]
-				));
-		} 
+			LivestockDoneDisassemble(worldLivestockObject[i]);
+		}
+
+//		float time = 1;
+//		for (int i = 0; i < worldLivestockObject.Count; i++) {
+//			iTween.MoveTo(worldLivestockObject[i],
+//				iTween.Hash(
+//					"position",Helper.RandomWithinArea(worldLivestockDisassemblePanel.GetComponents<BoxCollider2D>())
+//					,"time",time
+//					,"isLocal",true
+//					,"easeType",iTween.EaseType.linear
+//					,"oncomplete","LivestockDoneDisassemble"
+//					,"oncompletetarget",this.gameObject
+//					,"oncompleteparams",worldLivestockObject[i]
+//				));
+//		} 
 	}
 
 	private List<Vector3> GenerateAssemblePosition(int max = 100)

@@ -6,9 +6,10 @@ public class OwnedLivestockController : CharacterCanvasController {
 
 	LivestockSO livestockSO;
 
-	Vector3 targetPos;
-	float waitTime;
-	bool isWaiting;
+	public Vector3 targetPos;
+	public float waitTime;
+	public bool isWaiting;
+
 	bool isActivated;
 	public bool IsActivated
 	{
@@ -31,7 +32,8 @@ public class OwnedLivestockController : CharacterCanvasController {
 	{
 		isActivated = true;
 		isWaiting = true;
-		waitTime = Random.Range (4, 7);
+		velocity = Vector3.zero;
+		waitTime = Random.Range (4, 12);
 	}
 
 	public void SetLivestockSO(LivestockSO livestock)
@@ -51,8 +53,9 @@ public class OwnedLivestockController : CharacterCanvasController {
 		if (!isWaiting) {
 			if (Vector3 .Distance (targetPos, this.transform.position) < 0.1) {
 				isWaiting = true;
-				waitTime = Random.Range (4, 8);
+				waitTime = Random.Range (4, 12);
 				velocity = Vector3.zero;
+				targetPos = Vector3.zero;
 			}
 		} else {
 			waitTime -= Time.deltaTime;
