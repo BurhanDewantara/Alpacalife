@@ -18,7 +18,7 @@ public class CharacterCanvasController : MonoBehaviour {
 
 
 	protected bool isJump;
-	protected Vector3 velocity;
+	public Vector3 velocity;
 
 	[Header("Movement Speed")]
 	protected float minMoveSpeed = 0.05f;
@@ -71,7 +71,6 @@ public class CharacterCanvasController : MonoBehaviour {
 
 		//MOVE
 		this.transform.localPosition += velocity;
-
 
 		if(isJump)
 		{
