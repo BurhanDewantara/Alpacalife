@@ -8,7 +8,7 @@ public class GameDataManager : Singleton<GameDataManager>
 {
 	public const string PLAYER_ENV_UPGRADE_LEVEL_KEY = "PLAYER_ENV_UPGRADE_LEVEL_KEY";
 	public const string PLAYER_LVS_UPGRADE_LEVEL_KEY = "PLAYER_LVS_UPGRADE_LEVEL_KEY";
-	public const string PLAYER_BigInteger_KEY = "PLAYER_ENVIRONMENT_LEVEL_KEY";
+	public const string PLAYER_CURRENCY_KEY = "PLAYER_CURRENCY_KEY";
 
 	public DataManager data;
 
@@ -50,12 +50,12 @@ public class GameDataManager : Singleton<GameDataManager>
 		}
 	}
 
-	public BigInteger GameBigInteger {
+	public BigInteger PlayerCurrency {
 		get {
-			return (BigInteger)data.getObject (PLAYER_BigInteger_KEY);
+			return (BigInteger)data.getObject (PLAYER_CURRENCY_KEY);
 		}
 		set {
-			data.setObject (PLAYER_BigInteger_KEY, value);
+			data.setObject (PLAYER_CURRENCY_KEY, value);
 		}
 	}
 

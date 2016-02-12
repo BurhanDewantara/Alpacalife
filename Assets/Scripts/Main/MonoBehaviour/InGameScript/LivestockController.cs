@@ -15,6 +15,7 @@ public class LivestockController : CharacterCanvasController {
 	public GameObject nameTag;
 	public Canvas currCanvas;
 	public bool isOrdered = false;
+	private LivestockSO livestock;
 
 	[HideInInspector]
 	public ColorSO textSOColor;
@@ -37,13 +38,22 @@ public class LivestockController : CharacterCanvasController {
 			));
 	}
 
+	public void SetLivestock(LivestockSO so)
+	{
+		livestock = so;
+		currSprite.sprite = livestock.sprite;
+	}
+
+	public LivestockSO GetLivestock()
+	{
+		return livestock;
+	}
+
 	protected override void UpdateZOrder ()
 	{
 		base.UpdateZOrder ();
 		if(currCanvas.sortingOrder != -Mathf.CeilToInt(this.transform.localPosition.y * 100 ))
 			currCanvas.sortingOrder = -Mathf.CeilToInt(this.transform.localPosition.y * 100 );
-		
-	
 	}
 
 	public void SetLabel(ColorSO label, ColorSO color)
@@ -51,7 +61,7 @@ public class LivestockController : CharacterCanvasController {
 		textSOColor = label;
 		tintSOColor = color;
 		nameTag.SetActive (true);
-		nameTag.GetComponent<TMPro.TextMeshProUGUI> ().text = ColorSO.TintTextWithColor (textSOColor.colorType.ToString (), tintSOColor.color);
+		nameTag.GetComponent<TMPro.TextMeshProUGUI> ().text = ColorSO.TintTextWithColor (textSOColor.colorType.ToString ().ToUpper(), tintSOColor.color);
 	}
 
 	private void HideLabel()

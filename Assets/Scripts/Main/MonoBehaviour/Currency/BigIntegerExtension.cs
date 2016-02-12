@@ -125,7 +125,7 @@ public static class BigIntegerExtension
 		BigIntegerUnit unit = GetUnit (bigInteger);
 
 		if(unit > BigIntegerUnit.None)
-			return tempCoin.ToString () + "." + last3Digit.ToString("D3").Substring(0,2) + " " + unit;
+			return tempCoin.ToString () + "." + last3Digit.ToString("D3").Substring(0,2) + unit;
 		return tempCoin.ToString ();
 	}
 

@@ -22,12 +22,13 @@ public class GameOverController : MonoBehaviour {
 
 	void Init()
 	{
-		bestScoreText.text = bestScore.ToString();	
-		scoreText.text = "";	
+		scoreText.text = "0";	
 	}
 
 	public void SetScore(int currScore,int bScore)
 	{
+		bestScore = bScore;
+		bestScoreText.text = bestScore.ToString();	
 		Init ();
 		StartCoroutine(ScoreCounter(scoreText,currScore));
 	}
@@ -35,9 +36,8 @@ public class GameOverController : MonoBehaviour {
 
 	IEnumerator ScoreCounter(TextMeshProUGUI textObject,int toScore)
 	{
-
 		float percentage = 0;
-		float duration = 2.0f;
+		float duration = 1.0f;
 		float startTime = Time.time;
 
 		while (percentage < 1.0f) {

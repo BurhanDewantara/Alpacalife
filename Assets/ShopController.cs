@@ -63,7 +63,8 @@ public class ShopController : MonoBehaviour {
 			if(item !=null )
 			{
 				buyState = 0;
-				StartCoroutine(DisplayBoughtAnimation(item.sprite,item.name,item.name));
+				string detail = "multiplier x" + UpgradeManager.shared().GetEnvironmentMultiplyValue(item).ToStringShort();
+				StartCoroutine(DisplayBoughtAnimation(item.sprite,item.name,detail ));
 			}
 		}
 	}
@@ -110,7 +111,8 @@ public class ShopController : MonoBehaviour {
 			if(item !=null )
 			{
 				buyState = 1;
-				StartCoroutine(DisplayBoughtAnimation(item.sprite,item.name,item.name));
+				string detail = "Value : " + UpgradeManager.shared().GetLivestockSlideValue(item).ToStringShort();
+				StartCoroutine(DisplayBoughtAnimation(item.sprite,item.name,detail ));
 			}
 				
 			
@@ -189,6 +191,7 @@ public class ShopController : MonoBehaviour {
 		dDetail.GetComponent<TextMeshProUGUI>().text = detail;
 
 		buyPanel.GetComponent<Button>().interactable = true;
+		yield return new WaitForEndOfFrame();
 
 
 	}
@@ -205,7 +208,7 @@ public class ShopController : MonoBehaviour {
 	}
 
 
-	public void ChangeButtonDetail(Transform trans, Sprite sprite,string price,string availableText)
+	public void ChangeButtonDetail(Transform trans, Sprite sprite, string price, string availableText)
 	{
 		trans.FindChild("Image").GetComponent<Image>().sprite = sprite;
 		trans.FindChild("Image").GetComponent<Image>().color = sprite == null ? Color.clear : Color.black;
