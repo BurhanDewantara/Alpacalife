@@ -8,7 +8,8 @@ using ScottGarland;
 
 public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 {
-	public delegate void UpgradeManagerDelegate(BigInteger prev,BigInteger delta);
+	public delegate void UpgradeManagerDelegate (BigInteger prev,BigInteger delta);
+
 	public event UpgradeManagerDelegate OnMultiplierUpdated;
 
 
@@ -26,10 +27,10 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 	public void Start ()
 	{
-		Load();
+		Load ();
 	}
 
-	void Load()
+	void Load ()
 	{
 		environmentLevel = GameDataManager.shared ().EnvironmentLevel;
 		livestockLevel = GameDataManager.shared ().LivestockLevel;
@@ -51,7 +52,7 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 	}
 
 
-	void Save()
+	void Save ()
 	{
 		GameDataManager.shared ().EnvironmentLevel = environmentLevel;
 		GameDataManager.shared ().LivestockLevel = livestockLevel;
@@ -59,17 +60,18 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 
 	#region Helper
-	private int GetModPriceBasedOnLevel(int level)
+
+	private int GetModPriceBasedOnLevel (int level)
 	{
 		return Mathf.Min (level + 9, 100);
 	}
 
 
-	private int GetMultiplier(int basevalue, int level)
+	private int GetMultiplier (int basevalue, int level)
 	{
 		float multi = 1.4f;
 		float curr = 1;
-		float next = curr ;
+		float next = curr;
 		float n = 0;
 
 		for (int i = 0; i < level; i++) {
@@ -77,10 +79,10 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 			curr = next;
 		}
 
-		return Mathf.RoundToInt(next * basevalue);
+		return Mathf.RoundToInt (next * basevalue);
 	}
 
-	private BigInteger GetFibonaciIndex(int level)
+	private BigInteger GetFibonaciIndex (int level)
 	{
 		BigInteger o = 1;
 		BigInteger p = 1;
@@ -99,17 +101,19 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 	#endregion
 
 	#region Livestock
-	public LivestockSO GetNextLivestockUpgrade()
+
+	public LivestockSO GetNextLivestockUpgrade ()
 	{
-		if (livestockLevel < livestockList.Count ) {
+		if (livestockLevel < livestockList.Count) {
 			return livestockList [livestockLevel];
 		}
 
 		return null;
 	}
-	public bool UpgradeLivestock()
+
+	public bool UpgradeLivestock ()
 	{
-		if (livestockLevel < livestockList.Count ) {
+		if (livestockLevel < livestockList.Count) {
 			ownedLivestockList.Add (livestockList [livestockLevel]);
 			livestockLevel++;
 			return true;
@@ -117,72 +121,79 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		return false;
 	}
 
-	public BigInteger GetLivestockSlideValue(LivestockSO livestock)
+	public BigInteger GetLivestockSlideValue (LivestockSO livestock)
 	{
 		if (livestock.slideValue == 0) {
 			//LEVEL START FROM 1 not 0
-			int level = livestockList.IndexOf(livestock)+1;
-			livestock.slideValue = GetFibonaciIndex(level);
+			int level = livestockList.IndexOf (livestock) + 1;
+			livestock.slideValue = GetFibonaciIndex (level);
 		}
 
 		return livestock.slideValue;
 	}
 
-	public BigInteger GetLivestockUpgradePrice(LivestockSO livestock)
+	public BigInteger GetLivestockUpgradePrice (LivestockSO livestock)
 	{
-		if(livestock == null) return -1;
+		if (livestock == null)
+			return -1;
 
 		if (livestock.upgradePrice == 0) {
 			//LEVEL START FROM 1 not 0
-			int level = livestockList.IndexOf (livestock)+1;
+			int level = livestockList.IndexOf (livestock) + 1;
 //			BigInteger bIntPrice = GetFibonaciIndex(level);
-			BigInteger bIntPrice = GetMultiplier(GetModPriceBasedOnLevel (level),level);
+			BigInteger bIntPrice = GetMultiplier (GetModPriceBasedOnLevel (level), level);
 
 			bIntPrice = bIntPrice * level;
 			livestock.upgradePrice = bIntPrice;	
 		}
 		return livestock.upgradePrice;
 	}
-	public string GetLivestockProgress()
+
+	public string GetLivestockProgress ()
 	{
-		return livestockLevel+ "/" + livestockList.Count ;
+		return livestockLevel + "/" + livestockList.Count;
 	}
 
 	#endregion
 
 	#region Environment
 
-	public EnvironmentSO GetLatestEnvironment(EnvironmentType type)
+	public EnvironmentSO GetLatestEnvironment (EnvironmentType type)
 	{
+		EnvironmentSO selected = null;
 		foreach (EnvironmentSO item in ownedEnvironmentList) {
 			if (item.type == type) {
-				return item;
+				if (selected == null) {
+					selected = item;
+				}
+				else if (selected.level < item.level) {
+					selected = item;
+				}
 			}
 		}
-		return null;
+		return selected;
 	}
 
 
-	public EnvironmentSO GetNextEnvironmentUpgrade()
+	public EnvironmentSO GetNextEnvironmentUpgrade ()
 	{
-		if (environmentLevel < environmentList.Count ) {
+		if (environmentLevel < environmentList.Count) {
 			return environmentList [environmentLevel];
 		}
 			
 		return null;
 	}
 
-	public bool UpgradeEnvironment()
+	public bool UpgradeEnvironment ()
 	{
 		if (environmentLevel < environmentList.Count) {
 			ownedEnvironmentList.Add (environmentList [environmentLevel]);
-			if(OnMultiplierUpdated !=null)
-			{
-				BigInteger prev = environmentLevel == 0 ? 1 : GetEnvironmentMultiplyValue(environmentList [environmentLevel-1]);
-				BigInteger target = GetEnvironmentMultiplyValue(environmentList [environmentLevel]);
+			if (OnMultiplierUpdated != null) {
+				BigInteger prev = environmentLevel == 0 ? 1 : GetEnvironmentMultiplyValue (environmentList [environmentLevel - 1]);
+				BigInteger target = GetEnvironmentMultiplyValue (environmentList [environmentLevel]);
 				BigInteger delta = target - prev;
 
-				OnMultiplierUpdated (prev,delta);
+				OnMultiplierUpdated (prev, delta);
 			}
 
 			environmentLevel++;
@@ -193,51 +204,53 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		return false;
 	}
 
-	public BigInteger GetCurrentMultiplier()
+	public BigInteger GetCurrentMultiplier ()
 	{
-		BigInteger prev = environmentLevel == 0 ? 1 : GetEnvironmentMultiplyValue(environmentList [environmentLevel-1]);
+		BigInteger prev = environmentLevel == 0 ? 1 : GetEnvironmentMultiplyValue (environmentList [environmentLevel - 1]);
 		return prev; 
 	}
 
-	public BigInteger GetEnvironmentMultiplyValue(EnvironmentSO environment)
+	public BigInteger GetEnvironmentMultiplyValue (EnvironmentSO environment)
 	{
-		if(environment == null) return -1;
+		if (environment == null)
+			return -1;
 
-		if (environment.multiplier == 0) 
-		{
+		if (environment.multiplier == 0) {
 			//LEVEL START FROM 1 not 0
-			int level = environmentList.IndexOf (environment)+1;
-			environment.multiplier = 1 + GetMultiplier(1,level);
+			int level = environmentList.IndexOf (environment) + 1;
+			environment.multiplier = 1 + GetMultiplier (1, level);
 		}
-		return environment.multiplier ;
+		return environment.multiplier;
 
 	}
 
 
-	public BigInteger GetEnvironmentUpgradePrice(EnvironmentSO environment)
+	public BigInteger GetEnvironmentUpgradePrice (EnvironmentSO environment)
 	{
-		if(environment == null) return -1;
+		if (environment == null)
+			return -1;
 
 		if (environment.upgradePrice == 0) {
 			//LEVEL START FROM 1 not 0
-			int level = environmentList.IndexOf (environment)+1;
-			BigInteger bIntPrice = GetFibonaciIndex(level);
+			int level = environmentList.IndexOf (environment) + 1;
+			BigInteger bIntPrice = GetFibonaciIndex (level);
 			bIntPrice = bIntPrice * level * GetModPriceBasedOnLevel (level);
 			environment.upgradePrice = bIntPrice;	
 		}
 		return environment.upgradePrice;
 	}
 
-	public string GetEnvironmentProgress()
+	public string GetEnvironmentProgress ()
 	{
-		return environmentLevel + "/" + environmentList.Count ;
+		return environmentLevel + "/" + environmentList.Count;
 	}
-	#endregion 
+
+	#endregion
 
 
 
 
-	public void OnGUI()
+	public void OnGUI ()
 	{
 		GUILayout.BeginVertical ("Box");
 
@@ -249,7 +262,7 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 //			if (GUILayout.Button (env.ToString () + " : " + GetEnvironmentUpgradePrice(env).ToStringShort())) {
 			if (GUILayout.Button ("env")) {
 				UpgradeEnvironment ();
-				WorldManager.shared().RefreshEnvironment();
+				WorldManager.shared ().RefreshEnvironment ();
 
 			}
 		}
@@ -268,17 +281,18 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 
 	#region Custom Method
-	[MenuItem("CONTEXT/UpgradeManager/Calculate")]
-	private static void Calc()
+
+	[MenuItem ("CONTEXT/UpgradeManager/Calculate")]
+	private static void Calc ()
 	{
 		LivestockSO so = UpgradeManager.shared ().livestockList.Random ();
 
-		print (so + " : " + UpgradeManager.shared ().GetLivestockUpgradePrice (so).ToStringShort() + " " + UpgradeManager.shared ().GetLivestockSlideValue (so).ToStringShort());
+		print (so + " : " + UpgradeManager.shared ().GetLivestockUpgradePrice (so).ToStringShort () + " " + UpgradeManager.shared ().GetLivestockSlideValue (so).ToStringShort ());
 	}
 
 
-	[MenuItem("CONTEXT/UpgradeManager/Generate Upgrades")]
-	private static void GenerateUpgrade()
+	[MenuItem ("CONTEXT/UpgradeManager/Generate Upgrades")]
+	private static void GenerateUpgrade ()
 	{	
 		// Environment List
 		UpgradeManager.shared ().environmentList = new List<EnvironmentSO> ();
@@ -305,7 +319,7 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		// Get Livestock in the Assets Folder
 		foreach (LivestockSO item in Helper.LoadAllAssetsOfType<LivestockSO> ()) {
 			//dont insert the one that default
-			if(!UpgradeManager.shared ().defaultLivestockList.Contains(item))
+			if (!UpgradeManager.shared ().defaultLivestockList.Contains (item))
 				UpgradeManager.shared ().livestockList.Add (item);
 		}
 		//NO NEED TO SORT, SORT BASED ON THE DIRECTORY (by name)
