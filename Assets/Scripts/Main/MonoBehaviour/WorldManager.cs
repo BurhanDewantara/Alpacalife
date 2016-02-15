@@ -44,7 +44,7 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 //					Debug.Log(envDrawer.sprite!= envSO.sprite);
 					if(!init && envDrawer.sprite != envSO.sprite)
 					{
-						Debug.Log("add");
+						
 						GameObject obj = Instantiate(puffPrefab,envDrawer.transform.position,Quaternion.identity) as GameObject;
 						Destroy(obj,2);	
 					}
@@ -95,8 +95,6 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 			);
 		}
 		worldLivestockObject.Add(livestock);
-
-		InputManager.shared().receivers.Add(livestock);
 	}
 
 

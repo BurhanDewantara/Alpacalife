@@ -38,8 +38,9 @@ public class OwnedLivestockController : CharacterCanvasController,IInputManagerD
 	{
 		isActivated = true;
 		isWaiting = true;
-		velocity = Vector3.zero;
 		waitTime = Random.Range (4, 12);
+		velocity = Vector3.zero;
+		targetPos = Vector3.zero;
 	}
 
 	public void SetLivestockSO(LivestockSO livestock)
@@ -106,9 +107,6 @@ public class OwnedLivestockController : CharacterCanvasController,IInputManagerD
 
 			Vector3 worldTouchPos = Camera.main.ScreenToWorldPoint(touch.end);
 			worldTouchPos = new Vector3(worldTouchPos.x,worldTouchPos .y,0);
-			Debug.Log(this.GetComponent<BoxCollider2D>().bounds );
-			Debug.Log(touch.end );
-			Debug.Log(worldTouchPos );
 
 			if(this.GetComponent<BoxCollider2D>().bounds.Contains(worldTouchPos))
 			{
