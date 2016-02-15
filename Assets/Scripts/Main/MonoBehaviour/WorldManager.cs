@@ -95,6 +95,8 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 			);
 		}
 		worldLivestockObject.Add(livestock);
+
+		InputManager.shared().receivers.Add(livestock);
 	}
 
 

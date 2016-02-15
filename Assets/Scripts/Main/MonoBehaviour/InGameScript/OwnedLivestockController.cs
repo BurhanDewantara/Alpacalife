@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Artoncode.Core;
 
-public class OwnedLivestockController : CharacterCanvasController {
+public class OwnedLivestockController : CharacterCanvasController,IInputManagerDelegate {
 
 	LivestockSO livestockSO;
 
@@ -25,6 +26,11 @@ public class OwnedLivestockController : CharacterCanvasController {
 
 	void Start()
 	{
+		drag = 0.99f;
+		maxJumpPower = 0.18f;
+		minJumpPower = 0.15f;
+
+		InputManager.shared().receivers.Add(this.gameObject);
 		Reset ();
 	}
 
@@ -55,16 +61,13 @@ public class OwnedLivestockController : CharacterCanvasController {
 
 	protected override void MovementUpdate ()
 	{
-		if(!IsActivated) return;
-
 		base.MovementUpdate ();
+
+		if(!IsActivated) return;
 
 		if (!isWaiting) {
 			if (Vector3 .Distance (targetPos, this.transform.position) < 0.1) {
-				isWaiting = true;
-				waitTime = Random.Range (4, 12);
-				velocity = Vector3.zero;
-				targetPos = Vector3.zero;
+				Wait();
 			}
 		} else {
 			waitTime -= Time.deltaTime;
@@ -77,7 +80,43 @@ public class OwnedLivestockController : CharacterCanvasController {
 				isWaiting = false;
 			} 
 		}
+	}
+
+	private void Wait()
+	{
+		isWaiting = true;
+		waitTime = Random.Range (4, 12);
+		velocity = Vector3.zero;
+		targetPos = Vector3.zero;
+
+	}
 
 
+	public void touchStateChanged (TouchInput []touches)
+	{
+		if(!IsActivated) return;
+
+		TouchInput touch = touches [0];
+
+		switch (touch.phase) 
+		{
+		case TouchPhase.Began: break;
+		case TouchPhase.Moved: break;
+		case TouchPhase.Ended: 
+
+			Vector3 worldTouchPos = Camera.main.ScreenToWorldPoint(touch.end);
+			worldTouchPos = new Vector3(worldTouchPos.x,worldTouchPos .y,0);
+			Debug.Log(this.GetComponent<BoxCollider2D>().bounds );
+			Debug.Log(touch.end );
+			Debug.Log(worldTouchPos );
+
+			if(this.GetComponent<BoxCollider2D>().bounds.Contains(worldTouchPos))
+			{
+				Wait();
+				Jump();
+			}
+				
+			break;
+		}
 	}
 }
