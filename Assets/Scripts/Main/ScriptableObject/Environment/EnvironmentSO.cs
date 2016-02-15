@@ -13,13 +13,16 @@ public enum EnvironmentType
 	Zeppelin,
 
 	House,
-	Tree1,
-	Tree2,
-	Tree3,
-	Tree4,
-	Pond,
-	Fence,
-	Fence2,
+	TreeL1,
+	TreeL2,
+	TreeB1,
+	TreeB2,
+	PondF,
+	PondB,
+	FenceL,
+	FenceR,
+	FenceB,
+	Haysack,
 
 }
 

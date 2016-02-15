@@ -237,31 +237,33 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 
 
-//	public void OnGUI()
-//	{
-//		GUILayout.BeginVertical ("Box");
-//
-//		GUILayout.Label ("Env Level : " + environmentLevel);
-//		GUILayout.Label ("Lvs Level : " + livestockLevel);
-//
-//		EnvironmentSO env = GetNextEnvironmentUpgrade ();
-//		if (env != null) {
+	public void OnGUI()
+	{
+		GUILayout.BeginVertical ("Box");
+
+		GUILayout.Label ("Env Level : " + environmentLevel);
+		GUILayout.Label ("Lvs Level : " + livestockLevel);
+
+		EnvironmentSO env = GetNextEnvironmentUpgrade ();
+		if (env != null) {
 //			if (GUILayout.Button (env.ToString () + " : " + GetEnvironmentUpgradePrice(env).ToStringShort())) {
-//				UpgradeEnvironment ();
-//				WorldManager.shared().RefreshEnvironment();
-//
-//			}
-//		}
-//		LivestockSO lvs = GetNextLivestockUpgrade ();
-//		if (lvs != null) {
+			if (GUILayout.Button ("env")) {
+				UpgradeEnvironment ();
+				WorldManager.shared().RefreshEnvironment();
+
+			}
+		}
+		LivestockSO lvs = GetNextLivestockUpgrade ();
+		if (lvs != null) {
 //			if (GUILayout.Button (lvs.ToString () + " : " + GetLivestockUpgradePrice(lvs).ToStringShort())) {
-//				UpgradeLivestock ();
-//			}
-//		}
-//
-//		GUILayout.EndVertical ();
-////		BuyNewEnvironment ();
-//	}
+			if (GUILayout.Button ("lvs")) {
+				UpgradeLivestock ();
+			}
+		}
+
+		GUILayout.EndVertical ();
+//		BuyNewEnvironment ();
+	}
 
 
 
@@ -289,14 +291,14 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 		}
 
-		// SORT Environment
-		UpgradeManager.shared().environmentList.Sort (delegate(EnvironmentSO x, EnvironmentSO y) {
-			if (x.level == y.level)
-				return x.type.CompareTo (y.type);
-
-			return x.level.CompareTo (y.level);
-		});
-
+//		// SORT Environment
+//		UpgradeManager.shared().environmentList.Sort (delegate(EnvironmentSO x, EnvironmentSO y) {
+//			if (x.level == y.level)
+//				return x.type.CompareTo (y.type);
+//
+//			return x.level.CompareTo (y.level);
+//		});
+//
 
 		// LIVESTOCK
 		UpgradeManager.shared ().livestockList = new List<LivestockSO> ();
