@@ -19,6 +19,7 @@ public class GameDataManager : Singleton<GameDataManager>
 	{
 		data = DataManager.create ();
 		data.setDefaultPath ("data.dat");
+		Load();
 	}
 
 	public void save()

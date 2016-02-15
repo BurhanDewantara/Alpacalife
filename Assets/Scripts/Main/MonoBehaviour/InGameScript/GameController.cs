@@ -180,7 +180,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		environment.GetComponent<Animator>().SetBool("IsPlay",true);
 		livestockManager.Spawn();
 		PopObject (timerGameObject,true);
-		PopObject (tutorialButton,true);
+		PopObject (tutorialButton,!isTutorial);
 		tutorialAnimation.SetActive(true);
 		GetTutorialDirection();
 		state = GameStateType.Pregame;
@@ -279,6 +279,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		if(state != GameStateType.Start && state != GameStateType.Pregame) return;
 		TouchInput touch = touches [0];
 
+		if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject (-1) || UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject (touch.fingerId)) return;
 
 		switch (touch.phase) 
 		{

@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Artoncode.Core;
@@ -13,7 +12,7 @@ public class CurrencyManager : SingletonMonoBehaviour<CurrencyManager>
 
 	public BigInteger playerMoney;
 
-	void Start()
+	void Awake()
 	{
 		Load();
 	}
@@ -39,8 +38,6 @@ public class CurrencyManager : SingletonMonoBehaviour<CurrencyManager>
 		BigInteger gold		  = UpgradeManager.shared ().GetLivestockSlideValue (livestock);
 		BigInteger multiplier = UpgradeManager.shared ().GetCurrentMultiplier ();
 		AddGold (gold * multiplier);
-
-		
 	}
 
 	public void AddGold(BigInteger value)
@@ -49,7 +46,7 @@ public class CurrencyManager : SingletonMonoBehaviour<CurrencyManager>
 			OnUpdated(playerMoney,value);
 
 		playerMoney += value;
-
+		Save();
 	}
 
 	public void PayGold(BigInteger value)
@@ -60,8 +57,8 @@ public class CurrencyManager : SingletonMonoBehaviour<CurrencyManager>
 				OnUpdated(playerMoney,- value);
 
 			playerMoney -= value;	
+			Save();
 		}
-
 	}
 
 	public bool IsAfforadble(BigInteger value)
