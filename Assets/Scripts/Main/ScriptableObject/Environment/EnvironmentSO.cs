@@ -23,6 +23,7 @@ public enum EnvironmentType
 	FenceR,
 	FenceB,
 	Haysack,
+	TreeL3,
 
 }
 
