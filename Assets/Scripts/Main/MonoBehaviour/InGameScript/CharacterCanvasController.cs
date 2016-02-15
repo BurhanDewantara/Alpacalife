@@ -91,7 +91,7 @@ public class CharacterCanvasController : MonoBehaviour {
 
 	}
 
-	void Update()
+	public virtual void Update()
 	{
 		//movement & jump
 		MovementUpdate ();

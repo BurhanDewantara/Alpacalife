@@ -9,6 +9,9 @@ public class GameDataManager : Singleton<GameDataManager>
 	public const string PLAYER_ENV_UPGRADE_LEVEL_KEY = "PLAYER_ENV_UPGRADE_LEVEL_KEY";
 	public const string PLAYER_LVS_UPGRADE_LEVEL_KEY = "PLAYER_LVS_UPGRADE_LEVEL_KEY";
 	public const string PLAYER_CURRENCY_KEY = "PLAYER_CURRENCY_KEY";
+	public const string PLAYER_BEST_KEY = "PLAYER_BEST_KEY";
+	public const string PLAYER_TUTORIAL_KEY = "PLAYER_HAS_TUTORIAL_KEY";
+
 
 	public DataManager data;
 
@@ -49,6 +52,32 @@ public class GameDataManager : Singleton<GameDataManager>
 			data.setInt (PLAYER_LVS_UPGRADE_LEVEL_KEY, value);	
 		}
 	}
+
+	public int PlayerBestScore
+	{
+		get
+		{
+			return ((data.getInt (PLAYER_BEST_KEY) != null) ? data.getInt (PLAYER_BEST_KEY).Value : 0);
+		}
+		set{ 
+			data.setInt (PLAYER_BEST_KEY, value);	
+		}
+	}
+
+
+	public bool PlayerHasTakenTutorial
+	{
+		get
+		{
+			return ((data.getBool (PLAYER_TUTORIAL_KEY) != null) ? data.getBool (PLAYER_TUTORIAL_KEY).Value : false);
+		}
+		set{ 
+			data.setBool (PLAYER_TUTORIAL_KEY, value);	
+		}
+	}
+
+
+
 
 	public BigInteger PlayerCurrency {
 		get {

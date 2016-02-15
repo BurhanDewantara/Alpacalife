@@ -13,15 +13,26 @@ public class LivestockController : CharacterCanvasController {
 	public delegate void LivestockControllerDelegate (GameObject sender);
 	public event LivestockControllerDelegate OnLivestockReceivedOrder;
 	public GameObject nameTag;
+	public GameObject dieMark;
+	public GameObject sweat;
+
 	public Canvas currCanvas;
+	public GameObject smokePrefab;
+
 	public bool isOrdered = false;
-	private LivestockSO livestock;
 
 	[HideInInspector]
 	public ColorSO textSOColor;
 	[HideInInspector]
 	public ColorSO tintSOColor;
 
+
+	[Header("Audio")]
+	public AudioClip die;
+
+	private Coroutine onFakePanicCoroutine;
+
+	private LivestockSO livestock;
 	private SpriteRenderer currSprite{
 		get{
 			return characterObject.GetComponent<SpriteRenderer>();
@@ -52,8 +63,10 @@ public class LivestockController : CharacterCanvasController {
 	protected override void UpdateZOrder ()
 	{
 		base.UpdateZOrder ();
-		if(currCanvas.sortingOrder != -Mathf.CeilToInt(this.transform.localPosition.y * 100 ))
-			currCanvas.sortingOrder = -Mathf.CeilToInt(this.transform.localPosition.y * 100 );
+		if (currCanvas.sortingOrder != -Mathf.CeilToInt (this.transform.localPosition.y * 100)) {
+			currCanvas.sortingOrder = -Mathf.CeilToInt (this.transform.localPosition.y * 100);
+			dieMark.GetComponent<SpriteRenderer>().sortingOrder = -Mathf.CeilToInt( this.transform.localPosition.y * 100 ) ;
+		}
 	}
 
 	public void SetLabel(ColorSO label, ColorSO color)
@@ -67,6 +80,8 @@ public class LivestockController : CharacterCanvasController {
 	private void HideLabel()
 	{
 		nameTag.SetActive(false);
+		sweat.SetActive (false);
+		dieMark.SetActive (false);
 	}
 
 	public void Move(DirectionType direction)
@@ -75,6 +90,7 @@ public class LivestockController : CharacterCanvasController {
 			return;
 		
 		isOrdered = true;
+		this.tag = "Untagged";
 		HideLabel();
 		iTween.Stop(this.gameObject);
 
@@ -110,7 +126,54 @@ public class LivestockController : CharacterCanvasController {
 
 			Destroy (this.gameObject);
 		}
+		if (col.CompareTag ("Wolf")) {
+			if(!isOrdered)
+				CreateSmoke ();
+		}
 	}
 
+	void CreateSmoke()
+	{
+		GameObject obj = Instantiate (smokePrefab) as GameObject;
+		obj.transform.position = Vector3.zero;
+		obj.transform.SetParent (this.transform, false);
+		Destroy (obj, 3);
+
+	}
+
+
+	public void FakePanic()
+	{
+		if(onFakePanicCoroutine == null)
+			onFakePanicCoroutine = StartCoroutine (FakePanicCoroutine ());
+
+	}
+
+	IEnumerator FakePanicCoroutine()
+	{
+		AudioSource.PlayClipAtPoint (die, Camera.main.transform.position);	
+		sweat.SetActive (true);
+		dieMark.SetActive (true);
+		iTween.ShakePosition (dieMark, Vector3.one * 0.2f, 0.5f);
+		iTween.ShakePosition (Camera.main.gameObject, Vector3.one * 0.2f, 1.0f);
+		yield return new WaitForSeconds (1.0f);
+		sweat.SetActive (false);
+		dieMark.SetActive (false);
+
+		onFakePanicCoroutine = null;
+	}
+
+
+
+	public void Panic()
+	{
+		AudioSource.PlayClipAtPoint (die, Camera.main.transform.position);	
+
+		sweat.SetActive (true);
+		dieMark.SetActive (true);
+		iTween.ShakePosition (dieMark, Vector3.one * 0.2f, 0.5f);
+		iTween.ShakePosition (Camera.main.gameObject, Vector3.one * 0.2f, 1.0f);
+
+	}
 
 }

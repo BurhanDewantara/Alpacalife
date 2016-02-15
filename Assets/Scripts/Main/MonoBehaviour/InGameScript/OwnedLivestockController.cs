@@ -42,7 +42,16 @@ public class OwnedLivestockController : CharacterCanvasController {
 		characterObject.GetComponent<SpriteRenderer>().sprite = livestockSO.sprite;		
 	}
 
+	public void SetDirection(bool isFlipped)
+	{
+		characterObject.transform.eulerAngles = Vector3.up * (isFlipped ? 180 : 0);
 
+	}
+	protected override void UpdateRotation()
+	{
+		if(!IsActivated) return;
+		base.UpdateRotation ();
+	}
 
 	protected override void MovementUpdate ()
 	{

@@ -31,11 +31,23 @@ public class CurrencyManager : SingletonMonoBehaviour<CurrencyManager>
 	}
 
 
+
+
+
+	public void AddGold(LivestockSO livestock)
+	{
+		BigInteger gold		  = UpgradeManager.shared ().GetLivestockSlideValue (livestock);
+		BigInteger multiplier = UpgradeManager.shared ().GetCurrentMultiplier ();
+		AddGold (gold * multiplier);
+
+		
+	}
+
 	public void AddGold(BigInteger value)
 	{
 		if(OnUpdated !=null)
 			OnUpdated(playerMoney,value);
-		
+
 		playerMoney += value;
 
 	}

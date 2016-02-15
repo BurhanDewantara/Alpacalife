@@ -43,6 +43,7 @@ public class WolvesManager : SingletonMonoBehaviour<WolvesManager> {
 			GameObject livestockTransform = livestocks.Random ();
 			Vector3 targetPos = livestockTransform.transform.localPosition + Helper.RandomWithinArea (livestockTransform.GetComponents<BoxCollider2D>());
 
+
 			wolf.GetComponent<WolfContoller> ().Charge (targetPos, speed);
 			wolf.transform.SetParent (this.transform,false);
 			wolvesList.Add (wolf);

@@ -43,11 +43,11 @@ public class MultiplierHandler : MonoBehaviour {
 		StartCoroutine(ValueUpdate(curr,delta));
 	}
 
-	void OnGUI()
-	{
-		if(GUILayout.Button("up"))
-		{
-			UpgradeManager.shared().UpgradeEnvironment();
-		}
-	}
+//	void OnGUI()
+//	{
+//		if(GUILayout.Button("up"))
+//		{
+//			UpgradeManager.shared().UpgradeEnvironment();
+//		}
+//	}
 }

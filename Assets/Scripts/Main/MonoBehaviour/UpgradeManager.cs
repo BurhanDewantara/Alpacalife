@@ -84,7 +84,7 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 	{
 		BigInteger o = 1;
 		BigInteger p = 1;
-		BigInteger v = 0;
+		BigInteger v = 1;
 
 
 		for (int i = 0; i < level; i++) {
@@ -121,7 +121,7 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 	{
 		if (livestock.slideValue == 0) {
 			//LEVEL START FROM 1 not 0
-			int level = livestockList.IndexOf (livestock)+1;
+			int level = livestockList.IndexOf(livestock)+1;
 			livestock.slideValue = GetFibonaciIndex(level);
 		}
 

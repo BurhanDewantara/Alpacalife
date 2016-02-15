@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
+
+using ScottGarland;
 
 public class ShopController : MonoBehaviour {
 
@@ -11,6 +14,11 @@ public class ShopController : MonoBehaviour {
 
 	public GameObject buyPanel;
 
+	public GameObject mainCanvas;
+	public GameObject popUpPrefab;
+
+	public GameObject notificationGameObject;
+
 	private GameObject currentSelectedObject = null;
 
 
@@ -18,7 +26,30 @@ public class ShopController : MonoBehaviour {
 	//1 livestock
 	private int buyState = 0;
 
+	List<string> noMoney = 
+		new List<string>()
+	{
+		"Insufficient funds",
+		"You don't have enough gold",
+		"mbeee, not nuff gold",
+		"yo! you aint no money",
+		"Doh!",
+		"Sir, look at your money now",
+		"Not enough gold",
+	};
 
+	public void CheckAnyUpgradeable()
+	{
+		EnvironmentSO envSo = UpgradeManager.shared ().GetNextEnvironmentUpgrade();
+		LivestockSO lvsSo = UpgradeManager.shared ().GetNextLivestockUpgrade ();
+
+		BigInteger envSoPrice = UpgradeManager.shared ().GetEnvironmentUpgradePrice (envSo);
+		BigInteger lvsSoPrice = UpgradeManager.shared ().GetLivestockUpgradePrice (lvsSo);
+
+
+//		CurrencyManager.shared ().IsAfforadble (envSoPrice) || CurrencyManager.shared ().IsAfforadble (lvsSoPrice)
+			
+	}
 
 	void OnEnable()
 	{
@@ -62,9 +93,15 @@ public class ShopController : MonoBehaviour {
 			EnvironmentSO item = UpgradeManager.shared().GetNextEnvironmentUpgrade();
 			if(item !=null )
 			{
-				buyState = 0;
-				string detail = "multiplier x" + UpgradeManager.shared().GetEnvironmentMultiplyValue(item).ToStringShort();
-				StartCoroutine(DisplayBoughtAnimation(item.sprite,item.name,detail ));
+				BigInteger price = UpgradeManager.shared ().GetEnvironmentUpgradePrice (item);
+				if (CurrencyManager.shared ().IsAfforadble (price)) {
+					CurrencyManager.shared ().PayGold (price);
+					buyState = 0;
+					string detail = "multiplier x" + UpgradeManager.shared ().GetEnvironmentMultiplyValue (item).ToStringShort ();
+					StartCoroutine (DisplayBoughtAnimation (item.sprite, item.name, detail));
+				} else {
+					InsufficientFundPopUp (environmentBuyButton);
+				}
 			}
 		}
 	}
@@ -106,13 +143,23 @@ public class ShopController : MonoBehaviour {
 		}
 		else
 		{
-			
 			LivestockSO item = UpgradeManager.shared().GetNextLivestockUpgrade();
 			if(item !=null )
 			{
-				buyState = 1;
-				string detail = "Value : " + UpgradeManager.shared().GetLivestockSlideValue(item).ToStringShort();
-				StartCoroutine(DisplayBoughtAnimation(item.sprite,item.name,detail ));
+				BigInteger price = UpgradeManager.shared ().GetLivestockUpgradePrice (item);
+
+				if (CurrencyManager.shared ().IsAfforadble (price)) {
+					CurrencyManager.shared ().PayGold (price);
+
+					buyState = 1;
+					string detail = "Value : " + UpgradeManager.shared().GetLivestockSlideValue(item).ToStringShort();
+					StartCoroutine(DisplayBoughtAnimation(item.sprite,item.name,detail ));
+				}
+				else
+				{
+					InsufficientFundPopUp (livestockBuyButton);
+
+				}
 			}
 				
 			
@@ -147,6 +194,8 @@ public class ShopController : MonoBehaviour {
 
 	IEnumerator DisplayBoughtAnimation(Sprite img, string name, string detail)
 	{
+		float delay = 0.5f;
+
 		displayObject.SetActive(false);
 		buyPanel.SetActive(true);
 		buyPanel.GetComponent<Button>().interactable = false;
@@ -181,13 +230,15 @@ public class ShopController : MonoBehaviour {
 
 
 
-		yield return new WaitForSeconds(1.0f);
+		yield return new WaitForSeconds(delay);
+
+//		iTween.ColorTo (display, Color.white, delay);
 		display.GetComponent<Image>().color= Color.white;
 
-		yield return new WaitForSeconds(1.0f);
+		yield return new WaitForSeconds(delay);
 		dName.GetComponent<TextMeshProUGUI>().text = name;
 
-		yield return new WaitForSeconds(1.0f);
+		yield return new WaitForSeconds(delay);
 		dDetail.GetComponent<TextMeshProUGUI>().text = detail;
 
 		buyPanel.GetComponent<Button>().interactable = true;
@@ -218,5 +269,14 @@ public class ShopController : MonoBehaviour {
 	}
 
 
+	private void InsufficientFundPopUp(GameObject targetLoc)
+	{
+		string popText = noMoney.Random ();
+		GameObject obj = Instantiate (popUpPrefab, targetLoc.transform.position, Quaternion.identity) as GameObject;
+		obj.GetComponent<PopAndFade> ().SetText (popText);
+		obj.GetComponent<PopAndFade> ().PopUp ();
+		obj.transform.SetParent (mainCanvas.transform, true);
+
+	}
 
 }

@@ -42,15 +42,15 @@ public class CurrencyHandler : MonoBehaviour {
 		StartCoroutine(CurrencyUpdate(curr,delta));
 	}
 
-	void OnGUI()
-	{
-		if(GUILayout.Button("+100000"))
-		{
-			CurrencyManager.shared().AddGold(100000);
-		}
-		if(GUILayout.Button("-777"))
-		{
-			CurrencyManager.shared().PayGold(777);
-		}
-	}
+//	void OnGUI()
+//	{
+////		if(GUILayout.Button("+100000"))
+////		{
+////			CurrencyManager.shared().AddGold(100000);
+////		}
+////		if(GUILayout.Button("-777"))
+////		{
+////			CurrencyManager.shared().PayGold(777);
+////		}
+//	}
 }
