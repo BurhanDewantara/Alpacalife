@@ -31,7 +31,7 @@ public class MultiplierHandler : MonoBehaviour {
 			int bigpercent =  Mathf.CeilToInt(percentage * 1000);
 
 			BigInteger inText = curr + (delta * bigpercent / 1000);
-			textObject.text = inText.ToStringShort();
+			textObject.text = "x"+inText.ToStringShort();
 			yield return new WaitForEndOfFrame ();
 		}
 	}
