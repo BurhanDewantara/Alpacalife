@@ -24,6 +24,10 @@ public class TimerController : MonoBehaviour {
 
 	void Awake()
 	{
+	}
+
+	public void Init()
+	{
 		timerSlider.minValue = 0;
 		timerSlider.maxValue = maxValue;
 		timerSlider.value = maxValue;

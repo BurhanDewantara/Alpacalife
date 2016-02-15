@@ -44,6 +44,7 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 		GameObject newLivestock = Instantiate (livestockPrefab, newPos, Quaternion.identity) as GameObject;
 		newLivestock.name = livestockCounter.ToString();
 		newLivestock.transform.SetParent (this.transform, false);
+		newLivestock.GetComponent<LivestockController>().SetLivestock(UpgradeManager.shared().ownedLivestockList.Random());
 		newLivestock.GetComponent<LivestockController>().OnLivestockReceivedOrder += delegate(GameObject sender) {
 			queueLivestock.Remove(sender);
 		};

@@ -124,8 +124,8 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 	{
 
 		int livestockIdx = 0;
-		int randomCounter = 1;
-		float time = 1;
+		int randomCounter = 50;
+		float time = 0.5f;
 		List<Vector3> positions = new List<Vector3>();
 
 		while ( livestockIdx < worldLivestockObject.Count)
@@ -138,9 +138,15 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 			while (counter < randomCounter && livestockIdx < worldLivestockObject.Count) 
 			{
 				worldLivestockObject[livestockIdx].GetComponent<OwnedLivestockController>().IsActivated = false;
+				BoxCollider2D col = worldLivestockObject[livestockIdx].GetComponent<BoxCollider2D>();
+
+				Vector3 nextpos = positions [livestockIdx % randomCounter];
+				Vector3 diff = (nextpos - worldLivestockObject [livestockIdx].transform.localPosition);
+				worldLivestockObject [livestockIdx].GetComponent<OwnedLivestockController> ().SetDirection (diff.x > 0);
+
 				iTween.MoveTo(worldLivestockObject[livestockIdx],
 					iTween.Hash(
-						"position",positions[livestockIdx % randomCounter]
+						"position",nextpos
 						,"time",time
 						,"isLocal",true
 						,"easeType",iTween.EaseType.linear
@@ -191,6 +197,9 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 //				));
 //		} 
 	}
+
+
+
 
 	private List<Vector3> GenerateAssemblePosition(int max = 100)
 	{

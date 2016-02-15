@@ -23,11 +23,13 @@ public class ColorSO : ScriptableObject {
 
 	public static string TintTextWithColor(string text,Color color)
 	{
+		float maxValue = 230;
+
 		var rgbString = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", 
-		                              (int)(color.r * 255), 
-		                              (int)(color.g * 255), 
-		                              (int)(color.b * 255),
-		                              (int)(color.a * 255));
+			(int)(color.r * maxValue), 
+			(int)(color.g * maxValue), 
+			(int)(color.b * maxValue),
+			(int)(color.a * 255));
 		
 		string retVal = "<color="+rgbString+">";
 		retVal += text;

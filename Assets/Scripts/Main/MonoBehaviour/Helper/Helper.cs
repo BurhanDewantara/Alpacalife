@@ -15,6 +15,15 @@ public class Helper {
 		return newPos;
 	}
 
+	public static bool IsWithinArea(Collider2D obj ,Collider2D[] areas)
+	{
+		foreach (Collider2D item in areas) {
+			if(item.bounds.Contains(obj.bounds.center))
+				return true;
+		}
+
+		return false;
+	}
 
 	public static Vector3 RandomWithinArea(Collider2D[] areas)
 	{
