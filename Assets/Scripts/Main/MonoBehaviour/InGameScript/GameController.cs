@@ -248,12 +248,6 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		TouchInput touch = touches [0];
 
 
-		if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject (-1) || UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject (touch.fingerId)) {
-			
-			return;
-		}
-				
-
 		switch (touch.phase) 
 		{
 		case TouchPhase.Began: break;

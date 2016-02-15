@@ -32,8 +32,8 @@ public class CharacterCanvasController : MonoBehaviour {
 
 
 
-	private float drag = 0.98f;
-	private float gravity = 0.1f;
+	protected float drag = 0.98f;
+	protected float gravity = 0.1f;
 
 
 	protected bool isInteractable;
@@ -53,6 +53,7 @@ public class CharacterCanvasController : MonoBehaviour {
 	public void Jump()
 	{
 		if (!isJump) {
+
 			isJump = true;
 			anim.SetBool("Jump",isJump);
 			jumpPower = Random.Range (minJumpPower, maxJumpPower);
