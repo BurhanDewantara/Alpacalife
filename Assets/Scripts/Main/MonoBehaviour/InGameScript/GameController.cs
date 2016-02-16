@@ -91,6 +91,8 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 	private List<ColorSO> inGameColors;
 	private GameStateType state;
+	private DirectionType swipeDirection;
+	private Vector2 _deltaMovement;
 
 
 
@@ -279,59 +281,72 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		if(state != GameStateType.Start && state != GameStateType.Pregame) return;
 		TouchInput touch = touches [0];
 
-		if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject (-1) || UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject (touch.fingerId)) return;
-
 		switch (touch.phase) 
 		{
-		case TouchPhase.Began: break;
-		case TouchPhase.Moved: break;
+		case TouchPhase.Began: 
+			_deltaMovement = Vector2.zero;
+			break;
+		case TouchPhase.Moved: 
+//			_deltaMovement += touch.deltaPosition;
+			break;
 		case TouchPhase.Ended: 
 
-			DirectionType direction = SwipeDirection (touch.deltaPosition);
+			_deltaMovement = touch.end - touch.start;
 
-			if (direction == DirectionType.Up)
-				return;
-
-			if (state == GameStateType.Pregame && !isTutorial) {
-				state = GameStateType.Start;
-				tutorialButton.SetActive (false);
+			if (Mathf.Abs (_deltaMovement.x) > Mathf.Abs (_deltaMovement.y) && _deltaMovement.x > 100) {
+				ExecuteSwipe(DirectionType.Right);
+			} else if (Mathf.Abs (_deltaMovement.x) > Mathf.Abs (_deltaMovement.y) && _deltaMovement.x < 100) {
+				ExecuteSwipe(DirectionType.Left);
+			} else if (Mathf.Abs (_deltaMovement.y) > Mathf.Abs (_deltaMovement.x) && _deltaMovement.y < 100) {
+				ExecuteSwipe(DirectionType.Down);
 			}
-
-			foreach (FenceAreaHandler fence in fences) {
-				if (fence.fencePosition == direction) {
-					if (fence.IsEqual (livestockManager.activeLivestock.textSOColor)) {
-						
-
-						if (!isTutorial) {
-							Popuptext();
-							CurrencyManager.shared ().AddGold (livestockManager.activeLivestock.GetLivestock ());
-							UpdateDifficulty (Counter);
-							timerControllerObject.AddTime ();
-							Counter++;
-						}
-
-
-
-						livestockManager.ActiveLivestockGo(SwipeDirection(touch.deltaPosition));
-						livestockManager.Spawn ();
-						GetTutorialDirection();
-
-
-					} else {
-						if (!isTutorial) {
-							StartCoroutine (EndGame ());
-						} else {
-							livestockManager.activeLivestock.FakePanic();
-						}
-					}
-				}	
-			}
-
-			//			if(touch.deltaPosition)
 
 			break;
 		}
 	}
+
+	private void ExecuteSwipe(DirectionType direction)
+	{
+
+		if (direction == DirectionType.Up)
+			return;
+
+		if (state == GameStateType.Pregame && !isTutorial) {
+			state = GameStateType.Start;
+			tutorialButton.SetActive (false);
+		}
+
+		foreach (FenceAreaHandler fence in fences) {
+			if (fence.fencePosition == direction) {
+				if (fence.IsEqual (livestockManager.activeLivestock.textSOColor)) {
+
+
+					if (!isTutorial) {
+						Popuptext();
+						CurrencyManager.shared ().AddGold (livestockManager.activeLivestock.GetLivestock ());
+						UpdateDifficulty (Counter);
+						timerControllerObject.AddTime ();
+						Counter++;
+					}
+
+
+
+					livestockManager.ActiveLivestockGo(direction);
+					livestockManager.Spawn ();
+					GetTutorialDirection();
+
+
+				} else {
+					if (!isTutorial) {
+						StartCoroutine (EndGame ());
+					} else {
+						livestockManager.activeLivestock.FakePanic();
+					}
+				}
+			}	
+		}
+	}
+
 
 	private void Popuptext ()
 	{
