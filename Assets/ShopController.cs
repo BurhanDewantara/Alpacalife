@@ -17,8 +17,6 @@ public class ShopController : MonoBehaviour {
 	public GameObject mainCanvas;
 	public GameObject popUpPrefab;
 
-	public GameObject notificationGameObject;
-
 	private GameObject currentSelectedObject = null;
 
 
@@ -94,10 +92,9 @@ public class ShopController : MonoBehaviour {
 	}
 	public void EnvironmentBought()
 	{
-		currentSelectedObject = null;
 		UpgradeManager.shared().UpgradeEnvironment();
 		WorldManager.shared().RefreshEnvironment();
-
+		currentSelectedObject.GetComponent<AudioSource>().Play();
 		currentSelectedObject = null;
 		RefreshEnvironmentButton ();
 		RefreshDisplay();
@@ -155,7 +152,6 @@ public class ShopController : MonoBehaviour {
 
 	public void LivestockBought()
 	{
-		currentSelectedObject = null;
 		LivestockSO item = UpgradeManager.shared().GetNextLivestockUpgrade();
 		if(item!= null)
 		{
@@ -167,11 +163,12 @@ public class ShopController : MonoBehaviour {
 			pos = new Vector3 (pos.x, pos.y, 0);
 
 			WorldManager.shared ().AddLivestock (item,pos, true );
-
+			currentSelectedObject.GetComponent<AudioSource>().Play();
 			currentSelectedObject = null;
 
 			RefreshLivestockButton ();
 			RefreshDisplay();
+
 
 			//ShowLivestock();
 		}
