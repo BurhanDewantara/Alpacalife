@@ -43,6 +43,13 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 	public bool isTutorial = false;
 	public GameObject tutorialPanel;
 	public GameObject tutorialButton;
+	private GameObject tutorialAnimation{
+		get{
+			if(tutorialPanel!=null)
+				return tutorialPanel.transform.FindChild("Animation").gameObject;
+			return null;
+		}
+	}
 
 
 	int counter;
@@ -120,6 +127,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		isTutorial = true;
 		timerGameObject.SetActive (false);
 		tutorialPanel.SetActive (true);
+		tutorialAnimation.SetActive(true);
 		tutorialPanel.GetComponent<RectTransform> ().localScale = Vector3.one;
 		iTween.ScaleFrom (tutorialPanel,
 			iTween.Hash(
@@ -129,6 +137,8 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 			)
 			);
 		tutorialButton.SetActive (false);
+		GetTutorialDirection();
+
 	}
 
 
@@ -136,7 +146,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 	{
 		timerGameObject.SetActive (false);
 		tutorialButton.SetActive (false);
-
+		tutorialAnimation.SetActive(false);
 		iTween.ScaleTo(tutorialPanel,
 			iTween.Hash(
 				"scale",Vector3.zero 
@@ -146,6 +156,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 				,"oncompletetarget",this.gameObject
 			)
 		);
+
 	}
 
 	public void HideTutorialComplete()
@@ -169,7 +180,9 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		environment.GetComponent<Animator>().SetBool("IsPlay",true);
 		livestockManager.Spawn();
 		PopObject (timerGameObject,true);
-		PopObject (tutorialButton,true);
+		PopObject (tutorialButton,!isTutorial);
+		tutorialAnimation.SetActive(true);
+		GetTutorialDirection();
 		state = GameStateType.Pregame;
 		WorldManager.shared().OnAssembleDone -= OnAssembleDoneHandler;
 	}
@@ -242,11 +255,31 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 	}
 
+	private void GetTutorialDirection()
+	{
+		if(isTutorial)
+		{
+			if(livestockManager.activeLivestock ==null) return;
+			
+			if(tutorialAnimation !=null)
+			{
+				foreach (FenceAreaHandler fence in fences) {
+					if (fence.IsEqual (livestockManager.activeLivestock.textSOColor)) {
+						DirectionType direction = fence.fencePosition;
+						tutorialAnimation.GetComponent<Animator>().SetTrigger(direction.ToString());
+						break;
+					}
+				}
+			}
+		}
+	}
+
 	public void touchStateChanged (TouchInput []touches)
 	{
 		if(state != GameStateType.Start && state != GameStateType.Pregame) return;
 		TouchInput touch = touches [0];
 
+		if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject (-1) || UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject (touch.fingerId)) return;
 
 		switch (touch.phase) 
 		{
@@ -278,8 +311,11 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 						}
 
 
+
 						livestockManager.ActiveLivestockGo(SwipeDirection(touch.deltaPosition));
 						livestockManager.Spawn ();
+						GetTutorialDirection();
+
 
 					} else {
 						if (!isTutorial) {

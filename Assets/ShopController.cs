@@ -38,19 +38,6 @@ public class ShopController : MonoBehaviour {
 		"Not enough gold",
 	};
 
-	public void CheckAnyUpgradeable()
-	{
-		EnvironmentSO envSo = UpgradeManager.shared ().GetNextEnvironmentUpgrade();
-		LivestockSO lvsSo = UpgradeManager.shared ().GetNextLivestockUpgrade ();
-
-		BigInteger envSoPrice = UpgradeManager.shared ().GetEnvironmentUpgradePrice (envSo);
-		BigInteger lvsSoPrice = UpgradeManager.shared ().GetLivestockUpgradePrice (lvsSo);
-
-
-//		CurrencyManager.shared ().IsAfforadble (envSoPrice) || CurrencyManager.shared ().IsAfforadble (lvsSoPrice)
-			
-	}
-
 	void OnEnable()
 	{
 		RefreshEnvironmentButton();

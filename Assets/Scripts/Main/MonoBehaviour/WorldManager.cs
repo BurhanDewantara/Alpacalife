@@ -219,4 +219,9 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 		return positions;
 	}
 
+	void OnApplicationPause(bool pauseStatus)
+	{
+		GameDataManager.shared().save();
+	}
+
 }

@@ -1,13 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD:Assets/Art/icons/icons_soldout.png.meta
 guid: ac11cd5eeae0b754e9b03dd819021fdc
-timeCreated: 1455261638
-licenseType: Free
-=======
-guid: 8ff6f52b7d1408041a3a3989772031cd
-timeCreated: 1455274916
-licenseType: Pro
->>>>>>> 2c0b604d91e81807feab110666374fb60eab3018:Assets/Art/icons/icons_soldout.png.meta
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
@@ -29,14 +21,14 @@ TextureImporter:
   grayScaleToAlpha: 0
   generateCubemap: 0
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 7
+  cubemapConvolutionSteps: 4
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
     filterMode: -1
-    aniso: -1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
