@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using UnityEngine.Advertisements;
+using UnityEngine;
 using UnityEngine.UI;
+
 using System.Collections;
 using TMPro;
 using ScottGarland;
@@ -12,10 +14,13 @@ public class GameOverController : MonoBehaviour {
 	public TextMeshProUGUI freeCoinText;
 
 
+
 	public GameObject bonusCoinButton;
 	public GameObject homeButton;
 
 	private int bestScore = 80;
+
+	private BigInteger moneyResult;
 
 	void OnEnable ()
 	{
@@ -38,12 +43,15 @@ public class GameOverController : MonoBehaviour {
 		BigInteger multi = UpgradeManager.shared ().GetCurrentMultiplier ();
 		int randomFactor = Random.Range (20, 30);
 
-		BigInteger result = anyPrice * multi * randomFactor;
-		bonusCoinButton.GetComponentInChildren<TextMeshProUGUI> ().text = result.ToStringShort ();
+		moneyResult = anyPrice * multi * randomFactor;
+		bonusCoinButton.GetComponentInChildren<TextMeshProUGUI> ().text = moneyResult.ToStringShort ();
 
 		bonusCoinButton.GetComponent<Button> ().onClick.RemoveAllListeners ();
 		bonusCoinButton.GetComponent<Button> ().onClick.AddListener (delegate() {
-			CurrencyManager.shared().AddGold(result);
+
+			//TODO: Show ADS HERE
+			ShowRewardedAd();
+//			CurrencyManager.shared().AddGold(result);
 			bonusCoinButton.GetComponent<Button> ().interactable = false;	
 		});
 
@@ -84,7 +92,35 @@ public class GameOverController : MonoBehaviour {
 
 	}
 
+	public void ShowRewardedAd()
+	{
+		if (Advertisement.IsReady("rewardedVideo"))
+		{
+			ShowOptions options = new ShowOptions{ resultCallback = HandleShowResult };
+			Advertisement.Show("rewardedVideo", options);
+		}
+	}
 
+	private void HandleShowResult(ShowResult result)
+	{
+		switch (result)
+		{
+		case ShowResult.Finished:
+			Debug.Log("The ad was successfully shown.");
 
+			CurrencyManager.shared().AddGold(moneyResult);
+			//
+			// YOUR CODE TO REWARD THE GAMER
+			// Give coins etc.
+			break;
+		case ShowResult.Skipped:
+			Debug.Log("The ad was skipped before reaching the end.");
+			break;
+		case ShowResult.Failed:
+			Debug.LogError("The ad failed to be shown.");
+			break;
+		}
+	}
 
 }
+
