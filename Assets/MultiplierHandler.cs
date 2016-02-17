@@ -8,7 +8,6 @@ public class MultiplierHandler : MonoBehaviour {
 	public TextMeshProUGUI textObject;
 	// Use this for initialization
 	void Start () {
-		
 		SetValue(UpgradeManager.shared().GetCurrentMultiplier(),0);
 		UpgradeManager.shared().OnMultiplierUpdated+= HandleOnMultiplierUpdated;
 	}

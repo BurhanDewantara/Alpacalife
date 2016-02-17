@@ -53,10 +53,6 @@ public class CharacterCanvasController : MonoBehaviour {
 	public void Jump()
 	{
 		if (!isJump) {
-			if(this.GetComponent<RandomSound>())
-			{
-				this.GetComponent<RandomSound>().Play();	
-			}
 
 			isJump = true;
 			anim.SetBool("Jump",isJump);

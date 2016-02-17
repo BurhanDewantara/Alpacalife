@@ -104,6 +104,8 @@ public class OwnedLivestockController : CharacterCanvasController,IInputManagerD
 
 		TouchInput touch = touches [0];
 
+		if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject (-1) || UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject (touch.fingerId)) return;
+
 		switch (touch.phase) 
 		{
 		case TouchPhase.Began: break;
@@ -117,6 +119,9 @@ public class OwnedLivestockController : CharacterCanvasController,IInputManagerD
 			{
 				Wait();
 				Jump();
+				if(this.GetComponent<RandomSound>())
+					this.GetComponent<RandomSound>().Play();	
+				
 			}
 				
 			break;

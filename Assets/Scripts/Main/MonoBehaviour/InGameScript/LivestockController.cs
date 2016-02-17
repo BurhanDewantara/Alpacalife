@@ -93,6 +93,9 @@ public class LivestockController : CharacterCanvasController {
 		this.tag = "Untagged";
 		HideLabel();
 		iTween.Stop(this.gameObject);
+		if(this.GetComponent<RandomSound>())
+			this.GetComponent<RandomSound>().Play();	
+		
 
 		switch (direction) {
 		case DirectionType.Left:
@@ -150,7 +153,7 @@ public class LivestockController : CharacterCanvasController {
 
 	IEnumerator FakePanicCoroutine()
 	{
-		AudioSource.PlayClipAtPoint (die, Camera.main.transform.position);	
+		AudioSource.PlayClipAtPoint (die, Camera.main.transform.position,0.5f);	
 		sweat.SetActive (true);
 		dieMark.SetActive (true);
 		iTween.ShakePosition (dieMark, Vector3.one * 0.2f, 0.5f);
@@ -166,8 +169,7 @@ public class LivestockController : CharacterCanvasController {
 
 	public void Panic()
 	{
-		AudioSource.PlayClipAtPoint (die, Camera.main.transform.position);	
-
+		AudioSource.PlayClipAtPoint (die, Camera.main.transform.position,0.5f);	
 		sweat.SetActive (true);
 		dieMark.SetActive (true);
 		iTween.ShakePosition (dieMark, Vector3.one * 0.2f, 0.5f);

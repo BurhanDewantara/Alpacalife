@@ -24,7 +24,7 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 	public List<EnvironmentSO> ownedEnvironmentList;
 	public List<LivestockSO> ownedLivestockList;
 
-	public void Start ()
+	public void Awake ()
 	{
 		Load ();
 	}
@@ -37,13 +37,13 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		ownedEnvironmentList = new List<EnvironmentSO> (defaultEnvironmentList);
 		ownedLivestockList = new List<LivestockSO> (defaultLivestockList);
 
-		if (environmentLevel < environmentList.Count) {
+		if (environmentLevel <= environmentList.Count) {
 			for (int i = 0; i < environmentLevel; i++) {
 				ownedEnvironmentList.Add (environmentList [i]);
 			}
 		}
 
-		if (livestockLevel < livestockList.Count) {
+		if (livestockLevel <= livestockList.Count) {
 			for (int i = 0; i < livestockLevel; i++) {
 				ownedLivestockList.Add (livestockList [i]);
 			}
@@ -60,9 +60,20 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 	#region Helper
 
+
 	private int GetModPriceBasedOnLevel (int level)
 	{
-		return Mathf.Min (level + 9, 100);
+//		float mod =1.3f;
+//		float baseVal = 10.0f;
+//		float result = baseVal;
+//
+//		for (int i = 0; i < level-1; i++) {
+//			result*=mod;
+//		}
+//
+//		return Mathf.CeilToInt(result);
+
+//		return Mathf.Min (level + 9, 100);
 	}
 
 
@@ -154,6 +165,12 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		return livestockLevel + "/" + livestockList.Count;
 	}
 
+	public bool IsLivestockMaxedOut()
+	{
+		return livestockLevel == livestockList.Count;
+	}
+
+
 	#endregion
 
 	#region Environment
@@ -244,6 +261,11 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		return environmentLevel + "/" + environmentList.Count;
 	}
 
+	public bool IsEnvironmmentMaxedOut()
+	{
+		return environmentLevel == environmentList.Count;
+	}
+
 	#endregion
 
 
@@ -251,30 +273,27 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 	public void OnGUI ()
 	{
-//		GUILayout.BeginVertical ("Box");
-//
-//		GUILayout.Label ("Env Level : " + environmentLevel);
-//		GUILayout.Label ("Lvs Level : " + livestockLevel);
-//
-//		EnvironmentSO env = GetNextEnvironmentUpgrade ();
-//		if (env != null) {
-////			if (GUILayout.Button (env.ToString () + " : " + GetEnvironmentUpgradePrice(env).ToStringShort())) {
-//			if (GUILayout.Button ("env")) {
-//				UpgradeEnvironment ();
-//				WorldManager.shared ().RefreshEnvironment ();
-//
-//			}
-//		}
-//		LivestockSO lvs = GetNextLivestockUpgrade ();
-//		if (lvs != null) {
-////			if (GUILayout.Button (lvs.ToString () + " : " + GetLivestockUpgradePrice(lvs).ToStringShort())) {
-//			if (GUILayout.Button ("lvs")) {
-//				UpgradeLivestock ();
-//			}
-//		}
-//
-//		GUILayout.EndVertical ();
-////		BuyNewEnvironment ();
+		GUILayout.BeginVertical ("Box");
+
+		GUILayout.Label ("Env Level : " + environmentLevel);
+		GUILayout.Label ("Lvs Level : " + livestockLevel);
+
+		EnvironmentSO env = GetNextEnvironmentUpgrade ();
+		if (env != null) {
+			if (GUILayout.Button ("env")) {
+				UpgradeEnvironment ();
+				WorldManager.shared ().RefreshEnvironment ();
+
+			}
+		}
+		LivestockSO lvs = GetNextLivestockUpgrade ();
+		if (lvs != null) {
+			if (GUILayout.Button ("lvs")) {
+				UpgradeLivestock ();
+			}
+		}
+
+		GUILayout.EndVertical ();
 	}
 
 
@@ -291,6 +310,26 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 //
 
 	#if UNITY_EDITOR
+
+	[UnityEditor.MenuItem ("CONTEXT/UpgradeManager/Calculate")]
+	private static void Calculate(){
+		BigInteger totalCostEnv = 0;
+		BigInteger totalCostLvs = 0;
+
+		foreach (EnvironmentSO item in UpgradeManager.shared().environmentList) {
+			totalCostEnv += UpgradeManager.shared().GetEnvironmentUpgradePrice(item);
+		}
+
+		foreach (LivestockSO item in UpgradeManager.shared().livestockList) {
+			totalCostLvs += UpgradeManager.shared().GetLivestockUpgradePrice(item);
+		}
+
+		Debug.Log(totalCostEnv + " " + totalCostEnv.ToStringShort());
+		Debug.Log(totalCostLvs + " " + totalCostLvs.ToStringShort());
+		Debug.Log(totalCostEnv+totalCostLvs);
+		Debug.Log((totalCostEnv+totalCostLvs).ToStringShort());
+
+	}
 
 	[UnityEditor.MenuItem ("CONTEXT/UpgradeManager/Generate Upgrades")]
 	private static void GenerateUpgrade ()

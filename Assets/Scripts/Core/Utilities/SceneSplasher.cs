@@ -33,6 +33,7 @@ public class SceneSplasher : MonoBehaviour
 		fadeIn = false;
 		fadeOut = false;	
 		isPlaying = false;	
+		Play();
 	}
 
 	public void Play()
