@@ -18,6 +18,11 @@ public class OwnedLivestockController : CharacterCanvasController,IInputManagerD
 			isActivated = value;
 			if (isActivated)
 				Reset ();
+			else
+			{
+				velocity = Vector3.zero;
+				targetPos = Vector3.zero;
+			}
 		}
 		get { 
 			return isActivated;

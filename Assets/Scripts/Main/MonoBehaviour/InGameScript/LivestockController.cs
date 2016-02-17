@@ -123,8 +123,7 @@ public class LivestockController : CharacterCanvasController {
 		}
 
 		if (col.CompareTag ("Destroyer")) {
-
-			Destroy (this.gameObject);
+			Destroy (this.gameObject,2);
 		}
 		if (col.CompareTag ("Wolf")) {
 			if(!isOrdered)

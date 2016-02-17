@@ -83,6 +83,7 @@ public class ShopController : MonoBehaviour {
 					CurrencyManager.shared ().PayGold (price);
 					buyState = 0;
 					string detail = "multiplier x" + UpgradeManager.shared ().GetEnvironmentMultiplyValue (item).ToStringShort ();
+					currentSelectedObject.GetComponent<AudioSource>().Play();
 					StartCoroutine (DisplayBoughtAnimation (item.sprite, item.name, detail));
 				} else {
 					InsufficientFundPopUp (environmentBuyButton);
@@ -94,8 +95,8 @@ public class ShopController : MonoBehaviour {
 	{
 		UpgradeManager.shared().UpgradeEnvironment();
 		WorldManager.shared().RefreshEnvironment();
-		currentSelectedObject.GetComponent<AudioSource>().Play();
 		currentSelectedObject = null;
+		this.GetComponent<RandomSound>().Play();
 		RefreshEnvironmentButton ();
 		RefreshDisplay();
 	}
@@ -137,6 +138,7 @@ public class ShopController : MonoBehaviour {
 
 					buyState = 1;
 					string detail = "Value : " + UpgradeManager.shared().GetLivestockSlideValue(item).ToStringShort();
+					currentSelectedObject.GetComponent<AudioSource>().Play();
 					StartCoroutine(DisplayBoughtAnimation(item.sprite,item.name,detail ));
 				}
 				else
@@ -163,7 +165,7 @@ public class ShopController : MonoBehaviour {
 			pos = new Vector3 (pos.x, pos.y, 0);
 
 			WorldManager.shared ().AddLivestock (item,pos, true );
-			currentSelectedObject.GetComponent<AudioSource>().Play();
+			this.GetComponent<RandomSound>().Play();
 			currentSelectedObject = null;
 
 			RefreshLivestockButton ();
