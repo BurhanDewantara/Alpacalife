@@ -40,8 +40,8 @@ public class EnvironmentSO: ScriptableObject {
 	public Sprite sprite;
 
 
-	public BigInteger upgradePrice;
-	public BigInteger multiplier;
-
+//	public BigInteger upgradePrice;
+//	public BigInteger multiplier;
+//
 
 }

@@ -234,4 +234,15 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 		GameDataManager.shared().save();
 	}
 
+
+	public void OpenAchievement()
+	{
+		GameManager.shared().ShowAchievementBoard();
+	}
+
+	public void OpenLeaderboard()
+	{
+		GameManager.shared().ShowLeaderboardUI();
+	}
+
 }

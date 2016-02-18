@@ -61,52 +61,89 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 	#region Helper
 
 
-	private int GetModPriceBasedOnLevel (int level)
+	private int GetCalculateModPriceBasedOnLevel (int level)
 	{
-//		float mod =1.3f;
-//		float baseVal = 10.0f;
-//		float result = baseVal;
-//
-//		for (int i = 0; i < level-1; i++) {
-//			result*=mod;
-//		}
-//
-//		return Mathf.CeilToInt(result);
+		float mod =1.25f;
+		float baseVal = 10.0f;
+		int result = Mathf.CeilToInt(baseVal);
+
+		for (int i = 0; i < level-1; i++) {
+			result = Mathf.CeilToInt(result * mod);
+		}
+
+		return result;
 
 //		return Mathf.Min (level + 9, 100);
 	}
 
-
-	private int GetMultiplier (int basevalue, int level)
+	private BigInteger GetCalculateSlideValue(int level)
 	{
-		float multi = 1.4f;
-		float curr = 1;
-		float next = curr;
-		float n = 0;
+		BigInteger baseVal = 1;
+		BigInteger result = baseVal;
 
 		for (int i = 0; i < level; i++) {
-			next = curr * multi;
-			curr = next;
+			result += i+1;
 		}
-
-		return Mathf.RoundToInt (next * basevalue);
+		return result;
 	}
 
-	private BigInteger GetFibonaciIndex (int level)
+	private BigInteger GetCalculatedMultiplierValue(int level)
 	{
-		BigInteger o = 1;
-		BigInteger p = 1;
-		BigInteger v = 1;
-
-
-		for (int i = 0; i < level; i++) {
-			v = o + p;
-			o = p;
-			p = v;
-		}
-
-		return v;
+		return level+1;
 	}
+
+	private BigInteger GetEnvironmentUpgradePrice(int level)
+	{
+		int modPower = 2;
+		BigInteger modPrice = GetCalculateModPriceBasedOnLevel(level);
+		BigInteger levelMod = Mathf.CeilToInt(Mathf.Pow(level,modPower));
+
+		BigInteger result = level * levelMod * modPrice;
+		return result;
+	}
+
+	private BigInteger GetLivestockUpgradePrice(int level)
+	{
+		BigInteger modPrice = GetCalculateModPriceBasedOnLevel(level);
+		BigInteger slideValue = GetCalculateSlideValue(level-1);
+
+		BigInteger result = level * slideValue * modPrice;
+		return result;
+	}
+
+
+
+//
+//	private int GetMultiplier (int basevalue, int level)
+//	{
+//		float multi = 1.4f;
+//		float curr = 1;
+//		float next = curr;
+//		float n = 0;
+//
+//		for (int i = 0; i < level; i++) {
+//			next = curr * multi;
+//			curr = next;
+//		}
+//
+//		return Mathf.RoundToInt (next * basevalue);
+//	}
+//
+//	private BigInteger GetFibonaciIndex (int level)
+//	{
+//		BigInteger o = 1;
+//		BigInteger p = 1;
+//		BigInteger v = 1;
+//
+//
+//		for (int i = 0; i < level; i++) {
+//			v = o + p;
+//			o = p;
+//			p = v;
+//		}
+//
+//		return v;
+//	}
 
 	#endregion
 
@@ -134,30 +171,17 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 	public BigInteger GetLivestockSlideValue (LivestockSO livestock)
 	{
-		if (livestock.slideValue == 0) {
-			//LEVEL START FROM 1 not 0
-			int level = livestockList.IndexOf (livestock) + 1;
-			livestock.slideValue = GetFibonaciIndex (level);
-		}
-
-		return livestock.slideValue;
+		int level = livestockList.IndexOf (livestock) + 1;
+		return GetCalculateSlideValue(level);
 	}
 
 	public BigInteger GetLivestockUpgradePrice (LivestockSO livestock)
 	{
 		if (livestock == null)
 			return -1;
+		int level = livestockList.IndexOf (livestock) + 1;
+		return GetLivestockUpgradePrice(level);
 
-		if (livestock.upgradePrice == 0) {
-			//LEVEL START FROM 1 not 0
-			int level = livestockList.IndexOf (livestock) + 1;
-//			BigInteger bIntPrice = GetFibonaciIndex(level);
-			BigInteger bIntPrice = GetMultiplier (GetModPriceBasedOnLevel (level), level);
-
-			bIntPrice = bIntPrice * level;
-			livestock.upgradePrice = bIntPrice;	
-		}
-		return livestock.upgradePrice;
 	}
 
 	public string GetLivestockProgress ()
@@ -231,12 +255,8 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		if (environment == null)
 			return -1;
 
-		if (environment.multiplier == 0) {
-			//LEVEL START FROM 1 not 0
-			int level = environmentList.IndexOf (environment) + 1;
-			environment.multiplier = 1 + GetMultiplier (1, level);
-		}
-		return environment.multiplier;
+		int level = environmentList.IndexOf (environment) + 1;
+		return GetCalculatedMultiplierValue(level);
 
 	}
 
@@ -246,14 +266,8 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		if (environment == null)
 			return -1;
 
-		if (environment.upgradePrice == 0) {
-			//LEVEL START FROM 1 not 0
-			int level = environmentList.IndexOf (environment) + 1;
-			BigInteger bIntPrice = GetFibonaciIndex (level);
-			bIntPrice = bIntPrice * level * GetModPriceBasedOnLevel (level);
-			environment.upgradePrice = bIntPrice;	
-		}
-		return environment.upgradePrice;
+		int level = environmentList.IndexOf (environment) + 1;
+		return GetEnvironmentUpgradePrice(level);
 	}
 
 	public string GetEnvironmentProgress ()
@@ -271,31 +285,31 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 
 
-	public void OnGUI ()
-	{
-		GUILayout.BeginVertical ("Box");
-
-		GUILayout.Label ("Env Level : " + environmentLevel);
-		GUILayout.Label ("Lvs Level : " + livestockLevel);
-
-		EnvironmentSO env = GetNextEnvironmentUpgrade ();
-		if (env != null) {
-			if (GUILayout.Button ("env")) {
-				UpgradeEnvironment ();
-				WorldManager.shared ().RefreshEnvironment ();
-
-			}
-		}
-		LivestockSO lvs = GetNextLivestockUpgrade ();
-		if (lvs != null) {
-			if (GUILayout.Button ("lvs")) {
-				UpgradeLivestock ();
-			}
-		}
-
-		GUILayout.EndVertical ();
-	}
-
+//	public void OnGUI ()
+//	{
+//		GUILayout.BeginVertical ("Box");
+//
+//		GUILayout.Label ("Env Level : " + environmentLevel);
+//		GUILayout.Label ("Lvs Level : " + livestockLevel);
+//
+//		EnvironmentSO env = GetNextEnvironmentUpgrade ();
+//		if (env != null) {
+//			if (GUILayout.Button ("env")) {
+//				UpgradeEnvironment ();
+//				WorldManager.shared ().RefreshEnvironment ();
+//
+//			}
+//		}
+//		LivestockSO lvs = GetNextLivestockUpgrade ();
+//		if (lvs != null) {
+//			if (GUILayout.Button ("lvs")) {
+//				UpgradeLivestock ();
+//			}
+//		}
+//
+//		GUILayout.EndVertical ();
+//	}
+//
 
 
 	#region Custom Method
@@ -311,6 +325,15 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 
 	#if UNITY_EDITOR
 
+	[UnityEditor.MenuItem ("CONTEXT/UpgradeManager/CheckModLevel")]
+	private static void CalculateLevel(){
+
+		for (int i = 0; i < 10; i++) {
+			Debug.Log(UpgradeManager.shared().GetCalculateModPriceBasedOnLevel(i+1));
+		}
+	}
+
+
 	[UnityEditor.MenuItem ("CONTEXT/UpgradeManager/Calculate")]
 	private static void Calculate(){
 		BigInteger totalCostEnv = 0;
@@ -321,6 +344,7 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		}
 
 		foreach (LivestockSO item in UpgradeManager.shared().livestockList) {
+			Debug.Log(UpgradeManager.shared().GetLivestockUpgradePrice(item));
 			totalCostLvs += UpgradeManager.shared().GetLivestockUpgradePrice(item);
 		}
 

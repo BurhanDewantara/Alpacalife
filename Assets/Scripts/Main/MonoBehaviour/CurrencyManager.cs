@@ -29,10 +29,6 @@ public class CurrencyManager : SingletonMonoBehaviour<CurrencyManager>
 		GameDataManager.shared().PlayerCurrency = playerMoney;
 	}
 
-
-
-
-
 	public void AddGold(LivestockSO livestock)
 	{
 		BigInteger gold		  = UpgradeManager.shared ().GetLivestockSlideValue (livestock);
