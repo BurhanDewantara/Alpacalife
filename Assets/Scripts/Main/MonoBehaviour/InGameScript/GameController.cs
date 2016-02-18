@@ -53,6 +53,9 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 
 	int counter;
+	BigInteger inGameEarnedMoney;
+
+
 	private int Counter
 	{
 		set{
@@ -95,12 +98,10 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 	private Vector2 _deltaMovement;
 
 
-
-
-
 	void OnEnable()
 	{
 		counter = 0;
+		inGameEarnedMoney = 0;
 		state = GameStateType.Initiation;
 		inGameColors = new List<ColorSO> ();
 
@@ -322,14 +323,18 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 
 					if (!isTutorial) {
-						Popuptext();
-						CurrencyManager.shared ().AddGold (livestockManager.activeLivestock.GetLivestock ());
+						BigInteger earn = CalculateGold();
+
+						CurrencyManager.shared ().AddGold (earn);
+						Popuptext(earn.ToStringShort(), livestockManager.activeLivestock.transform.position );
+						inGameEarnedMoney += earn;
+
+
 						UpdateDifficulty (Counter);
 						timerControllerObject.AddTime ();
 						Counter++;
 					}
-
-
+					GPGManager.Trigger1stJumpAchievement ();
 
 					livestockManager.ActiveLivestockGo(direction);
 					livestockManager.Spawn ();
@@ -337,9 +342,25 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 
 				} else {
-					//HACK
-//					timerControllerObject.AddTime ();
 					if (!isTutorial) {
+
+
+						PlayerStatisticManager.shared().TotalBitten+=1;
+						PlayerStatisticManager.shared().TotalJump+=counter;
+						PlayerStatisticManager.shared().TotalGold+=inGameEarnedMoney;
+
+						Debug.Log(counter);
+						Debug.Log(inGameEarnedMoney);
+
+						GPGManager.PostLeaderBoard(Counter);
+						GPGManager.TriggerTotalEarnMoneyInOneAchievement(inGameEarnedMoney);
+						GPGManager.TriggerTotalJumpInOneAchievement(counter);
+
+						GPGManager.TriggerIncrementalEatbyWolfAchievement();
+						GPGManager.TriggerTotalEarnMoneyAchievement(PlayerStatisticManager.shared().TotalGold);
+						GPGManager.TriggerTotalJumpAchievement(PlayerStatisticManager.shared().TotalJump);
+
+
 						StartCoroutine (EndGame ());
 					} else {
 						livestockManager.activeLivestock.FakePanic();
@@ -350,7 +371,8 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 	}
 
 
-	private void Popuptext ()
+
+	private BigInteger CalculateGold()
 	{
 		GameObject lvsObj = livestockManager.activeLivestock.gameObject;
 		LivestockSO so = livestockManager.activeLivestock.GetLivestock ();
@@ -358,10 +380,14 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		BigInteger gold		  = UpgradeManager.shared ().GetLivestockSlideValue (so);
 		BigInteger multiplier = UpgradeManager.shared ().GetCurrentMultiplier ();
 		BigInteger result = gold * multiplier;
+		return result;
 
-		string popText = result.ToStringShort ();
+	}
 
-		Vector3 position = Camera.main.WorldToScreenPoint(lvsObj.transform.position);
+
+	private void Popuptext (string popText,Vector3 popUpPosition)
+	{
+		Vector3 position = Camera.main.WorldToScreenPoint(popUpPosition);
 
 		GameObject obj = Instantiate (popUpPrefab, position, Quaternion.identity) as GameObject;
 		obj.GetComponent<PopAndFade> ().SetText (popText);

@@ -8,6 +8,7 @@ public class TitleSceneManager : MonoBehaviour {
 
 	public GameObject splashSceneObject;
 	public GameObject titleSceneObject;
+	public string progressText = "Loading";
 
 	private bool isDone = false;
 
@@ -16,41 +17,38 @@ public class TitleSceneManager : MonoBehaviour {
 		titleSceneObject.SetActive(false);
 		splashSceneObject.GetComponent<SceneSplasher>().Play();
 		splashSceneObject.GetComponent<SceneSplasher>().OnSceneSplashCompleted += SceneSplashCompleteHandler;
+		GPGManager.shared().Activate();
 	}
 
 	void SceneSplashCompleteHandler ()
 	{
 		titleSceneObject.SetActive(true);
 		StartCoroutine(LoadingTextAnimation());
-		StartCoroutine(Login());
-	}
-
-	IEnumerator Login()
-	{
-		yield return new WaitForSeconds(Random.Range(4.0f,5.0f));
-		GameManager.shared().Authenticate((bool success) => {
+	
+		progressText = "Authenticate";
+		Social.localUser.Authenticate ((bool success) => {
 			if(success)
 			{
-				Debug.Log("berhasil");
+//				progressText = "To the Main";
 			}
 			else
 			{
-				Debug.Log("gagal");
+//				progressText = "gagal";
 			}
 			isDone = true;
-		});
+		});	
 	}
+
 
 
 	IEnumerator LoadingTextAnimation()
 	{
 		GameObject loadingTextObject = titleSceneObject.transform.FindChild("LoadingText").gameObject;
-		string dText = "Loading";
 		int dotCount = 0;
 
 		while (!isDone) {
 
-			string currText = dText;
+			string currText = progressText;
 			for (int i = 0; i < dotCount; i++) {
 				currText += ".";
 			}

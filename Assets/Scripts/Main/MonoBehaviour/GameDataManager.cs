@@ -9,6 +9,10 @@ public class GameDataManager : Singleton<GameDataManager>
 	public const string PLAYER_ENV_UPGRADE_LEVEL_KEY = "PLAYER_ENV_UPGRADE_LEVEL_KEY";
 	public const string PLAYER_LVS_UPGRADE_LEVEL_KEY = "PLAYER_LVS_UPGRADE_LEVEL_KEY";
 	public const string PLAYER_CURRENCY_KEY = "PLAYER_CURRENCY_KEY";
+	public const string PLAYER_TOTAL_GOLD_KEY = "PLAYER_TOTAL_GOLD_KEY";
+	public const string PLAYER_TOTAL_JUMP_KEY = "PLAYER_TOTAL_JUMP_KEY";
+	public const string PLAYER_TOTAL_BITTEN_KEY = "PLAYER_TOTAL_BITTEN_KEY";
+
 	public const string PLAYER_BEST_KEY = "PLAYER_BEST_KEY";
 	public const string PLAYER_TUTORIAL_KEY = "PLAYER_HAS_TUTORIAL_KEY";
 
@@ -87,8 +91,33 @@ public class GameDataManager : Singleton<GameDataManager>
 		set {
 			data.setObject (PLAYER_CURRENCY_KEY, value);
 		}
+	}	
+
+	public BigInteger PlayerTotalGold{
+		get {
+			return (BigInteger)data.getObject (PLAYER_TOTAL_GOLD_KEY);
+		}
+		set {
+			data.setObject (PLAYER_TOTAL_GOLD_KEY, value);
+		}
 	}
 
+	public BigInteger PlayerTotalJump{
+		get {
+			return (BigInteger)data.getObject (PLAYER_TOTAL_JUMP_KEY);
+		}
+		set {
+			data.setObject (PLAYER_TOTAL_JUMP_KEY, value);
+		}
+	}
 
+	public BigInteger PlayerTotalBitten{
+		get {
+			return (BigInteger)data.getObject (PLAYER_TOTAL_BITTEN_KEY);
+		}
+		set {
+			data.setObject (PLAYER_TOTAL_BITTEN_KEY, value);
+		}
+	}
 
 }

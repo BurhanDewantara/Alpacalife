@@ -213,8 +213,6 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 	}
 
 
-
-
 	private List<Vector3> GenerateAssemblePosition(int max = 100)
 	{
 		List<Vector3> positions = new List<Vector3>();
@@ -229,20 +227,15 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 		return positions;
 	}
 
-	void OnApplicationPause(bool pauseStatus)
-	{
-		GameDataManager.shared().save();
-	}
-
 
 	public void OpenAchievement()
 	{
-		GameManager.shared().ShowAchievementBoard();
+		GPGManager.shared().ShowAchievementBoard();
 	}
 
 	public void OpenLeaderboard()
 	{
-		GameManager.shared().ShowLeaderboardUI();
+		GPGManager.shared().ShowLeaderboardUI();
 	}
 
 }

@@ -96,6 +96,7 @@ public class ShopController : MonoBehaviour {
 	}
 	public void EnvironmentBought()
 	{
+		GPGManager.TriggerIncrementalUpgradeEnvironmentAchievement();
 		UpgradeManager.shared().UpgradeEnvironment();
 		WorldManager.shared().RefreshEnvironment();
 		currentSelectedObject = null;
@@ -137,9 +138,8 @@ public class ShopController : MonoBehaviour {
 			{
 				BigInteger price = UpgradeManager.shared ().GetLivestockUpgradePrice (item);
 
-				//HACK
-				if (CurrencyManager.shared ().IsAfforadble (price) || true) {
-//					CurrencyManager.shared ().PayGold (price);
+				if (CurrencyManager.shared ().IsAfforadble (price)) {
+					CurrencyManager.shared ().PayGold (price);
 
 					buyState = 1;
 					string detail = "Value : " + UpgradeManager.shared().GetLivestockSlideValue(item).ToStringShort();
@@ -160,6 +160,7 @@ public class ShopController : MonoBehaviour {
 	public void LivestockBought()
 	{
 		LivestockSO item = UpgradeManager.shared().GetNextLivestockUpgrade();
+		GPGManager.TriggerIncrementalUpgradePacaAchievement();
 		if(item!= null)
 		{
 

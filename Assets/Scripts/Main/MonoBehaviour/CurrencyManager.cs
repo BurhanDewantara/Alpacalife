@@ -19,9 +19,10 @@ public class CurrencyManager : SingletonMonoBehaviour<CurrencyManager>
 
 	void Load()
 	{
-		playerMoney = GameDataManager.shared().PlayerCurrency;
-		if(playerMoney == null)
-			playerMoney = 0;
+		playerMoney 	= GameDataManager.shared().PlayerCurrency;
+
+		if(playerMoney == null)	playerMoney = 0;
+
 	}
 
 	void Save()

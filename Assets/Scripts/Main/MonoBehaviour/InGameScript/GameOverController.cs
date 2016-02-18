@@ -107,6 +107,9 @@ public class GameOverController : MonoBehaviour {
 		{
 		case ShowResult.Finished:
 			Debug.Log("The ad was successfully shown.");
+
+			GPGManager.TriggerWatchVideo();
+
 			bonusCoinButton.GetComponent<AudioSource>().Play();
 			CurrencyManager.shared().AddGold(moneyResult);
 			//

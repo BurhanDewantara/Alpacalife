@@ -8,7 +8,17 @@ public class InputHandler : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Escape)) { 
 			Application.Quit();
 		}
-
-
 	}
+
+	void OnApplicationPause(bool pauseStatus)
+	{
+		GameDataManager.shared().save();
+	}
+
+
+	void OnGUI()
+	{
+		GUILayout.Label(PlayerStatisticManager.shared().ToString(),"box");
+	}
+
 }
