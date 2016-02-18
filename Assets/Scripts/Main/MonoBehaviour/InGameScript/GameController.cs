@@ -280,6 +280,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 	{
 		if(state != GameStateType.Start && state != GameStateType.Pregame) return;
 		TouchInput touch = touches [0];
+		float range = 50;
 
 		switch (touch.phase) 
 		{
@@ -292,12 +293,11 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		case TouchPhase.Ended: 
 
 			_deltaMovement = touch.end - touch.start;
-
-			if (Mathf.Abs (_deltaMovement.x) > Mathf.Abs (_deltaMovement.y) && _deltaMovement.x > 100) {
+			if (Mathf.Abs (_deltaMovement.x) > Mathf.Abs (_deltaMovement.y) && _deltaMovement.x > range ) {
 				ExecuteSwipe(DirectionType.Right);
-			} else if (Mathf.Abs (_deltaMovement.x) > Mathf.Abs (_deltaMovement.y) && _deltaMovement.x < 100) {
+			} else if (Mathf.Abs (_deltaMovement.x) > Mathf.Abs (_deltaMovement.y) && _deltaMovement.x < -range ) {
 				ExecuteSwipe(DirectionType.Left);
-			} else if (Mathf.Abs (_deltaMovement.y) > Mathf.Abs (_deltaMovement.x) && _deltaMovement.y < 100) {
+			} else if (Mathf.Abs (_deltaMovement.y) > Mathf.Abs (_deltaMovement.x) && _deltaMovement.y < -range ) {
 				ExecuteSwipe(DirectionType.Down);
 			}
 
@@ -337,6 +337,8 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 
 				} else {
+					//HACK
+//					timerControllerObject.AddTime ();
 					if (!isTutorial) {
 						StartCoroutine (EndGame ());
 					} else {
@@ -421,11 +423,15 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 	void UpdateDifficulty(int counter)
 	{
-		if (counter >= 20) {
-			if (counter % 5 == 0) {
-				//RE INIT
-				Init ();	
-			}
+		
+		if (counter >= 50) {
+			Init ();	
+		}
+		else if (counter >= 35 && counter % 3 == 0) {
+			Init ();	
+		}
+		else if (counter >= 20 && counter % 5 == 0) {
+			Init ();	
 		}
 
 	}

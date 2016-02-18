@@ -19,6 +19,8 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 	public List<GameObject> environmentObject;
 	public List<GameObject> worldLivestockObject;
 
+
+	private int movingLivestock = 0;
 	void Awake()
 	{
 		worldLivestockObject = new List<GameObject>();
@@ -94,6 +96,10 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 					,"easeType",iTween.EaseType.linear)
 			);
 		}
+
+		if(livestock.GetComponent<RandomSound>())
+			livestock.GetComponent<RandomSound>().Play();
+
 		worldLivestockObject.Add(livestock);
 	}
 
@@ -131,7 +137,7 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 		int randomCounter = 50;
 		float time = 0.5f;
 		List<Vector3> positions = new List<Vector3>();
-
+		movingLivestock =0;
 		while ( livestockIdx < worldLivestockObject.Count)
 		{		
 			positions.Clear();
@@ -151,7 +157,8 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 				iTween.MoveTo(worldLivestockObject[livestockIdx],
 					iTween.Hash(
 						"position",nextpos
-						,"time",time
+//						,"time",time
+						,"speed",2
 						,"isLocal",true
 						,"easeType",iTween.EaseType.linear
 						,"oncomplete","LivestockDoneAssemble"
@@ -169,8 +176,11 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 
 	private void LivestockDoneAssemble(GameObject obj)
 	{
-		if(OnAssembleDone!=null)
-			OnAssembleDone();
+		movingLivestock++;
+
+		if(movingLivestock == worldLivestockObject.Count)
+			if(OnAssembleDone!=null)
+				OnAssembleDone();
 	}
 	private void LivestockDoneDisassemble(GameObject obj)
 	{
@@ -222,6 +232,17 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 	void OnApplicationPause(bool pauseStatus)
 	{
 		GameDataManager.shared().save();
+	}
+
+
+	public void OpenAchievement()
+	{
+		GameManager.shared().ShowAchievementBoard();
+	}
+
+	public void OpenLeaderboard()
+	{
+		GameManager.shared().ShowLeaderboardUI();
 	}
 
 }

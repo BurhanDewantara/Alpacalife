@@ -85,6 +85,7 @@ public class SceneSplasher : MonoBehaviour
 				}
 			}
 		} else {
+			isPlaying = false;
 			if (OnSceneSplashCompleted != null)
 				OnSceneSplashCompleted ();
 		}

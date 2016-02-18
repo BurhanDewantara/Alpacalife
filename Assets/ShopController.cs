@@ -56,11 +56,14 @@ public class ShopController : MonoBehaviour {
 		Sprite sprite = null;
 		if(item!=null) sprite = item.sprite;
 
+
 		ChangeButtonDetail(environmentBuyButton.transform,
 			sprite,
 			UpgradeManager.shared().GetEnvironmentUpgradePrice(item).ToStringShort(),
-			UpgradeManager.shared().GetEnvironmentProgress()
+			UpgradeManager.shared().GetEnvironmentProgress(),
+			UpgradeManager.shared().IsEnvironmmentMaxedOut()
 		);
+
 	}
 
 
@@ -83,6 +86,7 @@ public class ShopController : MonoBehaviour {
 					CurrencyManager.shared ().PayGold (price);
 					buyState = 0;
 					string detail = "multiplier x" + UpgradeManager.shared ().GetEnvironmentMultiplyValue (item).ToStringShort ();
+					currentSelectedObject.GetComponent<AudioSource>().Play();
 					StartCoroutine (DisplayBoughtAnimation (item.sprite, item.name, detail));
 				} else {
 					InsufficientFundPopUp (environmentBuyButton);
@@ -94,7 +98,6 @@ public class ShopController : MonoBehaviour {
 	{
 		UpgradeManager.shared().UpgradeEnvironment();
 		WorldManager.shared().RefreshEnvironment();
-		currentSelectedObject.GetComponent<AudioSource>().Play();
 		currentSelectedObject = null;
 		RefreshEnvironmentButton ();
 		RefreshDisplay();
@@ -112,7 +115,9 @@ public class ShopController : MonoBehaviour {
 		ChangeButtonDetail(livestockBuyButton.transform,
 			sprite,
 			UpgradeManager.shared().GetLivestockUpgradePrice(item).ToStringShort(),
-			UpgradeManager.shared().GetLivestockProgress()
+			UpgradeManager.shared().GetLivestockProgress(),
+			UpgradeManager.shared().IsLivestockMaxedOut()
+
 		);
 	}
 
@@ -132,11 +137,13 @@ public class ShopController : MonoBehaviour {
 			{
 				BigInteger price = UpgradeManager.shared ().GetLivestockUpgradePrice (item);
 
-				if (CurrencyManager.shared ().IsAfforadble (price)) {
-					CurrencyManager.shared ().PayGold (price);
+				//HACK
+				if (CurrencyManager.shared ().IsAfforadble (price) || true) {
+//					CurrencyManager.shared ().PayGold (price);
 
 					buyState = 1;
 					string detail = "Value : " + UpgradeManager.shared().GetLivestockSlideValue(item).ToStringShort();
+					currentSelectedObject.GetComponent<AudioSource>().Play();
 					StartCoroutine(DisplayBoughtAnimation(item.sprite,item.name,detail ));
 				}
 				else
@@ -161,9 +168,7 @@ public class ShopController : MonoBehaviour {
 			Vector3 pos = Camera.main.ScreenToWorldPoint (displayObject.GetComponent<RectTransform> ().position);
 			//remove Z position
 			pos = new Vector3 (pos.x, pos.y, 0);
-
 			WorldManager.shared ().AddLivestock (item,pos, true );
-			currentSelectedObject.GetComponent<AudioSource>().Play();
 			currentSelectedObject = null;
 
 			RefreshLivestockButton ();
@@ -243,8 +248,13 @@ public class ShopController : MonoBehaviour {
 	}
 
 
-	public void ChangeButtonDetail(Transform trans, Sprite sprite, string price, string availableText)
+	public void ChangeButtonDetail(Transform trans, Sprite sprite, string price, string availableText, bool isMaxedOut)
 	{
+		trans.FindChild("SoldImage").gameObject.SetActive(isMaxedOut);
+		trans.FindChild("Image").gameObject.SetActive(!isMaxedOut);
+		trans.FindChild("Currency").gameObject.SetActive(!isMaxedOut);
+
+
 		trans.FindChild("Image").GetComponent<Image>().sprite = sprite;
 		trans.FindChild("Image").GetComponent<Image>().color = sprite == null ? Color.clear : Color.black;
 
