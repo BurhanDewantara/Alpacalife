@@ -39,7 +39,7 @@ public class OwnedLivestockController : CharacterCanvasController,IInputManagerD
 		Reset ();
 	}
 
-	void Reset()
+	public void Reset()
 	{
 		isActivated = true;
 		isWaiting = true;

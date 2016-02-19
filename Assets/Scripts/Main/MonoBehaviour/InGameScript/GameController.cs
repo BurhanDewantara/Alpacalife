@@ -41,8 +41,10 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 	[Header("Tutorial")]
 	public bool isTutorial = false;
+	private int tutorialCounter;
 	public GameObject tutorialPanel;
-	public GameObject tutorialButton;
+	public GameObject tutorialOkButton;
+	public GameObject showTutorialButton;
 	private GameObject tutorialAnimation{
 		get{
 			if(tutorialPanel!=null)
@@ -101,13 +103,14 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 	void OnEnable()
 	{
 		counter = 0;
+		tutorialCounter = 0;
 		inGameEarnedMoney = 0;
 		state = GameStateType.Initiation;
 		inGameColors = new List<ColorSO> ();
 
 		Init ();
 		timerGameObject.SetActive(false);
-		tutorialButton.SetActive (false);
+		showTutorialButton.SetActive (false);
 		counterTextObject.SetActive(false);
 
 
@@ -120,17 +123,17 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		WorldManager.shared().OnAssembleDone += OnAssembleDoneHandler;
 
 
-		if (!GameDataManager.shared ().PlayerHasTakenTutorial ) {
-			TriggerTutorial ();
-		}
 	}
 
-	public void TriggerTutorial ()
+	public void TriggerTutorial (int tCounter = 3)
 	{
+		tutorialCounter = tCounter;
 		isTutorial = true;
 		timerGameObject.SetActive (false);
 		tutorialPanel.SetActive (true);
 		tutorialAnimation.SetActive(true);
+		tutorialOkButton.SetActive(tutorialCounter <= 0);
+
 		tutorialPanel.GetComponent<RectTransform> ().localScale = Vector3.one;
 		iTween.ScaleFrom (tutorialPanel,
 			iTween.Hash(
@@ -139,7 +142,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 				,"easetype",iTween.EaseType.easeOutBack
 			)
 			);
-		tutorialButton.SetActive (false);
+		showTutorialButton.SetActive (false);
 		GetTutorialDirection();
 
 	}
@@ -148,7 +151,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 	public void HideTutorial()
 	{
 		timerGameObject.SetActive (false);
-		tutorialButton.SetActive (false);
+		showTutorialButton.SetActive (false);
 		tutorialAnimation.SetActive(false);
 		iTween.ScaleTo(tutorialPanel,
 			iTween.Hash(
@@ -168,7 +171,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		tutorialPanel.SetActive (false);
 		isTutorial = false;
 		PopObject(timerGameObject,true);
-		PopObject(tutorialButton,true);
+		PopObject(showTutorialButton,true);
 		GameDataManager.shared ().PlayerHasTakenTutorial = true;
 	}
 
@@ -183,11 +186,14 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		environment.GetComponent<Animator>().SetBool("IsPlay",true);
 		livestockManager.Spawn();
 		PopObject (timerGameObject,true);
-		PopObject (tutorialButton,!isTutorial);
+		PopObject (showTutorialButton,!isTutorial);
 		tutorialAnimation.SetActive(true);
 		GetTutorialDirection();
 		state = GameStateType.Pregame;
 		WorldManager.shared().OnAssembleDone -= OnAssembleDoneHandler;
+		if (!GameDataManager.shared ().PlayerHasTakenTutorial ) {
+			TriggerTutorial (5);
+		}
 	}
 
 	void Init()
@@ -314,13 +320,12 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 		if (state == GameStateType.Pregame && !isTutorial) {
 			state = GameStateType.Start;
-			tutorialButton.SetActive (false);
+			showTutorialButton.SetActive (false);
 		}
 
 		foreach (FenceAreaHandler fence in fences) {
 			if (fence.fencePosition == direction) {
 				if (fence.IsEqual (livestockManager.activeLivestock.textSOColor)) {
-
 
 					if (!isTutorial) {
 						BigInteger earn = CalculateGold();
@@ -334,12 +339,16 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 						timerControllerObject.AddTime ();
 						Counter++;
 					}
+					else if (isTutorial)
+					{
+						tutorialCounter--;
+						tutorialOkButton.SetActive(tutorialCounter <= 0);
+					}
 					GPGManager.Trigger1stJumpAchievement ();
 
 					livestockManager.ActiveLivestockGo(direction);
 					livestockManager.Spawn ();
 					GetTutorialDirection();
-
 
 				} else {
 					if (!isTutorial) {

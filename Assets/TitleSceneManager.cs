@@ -20,6 +20,7 @@ public class TitleSceneManager : MonoBehaviour {
 		splashSceneObject.GetComponent<SceneSplasher>().Play();
 		splashSceneObject.GetComponent<SceneSplasher>().OnSceneSplashEndCompleted += SceneSplashCompleteHandler;
 		GPGManager.shared().Activate();
+		FlurryManager.shared().Activate();
 		versionObject.GetComponent<TextMeshProUGUI>().text = "v:"+BundleVersion.GetVersion();
 	}
 

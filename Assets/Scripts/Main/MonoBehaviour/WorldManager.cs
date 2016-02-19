@@ -238,4 +238,11 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 		GPGManager.shared().ShowLeaderboardUI();
 	}
 
+
+	public void LivestockStopMove()
+	{
+		foreach (GameObject item in worldLivestockObject) {
+			item.GetComponent<OwnedLivestockController>().Reset();
+		}
+	}
 }

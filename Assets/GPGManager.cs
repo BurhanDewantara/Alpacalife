@@ -10,7 +10,6 @@ using ScottGarland;
 public class GPGManager : Singleton<GPGManager>
 {
 
-
 	public void Activate()
 	{
 		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
