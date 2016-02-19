@@ -15,10 +15,4 @@ public class InputHandler : MonoBehaviour {
 		GameDataManager.shared().save();
 	}
 
-
-	void OnGUI()
-	{
-		GUILayout.Label(PlayerStatisticManager.shared().ToString(),"box");
-	}
-
 }

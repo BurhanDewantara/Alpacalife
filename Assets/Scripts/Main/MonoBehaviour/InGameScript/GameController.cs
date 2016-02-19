@@ -349,12 +349,9 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 						PlayerStatisticManager.shared().TotalJump+=counter;
 						PlayerStatisticManager.shared().TotalGold+=inGameEarnedMoney;
 
-						Debug.Log(counter);
-						Debug.Log(inGameEarnedMoney);
 
-						GPGManager.PostLeaderBoard(Counter);
 						GPGManager.TriggerTotalEarnMoneyInOneAchievement(inGameEarnedMoney);
-						GPGManager.TriggerTotalJumpInOneAchievement(counter);
+						GPGManager.TriggerTotalJumpInOneAchievement(Counter);
 
 						GPGManager.TriggerIncrementalEatbyWolfAchievement();
 						GPGManager.TriggerTotalEarnMoneyAchievement(PlayerStatisticManager.shared().TotalGold);
@@ -389,10 +386,11 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 	{
 		Vector3 position = Camera.main.WorldToScreenPoint(popUpPosition);
 
-		GameObject obj = Instantiate (popUpPrefab, position, Quaternion.identity) as GameObject;
+		GameObject obj = Instantiate (popUpPrefab) as GameObject;
 		obj.GetComponent<PopAndFade> ().SetText (popText);
 		obj.GetComponent<PopAndFade> ().PopUp ();
-		obj.transform.SetParent (mainCanvas.transform, true);
+		obj.transform.SetParent (mainCanvas.transform, false);
+		obj.GetComponent<RectTransform>().position = position;
 	}
 
 	private IEnumerator EndGame()
@@ -411,6 +409,8 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 		if (bestscore < counter)
 			GameDataManager.shared ().PlayerBestScore = counter;
+
+		GPGManager.PostLeaderBoard(bestscore);
 
 	}
 

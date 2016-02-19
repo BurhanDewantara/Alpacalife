@@ -8,7 +8,9 @@ public class TitleSceneManager : MonoBehaviour {
 
 	public GameObject splashSceneObject;
 	public GameObject titleSceneObject;
+	public GameObject versionObject;
 	public string progressText = "Loading";
+
 
 	private bool isDone = false;
 
@@ -16,8 +18,9 @@ public class TitleSceneManager : MonoBehaviour {
 	{
 		titleSceneObject.SetActive(false);
 		splashSceneObject.GetComponent<SceneSplasher>().Play();
-		splashSceneObject.GetComponent<SceneSplasher>().OnSceneSplashCompleted += SceneSplashCompleteHandler;
+		splashSceneObject.GetComponent<SceneSplasher>().OnSceneSplashEndCompleted += SceneSplashCompleteHandler;
 		GPGManager.shared().Activate();
+		versionObject.GetComponent<TextMeshProUGUI>().text = "v:"+BundleVersion.GetVersion();
 	}
 
 	void SceneSplashCompleteHandler ()
