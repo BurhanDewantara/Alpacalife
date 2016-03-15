@@ -8,6 +8,9 @@ using ScottGarland;
 
 public class GameOverController : MonoBehaviour {
 
+	public delegate void GameOverControllerDelegate ();
+	public event GameOverControllerDelegate OnDisabled;
+
 	public GameObject gameoverPanel;
 	public TextMeshProUGUI bestScoreText;
 	public TextMeshProUGUI scoreText;
@@ -30,10 +33,26 @@ public class GameOverController : MonoBehaviour {
 
 	void Init()
 	{
-		scoreText.text = "0";	
-		SetBonusCoinButton ();
+		scoreText.text = "0";
+		if(ConnectionManager.shared().isConnected)
+			SetBonusCoinButton ();
+		else
+			SetBonusCoinButtonNotAvailable();
 	}
 
+	void SetBonusCoinButtonNotAvailable()
+	{
+		bonusCoinButton.GetComponentInChildren<TextMeshProUGUI> ().text = "N/A";
+		bonusCoinButton.GetComponent<Button> ().interactable = false;	
+
+		bonusCoinButton.transform.FindChild("FreeImage").gameObject.SetActive(false);
+		bonusCoinButton.transform.FindChild("FreeImage").GetComponent<Image>().color = Color.gray;
+
+		bonusCoinButton.transform.FindChild("CoinImage").gameObject.SetActive(true);
+		bonusCoinButton.transform.FindChild("CoinImage").GetComponent<Image>().color = Color.gray;
+
+
+	}
 
 	void SetBonusCoinButton()
 	{
@@ -45,6 +64,12 @@ public class GameOverController : MonoBehaviour {
 
 		moneyResult = anyPrice * multi * randomFactor;
 		bonusCoinButton.GetComponentInChildren<TextMeshProUGUI> ().text = moneyResult.ToStringShort ();
+
+		bonusCoinButton.transform.FindChild("FreeImage").gameObject.SetActive(true);
+		bonusCoinButton.transform.FindChild("FreeImage").GetComponent<Image>().color = Color.white;
+
+		bonusCoinButton.transform.FindChild("CoinImage").gameObject.SetActive(true);
+		bonusCoinButton.transform.FindChild("CoinImage").GetComponent<Image>().color = Color.white;
 
 		bonusCoinButton.GetComponent<Button> ().onClick.RemoveAllListeners ();
 		bonusCoinButton.GetComponent<Button> ().onClick.AddListener (delegate() {
@@ -110,8 +135,9 @@ public class GameOverController : MonoBehaviour {
 
 			GPGManager.TriggerWatchVideo();
 
-			bonusCoinButton.GetComponent<AudioSource>().Play();
+			AudioSource.PlayClipAtPoint(bonusCoinButton.GetComponent<AudioSource>().clip,Camera.main.transform.position);
 			CurrencyManager.shared().AddGold(moneyResult);
+			CloseGameOver();
 			//
 			// YOUR CODE TO REWARD THE GAMER
 			// Give coins etc.
@@ -125,5 +151,12 @@ public class GameOverController : MonoBehaviour {
 		}
 	}
 
+
+	public void CloseGameOver()
+	{
+		this.gameObject.SetActive(false);
+		if(this.OnDisabled !=null)
+			OnDisabled();
+	}
 }
 

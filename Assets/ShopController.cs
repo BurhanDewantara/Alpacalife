@@ -69,15 +69,17 @@ public class ShopController : MonoBehaviour {
 
 	public void ShowEnvironment()
 	{
-		if(currentSelectedObject != environmentBuyButton)
-		{
-			EnvironmentSO item = UpgradeManager.shared().GetNextEnvironmentUpgrade();
-			if(item !=null )
-				RefreshDisplay(item.sprite);
+//		SKIP THE BUY CONFIRMATION
+//		if(currentSelectedObject != environmentBuyButton)
+//		{
+//			EnvironmentSO item = UpgradeManager.shared().GetNextEnvironmentUpgrade();
+//			if(item !=null )
+//				RefreshDisplay(item.sprite);
+//			currentSelectedObject = environmentBuyButton;
+//		}
+//		else
+//		{
 			currentSelectedObject = environmentBuyButton;
-		}
-		else
-		{
 			EnvironmentSO item = UpgradeManager.shared().GetNextEnvironmentUpgrade();
 			if(item !=null )
 			{
@@ -92,7 +94,7 @@ public class ShopController : MonoBehaviour {
 					InsufficientFundPopUp (environmentBuyButton);
 				}
 			}
-		}
+//		}
 	}
 	public void EnvironmentBought()
 	{
@@ -102,6 +104,7 @@ public class ShopController : MonoBehaviour {
 		currentSelectedObject = null;
 		RefreshEnvironmentButton ();
 		RefreshDisplay();
+		GameDataManager.shared().save();
 	}
 	#endregion
 
@@ -124,15 +127,17 @@ public class ShopController : MonoBehaviour {
 
 	public void ShowLivestock()
 	{
-		if(currentSelectedObject != livestockBuyButton)
-		{
-			LivestockSO item = UpgradeManager.shared().GetNextLivestockUpgrade();
-			if(item !=null )
-				RefreshDisplay(item.sprite);
+//		SKIP THE BUY CONFIRMATION
+//		if(currentSelectedObject != livestockBuyButton)
+//		{
+//			LivestockSO item = UpgradeManager.shared().GetNextLivestockUpgrade();
+//			if(item !=null )
+//				RefreshDisplay(item.sprite);
+//			currentSelectedObject = livestockBuyButton;
+//		}
+//		else
+//		{
 			currentSelectedObject = livestockBuyButton;
-		}
-		else
-		{
 			LivestockSO item = UpgradeManager.shared().GetNextLivestockUpgrade();
 			if(item !=null )
 			{
@@ -154,7 +159,7 @@ public class ShopController : MonoBehaviour {
 			}
 				
 			
-		}
+//		}
 	}
 
 	public void LivestockBought()
@@ -177,6 +182,7 @@ public class ShopController : MonoBehaviour {
 
 
 			//ShowLivestock();
+			GameDataManager.shared().save();
 		}
 	}
 	#endregion

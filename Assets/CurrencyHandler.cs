@@ -21,7 +21,7 @@ public class CurrencyHandler : MonoBehaviour {
 	IEnumerator	CurrencyUpdate(BigInteger curr, BigInteger delta)
 	{
 		float percentage = 0;
-		float duration = 0.1f;
+		float duration = 0.5f;
 		float startTime = Time.time;
 
 		while (percentage < 1.0f) {

@@ -57,6 +57,14 @@ public class GPGManager : Singleton<GPGManager>
 	}
 
 
+	public static void TriggerTutorial()
+	{
+		if(!Social.localUser.authenticated)return;
+
+		Social.ReportProgress (GPGIds.achievement_practice_makes_perfect, 100.0f, delegate(bool success) {
+		});
+	}
+
 	public static void TriggerWatchVideo ()
 	{
 		if(!Social.localUser.authenticated)return;
@@ -69,18 +77,18 @@ public class GPGManager : Singleton<GPGManager>
 	{
 		if(!Social.localUser.authenticated)return;
 
-		float fiftM = float.Parse ((value / 50000000).ToString ());
-		float fivhK = float.Parse ((value / 500000).ToString ());
-		float fiveK = float.Parse ((value / 5000).ToString ());
-		float fifty = float.Parse ((value / 50).ToString ());
+		float _50M = value.DivideWith(new BigInteger(50000000));
+		float _500K = value.DivideWith(new BigInteger(500000));
+		float _5K = value.DivideWith(new BigInteger(5000));
+		float _50 = value.DivideWith(new BigInteger(50));
 
-		Social.ReportProgress (GPGIds.achievement_novice_billionaire, fifty, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_novice_billionaire, _50, delegate(bool success) {
 		});
-		Social.ReportProgress (GPGIds.achievement_beginner_billionaire, fiveK, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_beginner_billionaire, _5K, delegate(bool success) {
 		});
-		Social.ReportProgress (GPGIds.achievement_expert_billionaire, fivhK, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_expert_billionaire, _500K, delegate(bool success) {
 		});
-		Social.ReportProgress (GPGIds.achievement_master_billionaire, fiftM, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_master_billionaire, _50M, delegate(bool success) {
 		});
 	}
 
@@ -89,18 +97,18 @@ public class GPGManager : Singleton<GPGManager>
 	{
 		if(!Social.localUser.authenticated)return;
 
-		float oneB = float.Parse ((value / 1000000000).ToString ());
-		float tenM = float.Parse ((value / 10000000).ToString ());
-		float hunK = float.Parse ((value / 100000).ToString ());
-		float oneK = float.Parse ((value / 1000).ToString ());
+		float _1B = value.DivideWith(new BigInteger(1000000000));
+		float _10M = value.DivideWith(new BigInteger(10000000));
+		float _100K = value.DivideWith(new BigInteger(100000));
+		float _1K = value.DivideWith(new BigInteger(1000));
 
-		Social.ReportProgress (GPGIds.achievement_novice_billionaire, oneK, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_novice_billionaire, _1K, delegate(bool success) {
 		});
-		Social.ReportProgress (GPGIds.achievement_beginner_billionaire, hunK, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_beginner_billionaire, _100K, delegate(bool success) {
 		});
-		Social.ReportProgress (GPGIds.achievement_expert_billionaire, tenM, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_expert_billionaire, _10M, delegate(bool success) {
 		});
-		Social.ReportProgress (GPGIds.achievement_master_billionaire, oneB, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_master_billionaire, _1B, delegate(bool success) {
 		});
 
 	}
@@ -110,10 +118,10 @@ public class GPGManager : Singleton<GPGManager>
 
 		if(!Social.localUser.authenticated)return;
 
-		float _20 = float.Parse ((value / 20).ToString ());
-		float _50 = float.Parse ((value / 50).ToString ());
-		float _100 = float.Parse ((value / 100).ToString ());
-		float _200 = float.Parse ((value / 200).ToString ());
+		float _20 = value.DivideWith(new BigInteger(20));
+		float _50 = value.DivideWith(new BigInteger(50));
+		float _100 = value.DivideWith(new BigInteger(100));
+		float _200 = value.DivideWith(new BigInteger(200));
 
 		Social.ReportProgress (GPGIds.achievement_jumper_novice, _20, delegate(bool success) {
 		});
@@ -139,10 +147,10 @@ public class GPGManager : Singleton<GPGManager>
 	{
 		if(!Social.localUser.authenticated)return;
 
-		float _500 = float.Parse ((value / 500).ToString ());
-		float _1000 = float.Parse ((value / 1000).ToString ());
-		float _5000 = float.Parse ((value / 5000).ToString ());
-		float _10000 = float.Parse ((value / 10000).ToString ());
+		float _500 = value.DivideWith(new BigInteger(500));
+		float _1000 = value.DivideWith(new BigInteger(1000));
+		float _5000 = value.DivideWith(new BigInteger(5000));
+		float _10000 = value.DivideWith(new BigInteger(10000));
 
 		Social.ReportProgress (GPGIds.achievement_can_you_jump, _500, delegate(bool success) {
 		});

@@ -162,7 +162,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 				,"oncompletetarget",this.gameObject
 			)
 		);
-
+		GPGManager.TriggerTutorial();
 	}
 
 	public void HideTutorialComplete()
@@ -413,6 +413,8 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		timerGameObject.SetActive(false);
 		counterTextObject.SetActive(false);
 		gameoverPanelObject.SetActive(true);
+		gameoverPanelObject.GetComponent<GameOverController>().OnDisabled += GoToHome;
+
 		int bestscore = GameDataManager.shared ().PlayerBestScore;
 		gameoverPanelObject.GetComponent<GameOverController>().SetScore(Counter,bestscore);
 
@@ -420,7 +422,6 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 			GameDataManager.shared ().PlayerBestScore = counter;
 
 		GPGManager.PostLeaderBoard(bestscore);
-
 	}
 
 	public void GoToHome()
@@ -429,6 +430,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		wolfManager.RemoveAllWolves();
 		WorldManager.shared().OnDisassembleDone += OnDisassembleDoneHandler;
 		WorldManager.shared().LivestockDissasemble();
+		GameDataManager.shared().save();
 	}
 
 	private void OnDisassembleDoneHandler()

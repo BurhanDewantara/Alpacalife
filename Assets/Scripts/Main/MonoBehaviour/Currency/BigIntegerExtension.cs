@@ -97,7 +97,7 @@ public static class BigIntegerExtension
 //	private BigInteger coin;	
 	private const int THRESHOLD = 1000;
 
-	private static BigIntegerUnit GetUnit(this BigInteger bigInteger)
+	public static BigIntegerUnit GetUnit(this BigInteger bigInteger)
 	{
 		BigIntegerUnit unit = BigIntegerUnit.None;
 		BigInteger tempCoin = new BigInteger (bigInteger.ToString ());
@@ -108,7 +108,25 @@ public static class BigIntegerExtension
 		return unit;
 	}
 
-
+	private static int GetLast3Digit(BigInteger bigInteger)
+	{
+		BigInteger tempCoin = new BigInteger (bigInteger.ToString ());
+		int last3Digit = 0;
+		while (tempCoin > THRESHOLD) {
+			last3Digit = int.Parse((tempCoin % THRESHOLD).ToString());
+			tempCoin /= THRESHOLD;
+		}
+		return last3Digit ;
+	}
+	private static int GetLast3Digit(int tempCoin)
+	{
+		int last3Digit = 0;
+		while (tempCoin > THRESHOLD) {
+			last3Digit = int.Parse((tempCoin % THRESHOLD).ToString());
+			tempCoin /= THRESHOLD;
+		}
+		return last3Digit ;
+	}
 
 	public static string ToStringShort (this BigInteger bigInteger)
 	{
@@ -119,7 +137,6 @@ public static class BigIntegerExtension
 		while (tempCoin > THRESHOLD) {
 			last3Digit = int.Parse((tempCoin % THRESHOLD).ToString());
 			tempCoin /= THRESHOLD;
-
 		}
 
 		BigIntegerUnit unit = GetUnit (bigInteger);
@@ -129,5 +146,32 @@ public static class BigIntegerExtension
 		return tempCoin.ToString ();
 	}
 
+	public static float DivideWith(this BigInteger bigInteger, BigInteger otherBigInteger,int coma = 4)
+	{
+		int multiplier = (int)Mathf.Pow(10,coma);
+		BigInteger tempCoin = new BigInteger (bigInteger.ToString ());
+		tempCoin *= multiplier;
+
+		BigInteger sisa = tempCoin / otherBigInteger;
+		float percent = float.Parse(sisa.ToString()) / multiplier ;
+
+		return percent;
+
+	}
+
+	public static bool IsGreaterThan(this BigInteger bigInteger, int value, BigIntegerUnit unit)
+	{
+		if(GetUnit(bigInteger) < unit)
+			return false;
+		
+		else if(GetUnit(bigInteger) > unit)
+			return true;
+
+		else if(GetLast3Digit(bigInteger) <= GetLast3Digit(value))
+			return false;
+
+		return true;
+
+	}
 
 }
