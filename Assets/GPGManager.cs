@@ -77,10 +77,11 @@ public class GPGManager : Singleton<GPGManager>
 	{
 		if(!Social.localUser.authenticated)return;
 
-		float _50M = value.DivideWith(new BigInteger(50000000));
-		float _500K = value.DivideWith(new BigInteger(500000));
-		float _5K = value.DivideWith(new BigInteger(5000));
-		float _50 = value.DivideWith(new BigInteger(50));
+		float _50M = value.DivideWith(new BigInteger(50000000))*100.0f;
+		float _500K = value.DivideWith(new BigInteger(500000))*100.0f;
+		float _5K = value.DivideWith(new BigInteger(5000))*100.0f;
+		float _50 = value.DivideWith(new BigInteger(50))*100.0f;
+
 
 		Social.ReportProgress (GPGIds.achievement_novice_billionaire, _50, delegate(bool success) {
 		});
@@ -97,10 +98,10 @@ public class GPGManager : Singleton<GPGManager>
 	{
 		if(!Social.localUser.authenticated)return;
 
-		float _1B = value.DivideWith(new BigInteger(1000000000));
-		float _10M = value.DivideWith(new BigInteger(10000000));
-		float _100K = value.DivideWith(new BigInteger(100000));
-		float _1K = value.DivideWith(new BigInteger(1000));
+		float _1B = value.DivideWith(new BigInteger(1000000000))*100.0f;
+		float _10M = value.DivideWith(new BigInteger(10000000))*100.0f;
+		float _100K = value.DivideWith(new BigInteger(100000))*100.0f;
+		float _1K = value.DivideWith(new BigInteger(1000))*100.0f;
 
 		Social.ReportProgress (GPGIds.achievement_novice_billionaire, _1K, delegate(bool success) {
 		});
@@ -118,10 +119,10 @@ public class GPGManager : Singleton<GPGManager>
 
 		if(!Social.localUser.authenticated)return;
 
-		float _20 = value.DivideWith(new BigInteger(20));
-		float _50 = value.DivideWith(new BigInteger(50));
-		float _100 = value.DivideWith(new BigInteger(100));
-		float _200 = value.DivideWith(new BigInteger(200));
+		float _20 = value.DivideWith(new BigInteger(20))*100.0f;
+		float _50 = value.DivideWith(new BigInteger(50))*100.0f;
+		float _100 = value.DivideWith(new BigInteger(100))*100.0f;
+		float _200 = value.DivideWith(new BigInteger(200))*100.0f;
 
 		Social.ReportProgress (GPGIds.achievement_jumper_novice, _20, delegate(bool success) {
 		});
@@ -147,10 +148,10 @@ public class GPGManager : Singleton<GPGManager>
 	{
 		if(!Social.localUser.authenticated)return;
 
-		float _500 = value.DivideWith(new BigInteger(500));
-		float _1000 = value.DivideWith(new BigInteger(1000));
-		float _5000 = value.DivideWith(new BigInteger(5000));
-		float _10000 = value.DivideWith(new BigInteger(10000));
+		float _500 = value.DivideWith(new BigInteger(500))*100.0f;
+		float _1000 = value.DivideWith(new BigInteger(1000))*100.0f;
+		float _5000 = value.DivideWith(new BigInteger(5000))*100.0f;
+		float _10000 = value.DivideWith(new BigInteger(10000))*100.0f;
 
 		Social.ReportProgress (GPGIds.achievement_can_you_jump, _500, delegate(bool success) {
 		});

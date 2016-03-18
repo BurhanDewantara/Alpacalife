@@ -34,10 +34,10 @@ public class GameOverController : MonoBehaviour {
 	void Init()
 	{
 		scoreText.text = "0";
-		if(ConnectionManager.shared().isConnected)
+//		if(ConnectionManager.shared().isConnected)
 			SetBonusCoinButton ();
-		else
-			SetBonusCoinButtonNotAvailable();
+//		else
+//			SetBonusCoinButtonNotAvailable();
 	}
 
 	void SetBonusCoinButtonNotAvailable()
