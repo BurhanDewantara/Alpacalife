@@ -17,10 +17,14 @@ public class CurrencyManager : SingletonMonoBehaviour<CurrencyManager>
 		Load();
 	}
 
+	public void Reset()
+	{
+		Load();		
+	}
+
 	void Load()
 	{
 		playerMoney 	= GameDataManager.shared().PlayerCurrency;
-
 		if(playerMoney == null)	playerMoney = 0;
 
 	}
@@ -43,6 +47,7 @@ public class CurrencyManager : SingletonMonoBehaviour<CurrencyManager>
 			OnUpdated(playerMoney,value);
 
 		playerMoney += value;
+		PlayerStatisticManager.shared().TotalGold +=value;
 		Save();
 	}
 
@@ -54,6 +59,7 @@ public class CurrencyManager : SingletonMonoBehaviour<CurrencyManager>
 				OnUpdated(playerMoney,- value);
 
 			playerMoney -= value;	
+			PlayerStatisticManager.shared().TotalGoldSpent += value;
 			Save();
 		}
 	}

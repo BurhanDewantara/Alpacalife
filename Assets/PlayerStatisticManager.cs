@@ -10,6 +10,46 @@ public class PlayerStatisticManager : Singleton<PlayerStatisticManager>
 	BigInteger totalJump;
 	BigInteger totalBitten;
 
+	BigInteger totalGoldSpent;
+	BigInteger totalGoldEarn1Game;
+	BigInteger totalGameTime;
+	BigInteger totalPlayTime;
+
+
+	public BigInteger TotalPlayTime
+	{
+		get{
+			return totalPlayTime ;
+		}
+		set{
+			totalPlayTime = value;
+			Save();
+		}
+	}
+
+	public BigInteger TotalGoldSpent {
+		get{
+			return totalGoldSpent ;
+		}
+		set{
+			totalGoldSpent = value;
+			Save();
+		}
+	}
+
+
+	public BigInteger TotalGoldEarn1Game{
+		get{
+			return totalGoldEarn1Game;
+		}
+		set{
+			if(value > totalGoldEarn1Game){
+				totalGoldEarn1Game = value;
+				Save();
+			}
+		}
+	}
+		
 	public BigInteger TotalGold{
 		get{
 			return totalGold;
@@ -46,15 +86,24 @@ public class PlayerStatisticManager : Singleton<PlayerStatisticManager>
 		Load();
 	}
 
+	public void Reset()
+	{
+		Load();
+	}
+
 	void Load()
 	{
 		totalGold = GameDataManager.shared().PlayerTotalGold;
 		totalJump = GameDataManager.shared().PlayerTotalJump;
 		totalBitten = GameDataManager.shared().PlayerTotalBitten;
+		totalGoldEarn1Game = GameDataManager.shared().PlayerTotalGoldEarn1Game;
+		totalPlayTime = GameDataManager.shared().PlayerTotalGameTime;
+		totalGoldSpent = GameDataManager.shared().PlayerTotalGoldSpent;
+		if(totalGoldSpent == 0 )
+		{
+			totalGoldSpent = UpgradeManager.shared().CalculateTotalSpent();
+		}
 
-		if(totalGold  == null)		totalGold = 0;
-		if(totalJump  == null)		totalJump = 0;
-		if(totalBitten  == null)	totalBitten = 0;
 
 	}
 
@@ -63,6 +112,10 @@ public class PlayerStatisticManager : Singleton<PlayerStatisticManager>
 		GameDataManager.shared().PlayerTotalGold = totalGold;
 		GameDataManager.shared().PlayerTotalJump = totalJump;
 		GameDataManager.shared().PlayerTotalBitten = totalBitten;
+		GameDataManager.shared().PlayerTotalGoldEarn1Game = totalGoldEarn1Game;
+		GameDataManager.shared().PlayerTotalGameTime = totalPlayTime;
+		GameDataManager.shared().PlayerTotalGoldSpent = totalGoldSpent;
+
 	}
 		
 	public override string ToString ()

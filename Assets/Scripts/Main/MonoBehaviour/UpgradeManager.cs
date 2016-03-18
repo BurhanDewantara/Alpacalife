@@ -29,6 +29,22 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		Load ();
 	}
 
+	public int LivestockLevel
+	{
+		get{return livestockLevel;}
+	}
+
+	public int EnvironmentLevel
+	{
+		get{return environmentLevel;}
+	}
+
+	public void Reset()
+	{
+		Load();		
+	}
+
+
 	void Load ()
 	{
 		environmentLevel = GameDataManager.shared ().EnvironmentLevel;
@@ -57,6 +73,22 @@ public class UpgradeManager : SingletonMonoBehaviour<UpgradeManager>
 		GameDataManager.shared ().LivestockLevel = livestockLevel;
 	}
 
+
+	public BigInteger CalculateTotalSpent()
+	{
+		BigInteger totalCostEnv = 0;
+		BigInteger totalCostLvs = 0;
+
+		for (int i = 0; i < environmentLevel; i++) {
+			totalCostEnv += GetEnvironmentUpgradePrice(environmentList[i]);
+		}
+
+		for (int i = 0; i < livestockLevel; i++) {
+			totalCostLvs += GetLivestockUpgradePrice(livestockList[i]);
+		}
+
+		return (totalCostEnv + totalCostLvs);
+	}
 
 	#region Helper
 

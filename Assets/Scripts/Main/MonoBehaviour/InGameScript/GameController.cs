@@ -356,14 +356,13 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 						PlayerStatisticManager.shared().TotalBitten+=1;
 						PlayerStatisticManager.shared().TotalJump+=counter;
-						PlayerStatisticManager.shared().TotalGold+=inGameEarnedMoney;
+						PlayerStatisticManager.shared().TotalGoldEarn1Game=inGameEarnedMoney;
 
 
 						GPGManager.TriggerTotalEarnMoneyInOneAchievement(inGameEarnedMoney);
 						GPGManager.TriggerTotalJumpInOneAchievement(Counter);
 
 						GPGManager.TriggerIncrementalEatbyWolfAchievement();
-						GPGManager.TriggerTotalEarnMoneyAchievement(PlayerStatisticManager.shared().TotalGold);
 						GPGManager.TriggerTotalJumpAchievement(PlayerStatisticManager.shared().TotalJump);
 
 
@@ -431,6 +430,8 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		WorldManager.shared().OnDisassembleDone += OnDisassembleDoneHandler;
 		WorldManager.shared().LivestockDissasemble();
 		GameDataManager.shared().save();
+
+		GPGManager.TriggerTotalEarnMoneyAchievement(PlayerStatisticManager.shared().TotalGold);
 	}
 
 	private void OnDisassembleDoneHandler()

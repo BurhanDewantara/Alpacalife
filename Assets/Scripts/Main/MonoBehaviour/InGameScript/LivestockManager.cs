@@ -55,7 +55,7 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 	{
 		 
 		Vector3 newPos = Helper.RandomWithinArea (gatheringPoint.GetComponents<BoxCollider2D>());
-		float speed = 2.5f;
+		float speed = 3.0f;
 
 		GameObject currLivestock = SpawnLivestock ();
 
