@@ -48,7 +48,7 @@ public class GameDataManager : Singleton<GameDataManager>
 	public void Reset()
 	{
 		data.reset();
-		data.load ();
+		save();
 	}
 
 

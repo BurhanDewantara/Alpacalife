@@ -29,6 +29,7 @@ public class LivestockController : CharacterCanvasController {
 
 	[Header("Audio")]
 	public AudioClip die;
+	public AudioClip jump;
 
 	private Coroutine onFakePanicCoroutine;
 
@@ -123,6 +124,8 @@ public class LivestockController : CharacterCanvasController {
 		if (col.CompareTag("Fence"))
 		{
 			Jump();				
+			AudioSource.PlayClipAtPoint (jump, Camera.main.transform.position,0.5f);	
+
 		}
 
 		if (col.CompareTag ("Destroyer")) {
