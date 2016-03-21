@@ -7,6 +7,7 @@ public class WolvesManager : SingletonMonoBehaviour<WolvesManager> {
 
 	public GameObject WolfPrefab;
 	public GameObject WolfSpawnPoints;
+	public AudioClip WolfAudio;
 
 	private int wolvesCount = 10;
 	private List<GameObject> wolvesList;
@@ -20,7 +21,10 @@ public class WolvesManager : SingletonMonoBehaviour<WolvesManager> {
 	public void Charge(GameObject[] livestocks)
 	{
 		StartCoroutine(SpawnWolves(livestocks));
+		StartCoroutine(SpawnWolvesSound());
 	}
+
+
 
 	public void RemoveAllWolves()
 	{
@@ -30,6 +34,11 @@ public class WolvesManager : SingletonMonoBehaviour<WolvesManager> {
 		wolvesList.Clear();
 	}
 
+	IEnumerator SpawnWolvesSound(float delay = 0.1f)
+	{
+		yield return new WaitForSeconds (delay);
+		AudioSource.PlayClipAtPoint(WolfAudio,Camera.main.transform.position,0.5f);
+	}
 
 	IEnumerator SpawnWolves(GameObject[] livestocks,float delay = 0.1f)
 	{
@@ -42,16 +51,13 @@ public class WolvesManager : SingletonMonoBehaviour<WolvesManager> {
 
 			GameObject livestockTransform = livestocks.Random ();
 			Vector3 targetPos = livestockTransform.transform.localPosition + Helper.RandomWithinArea (livestockTransform.GetComponents<BoxCollider2D>());
-
-
+			
 			wolf.GetComponent<WolfContoller> ().Charge (targetPos, speed);
 			wolf.transform.SetParent (this.transform,false);
 			wolvesList.Add (wolf);
 
 			yield return new WaitForSeconds (delay);
 		}
-
-
 	}
 
 

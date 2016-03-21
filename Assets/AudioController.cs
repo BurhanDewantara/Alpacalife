@@ -8,6 +8,6 @@ public class AudioController : SingletonMonoBehaviour<AudioController>{
 
 	public void PlayButtonClick()
 	{
-		AudioSource.PlayClipAtPoint (button, Camera.main.transform.position,0.5f);	
+		AudioSource.PlayClipAtPoint (button, Camera.main.transform.position);	
 	}
 }
