@@ -11,17 +11,22 @@ public class OwnedLivestockController : CharacterCanvasController,IInputManagerD
 	public float waitTime;
 	public bool isWaiting;
 
-	bool isActivated;
+	public bool isActivated;
 	public bool IsActivated
 	{
 		set{ 
 			isActivated = value;
 			if (isActivated)
+			{
 				Reset ();
+			}
 			else
 			{
+				isWaiting = false;
+				waitTime = 0;
 				velocity = Vector3.zero;
 				targetPos = Vector3.zero;
+
 			}
 		}
 		get { 

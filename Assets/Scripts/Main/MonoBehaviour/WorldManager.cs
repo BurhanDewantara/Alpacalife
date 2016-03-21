@@ -242,7 +242,8 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 	public void LivestockStopMove()
 	{
 		foreach (GameObject item in worldLivestockObject) {
-			item.GetComponent<OwnedLivestockController>().Reset();
+			if(item.GetComponent<OwnedLivestockController>().IsActivated)
+				item.GetComponent<OwnedLivestockController>().Reset();
 		}
 	}
 }
