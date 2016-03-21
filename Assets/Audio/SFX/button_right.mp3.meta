@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Audio/SFX/button_right.mp3.meta
 guid: e4d13120ec7979c4f8e7e2155e1bdd88
 timeCreated: 1458539500
 licenseType: Free
+=======
+guid: 533789ed1b085374a952a1a01618e678
+timeCreated: 1458532195
+licenseType: Pro
+>>>>>>> e332d240f985b6eb1c757f2a8a9043dbb44ea6d5:Assets/Audio/SFX/button_right.mp3.meta
 AudioImporter:
   serializedVersion: 6
   defaultSettings:
