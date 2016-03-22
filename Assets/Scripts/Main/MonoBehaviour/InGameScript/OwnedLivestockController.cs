@@ -37,8 +37,8 @@ public class OwnedLivestockController : CharacterCanvasController,IInputManagerD
 	void Start()
 	{
 		drag = 0.99f;
-		maxJumpPower = 0.18f;
-		minJumpPower = 0.15f;
+		minJumpPower = 0.18f;
+		maxJumpPower = 0.20f;
 
 		InputManager.shared().receivers.Add(this.gameObject);
 		Reset ();
