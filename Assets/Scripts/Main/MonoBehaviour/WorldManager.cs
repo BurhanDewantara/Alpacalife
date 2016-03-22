@@ -62,11 +62,21 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager> {
 
 	public void LoadLivestock()
 	{
-		foreach (LivestockSO item in  UpgradeManager.shared().ownedLivestockList) {
-			GameObject livestock = CreateLivestock(item);
-			worldLivestockObject.Add(livestock);
+		int threshold = Random.Range(10,15);
+
+		List<LivestockSO> loadedLivestock = new List<LivestockSO>();
+
+		while (loadedLivestock.Count < threshold && loadedLivestock.Count != UpgradeManager.shared().ownedLivestockList.Count) {
+			LivestockSO item = UpgradeManager.shared().ownedLivestockList.Random();
+			if(!loadedLivestock.Contains(item))
+			{
+				GameObject livestock = CreateLivestock(item);
+				worldLivestockObject.Add(livestock);
+				loadedLivestock.Add(item);
+			}
 
 		}
+
 
 	}
 
