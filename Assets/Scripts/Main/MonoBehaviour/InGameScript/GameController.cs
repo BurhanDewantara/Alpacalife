@@ -16,6 +16,14 @@ public enum GameStateType
 	GameOver,
 }
 
+public enum GameModeType
+{
+	ColorToText,
+	TextToColor,
+}
+
+
+
 public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 	public LivestockManager livestockManager;
@@ -41,11 +49,11 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 	[Header("Tutorial")]
 	public bool isTutorial = false;
-	private int tutorialCounter;
+	protected int tutorialCounter;
 	public GameObject tutorialPanel;
 	public GameObject tutorialOkButton;
 	public GameObject showTutorialButton;
-	private GameObject tutorialAnimation{
+	protected GameObject tutorialAnimation{
 		get{
 			if(tutorialPanel!=null)
 				return tutorialPanel.transform.FindChild("Animation").gameObject;
@@ -54,11 +62,11 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 	}
 
 
-	int counter;
-	BigInteger inGameEarnedMoney;
+	protected int counter;
+	protected BigInteger inGameEarnedMoney;
 
 
-	private int Counter
+	protected int Counter
 	{
 		set{
 			counter = value;
@@ -88,19 +96,19 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 	[Header("Environment")]
 	public GameObject environment;
-	public List<FenceAreaHandler> fences;
+	public List<GameObject> fences;
 
 	[Header("In Game Settings")]
 	public List<ColorSO> availableColors;
 
 
-	private List<ColorSO> inGameColors;
-	private GameStateType state;
-	private DirectionType swipeDirection;
-	private Vector2 _deltaMovement;
+	protected List<ColorSO> inGameColors;
+	protected GameStateType state;
+	protected DirectionType swipeDirection;
+	protected Vector2 _deltaMovement;
+	protected GameModeType gameMode;
 
-
-	void OnEnable()
+	public void StartGame()
 	{
 		counter = 0;
 		tutorialCounter = 0;
@@ -116,15 +124,57 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 		timerControllerObject.Init();
 		timerControllerObject.OnTimeReachZero += delegate(GameObject sender) {
-			StartCoroutine(EndGame());
+			StartCoroutine(GameOver());
 		};
 
 		WorldManager.shared().LivestockAssemble();
 		WorldManager.shared().OnAssembleDone += OnAssembleDoneHandler;
-
-
 	}
 
+	#region Init
+	void Init()
+	{
+		inGameColors.Clear ();
+		InitInGameColor ();
+		InitFence ();
+		livestockManager.InitColors (availableColors,inGameColors);
+	}
+
+	protected void InitFence()
+	{
+		for (int i = 0; i < inGameColors.Count; i++) {
+			fences[i].GetComponent<FenceAreaHandler>().SetColor(inGameColors[i]);
+		}
+	}
+
+	void InitInGameColor()
+	{
+		if (availableColors.Count < 3) {
+			Debug.LogError ("COLOR MUST AT LEAST 3 TYPES");
+			return;
+		}
+
+
+		while (inGameColors.Count < 3) 
+		{
+			ColorSO randomedSoColor = availableColors.Random ();
+			if (!inGameColors.Contains (randomedSoColor)) {
+				inGameColors.Add (randomedSoColor);
+			}
+		}
+	}
+
+
+	#endregion
+
+	public void SetGameMode(GameModeType mode)
+	{
+		gameMode = mode;
+	}
+
+
+
+	#region Tutorial
 	public void TriggerTutorial (int tCounter = 3)
 	{
 		tutorialCounter = tCounter;
@@ -141,7 +191,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 				,"time", 0.4f
 				,"easetype",iTween.EaseType.easeOutBack
 			)
-			);
+		);
 		showTutorialButton.SetActive (false);
 		GetTutorialDirection();
 
@@ -175,6 +225,29 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		GameDataManager.shared ().PlayerHasTakenTutorial = true;
 	}
 
+	private void GetTutorialDirection()
+	{
+		if(isTutorial)
+		{
+			if(livestockManager.activeLivestock ==null) return;
+
+			if(tutorialAnimation !=null)
+			{
+				foreach (GameObject obj in fences) {
+					FenceAreaHandler fence = obj.GetComponent<FenceAreaHandler>();
+					if (fence.IsEqual (livestockManager.activeLivestock.textSOColor)) {
+						DirectionType direction = fence.fencePosition;
+						tutorialAnimation.GetComponent<Animator>().SetTrigger(direction.ToString());
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	#endregion
+
+
 
 
 
@@ -196,13 +269,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		}
 	}
 
-	void Init()
-	{
-		inGameColors.Clear ();
-		InitInGameColor ();
-		InitFenceColor ();
-		livestockManager.InitColors (availableColors,inGameColors);
-	}
+
 
 	void PopObject(GameObject obj, bool show,float delay = 0,float time =0.2f)
 	{
@@ -230,29 +297,6 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 
 
-	void InitFenceColor()
-	{
-		for (int i = 0; i < inGameColors.Count; i++) {
-			fences[i].SetColor(inGameColors[i]);
-		}
-	}
-
-	void InitInGameColor()
-	{
-		if (availableColors.Count < 3) {
-			Debug.LogError ("COLOR MUST AT LEAST 3 TYPES");
-			return;
-		}
-
-
-		while (inGameColors.Count < 3) 
-		{
-			ColorSO randomedSoColor = availableColors.Random ();
-			if (!inGameColors.Contains (randomedSoColor)) {
-				inGameColors.Add (randomedSoColor);
-			}
-		}
-	}
 
 
 	void Update()
@@ -264,24 +308,6 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 	}
 
-	private void GetTutorialDirection()
-	{
-		if(isTutorial)
-		{
-			if(livestockManager.activeLivestock ==null) return;
-			
-			if(tutorialAnimation !=null)
-			{
-				foreach (FenceAreaHandler fence in fences) {
-					if (fence.IsEqual (livestockManager.activeLivestock.textSOColor)) {
-						DirectionType direction = fence.fencePosition;
-						tutorialAnimation.GetComponent<Animator>().SetTrigger(direction.ToString());
-						break;
-					}
-				}
-			}
-		}
-	}
 
 	public void touchStateChanged (TouchInput []touches)
 	{
@@ -323,7 +349,9 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 			showTutorialButton.SetActive (false);
 		}
 
-		foreach (FenceAreaHandler fence in fences) {
+		foreach (GameObject obj in fences) {
+			FenceAreaHandler fence = obj.GetComponent<FenceAreaHandler>();
+
 			if (fence.fencePosition == direction) {
 				if (fence.IsEqual (livestockManager.activeLivestock.textSOColor)) {
 
@@ -366,7 +394,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 						GPGManager.TriggerTotalJumpAchievement(PlayerStatisticManager.shared().TotalJump);
 
 
-						StartCoroutine (EndGame ());
+						StartCoroutine (GameOver ());
 					} else {
 						livestockManager.activeLivestock.FakePanic();
 					}
@@ -401,7 +429,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		obj.GetComponent<RectTransform>().position = position;
 	}
 
-	private IEnumerator EndGame()
+	private IEnumerator GameOver()
 	{
 		livestockManager.activeLivestock.Panic ();
 		livestockManager.ActiveLivestockEaten ();
@@ -412,7 +440,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		timerGameObject.SetActive(false);
 		counterTextObject.SetActive(false);
 		gameoverPanelObject.SetActive(true);
-		gameoverPanelObject.GetComponent<GameOverController>().OnDisabled += GoToHome;
+		gameoverPanelObject.GetComponent<GameOverController>().OnDisabled += EndGame;
 
 		int bestscore = GameDataManager.shared ().PlayerBestScore;
 		gameoverPanelObject.GetComponent<GameOverController>().SetScore(Counter,bestscore);
@@ -423,7 +451,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		GPGManager.PostLeaderBoard(bestscore);
 	}
 
-	public void GoToHome()
+	public void EndGame()
 	{
 		livestockManager.RemoveAllLivestock();
 		wolfManager.RemoveAllWolves();
@@ -440,6 +468,7 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		this.mainMenuPanel.SetActive(true);
 		WorldManager.shared().OnDisassembleDone -= OnDisassembleDoneHandler;
 	}
+
 
 
 	public DirectionType SwipeDirection(Vector2 delta)
