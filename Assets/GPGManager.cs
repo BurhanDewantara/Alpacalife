@@ -50,8 +50,8 @@ public class GPGManager : Singleton<GPGManager>
 	{
 		if(!Social.localUser.authenticated)return;
 
-		Social.ReportScore (score, GPGIds.leaderboard_paca_ranger_leaderboard, delegate(bool success) {
-
+		Social.ReportScore (score, GPGIds.leaderboard_rainbow_paca_leader, delegate(bool success) {
+			
 		});
 	}
 

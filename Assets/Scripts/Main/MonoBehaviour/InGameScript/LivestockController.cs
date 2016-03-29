@@ -183,6 +183,6 @@ public class LivestockController : CharacterCanvasController {
 
 	public ColorSO GetColorSO(GameModeType mode)
 	{
-		return (mode == GameModeType.ColorToText ? textSOColor : tintSOColor );
+		return (mode == GameModeType.TextMode ? textSOColor : tintSOColor );
 	}
 }

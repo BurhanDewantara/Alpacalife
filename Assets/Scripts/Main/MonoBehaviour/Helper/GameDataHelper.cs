@@ -57,9 +57,11 @@ public class GameDataHelper : MonoBehaviour {
 			text += "Max earned gold in 1 game : " + PlayerStatisticManager.shared().TotalGoldEarn1Game + "\n";
 			text += "Total money spent : " + PlayerStatisticManager.shared().TotalGoldSpent + "\n";
 			text += "===TEXT===" + "\n";
+			text += "Tutorial Taken TEXT : " + GameDataManager.shared().PlayerHasTakenTutorial.ToString() + "\n";
 			text += "Highest Score TEXT : " + GameDataManager.shared().PlayerBestScore + "\n";
-			text += "Total animal jump COLOR : " + PlayerStatisticManager.shared().TotalJump + "\n";
+			text += "Total animal jump TEXT : " + PlayerStatisticManager.shared().TotalJump + "\n";
 			text += "===COLOR===" + "\n";
+			text += "Tutorial Taken COLOR : " + GameDataManager.shared().PlayerHasTakenColorTutorial.ToString() + "\n";
 			text += "Highest Score COLOR: " + GameDataManager.shared().PlayerColorBestScore + "\n";
 			text += "Total animal jump COLOR : " + PlayerStatisticManager.shared().TotalColorJump + "\n";
 

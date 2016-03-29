@@ -18,8 +18,8 @@ public enum GameStateType
 
 public enum GameModeType
 {
-	ColorToText,
-	TextToColor,
+	TextMode,
+	ColorMode,
 }
 
 
@@ -124,12 +124,12 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		gameMode = mode;
 		switch (gameMode) {
 
-		case GameModeType.ColorToText : 
+		case GameModeType.TextMode : 
 			moveAreas = corrals;
 			environment = environmentCorral;
 			tutorialDetailPanel = tutorialDetailPanelColor;
 			break;
-		case GameModeType.TextToColor : 
+		case GameModeType.ColorMode : 
 			moveAreas = barns;
 			environment = environmentBarn;
 			tutorialDetailPanel = tutorialDetailPanelText;
@@ -140,12 +140,12 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 
 	public void StartGameTextToColor()
 	{
-		StartGame(GameModeType.TextToColor);
+		StartGame(GameModeType.ColorMode);
 	}
 
 	public void StartGameColorToText()
 	{
-		StartGame(GameModeType.ColorToText);
+		StartGame(GameModeType.TextMode);
 	}
 
 
@@ -265,7 +265,13 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		isTutorial = false;
 		PopObject(timerGameObject,true);
 		PopObject(showTutorialButton,true);
-		GameDataManager.shared ().PlayerHasTakenTutorial = true;
+
+		if(gameMode == GameModeType.TextMode)
+			GameDataManager.shared ().PlayerHasTakenTutorial = true;
+		else if(gameMode == GameModeType.ColorMode)
+			GameDataManager.shared ().PlayerHasTakenColorTutorial = true;
+		
+
 	}
 
 	private void GetTutorialDirection()
@@ -311,7 +317,13 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		GetTutorialDirection();
 		state = GameStateType.Pregame;
 		WorldManager.shared().OnAssembleDone -= OnAssembleDoneHandler;
-		if (!GameDataManager.shared ().PlayerHasTakenTutorial ) {
+
+		bool tutorialTaken = ((gameMode == GameModeType.TextMode) ? GameDataManager.shared ().PlayerHasTakenTutorial : GameDataManager.shared ().PlayerHasTakenColorTutorial);
+			
+		Debug.Log(gameMode == GameModeType.TextMode);
+		Debug.Log(GameDataManager.shared ().PlayerHasTakenTutorial);
+		Debug.Log(GameDataManager.shared ().PlayerHasTakenColorTutorial);
+		if (!tutorialTaken ) {
 			TriggerTutorial (5);
 		}
 	}
@@ -490,18 +502,18 @@ public class GameController : MonoBehaviour, IInputManagerDelegate {
 		gameoverPanelObject.SetActive(true);
 		gameoverPanelObject.GetComponent<GameOverController>().OnDisabled += EndGame;
 
-		int bestscore = gameMode == GameModeType.TextToColor ? GameDataManager.shared ().PlayerBestScore : GameDataManager.shared ().PlayerColorBestScore;
+		int bestscore = gameMode == GameModeType.TextMode ? GameDataManager.shared ().PlayerBestScore : GameDataManager.shared ().PlayerColorBestScore;
 		gameoverPanelObject.GetComponent<GameOverController>().SetScore(Counter,bestscore);
 
 		if (bestscore < counter)
 		{
-			if(gameMode	== GameModeType.TextToColor)
+			if(gameMode	== GameModeType.TextMode)
 			{
 				GameDataManager.shared ().PlayerBestScore = counter;
 				GPGManager.PostLeaderBoard(bestscore);
 
 			}
-			else if(gameMode == GameModeType.ColorToText)
+			else if(gameMode == GameModeType.ColorMode)
 			{
 				GameDataManager.shared ().PlayerColorBestScore = counter;
 				GPGManager.PostLeaderBoardColor(bestscore);

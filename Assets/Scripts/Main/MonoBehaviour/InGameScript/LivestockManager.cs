@@ -63,9 +63,9 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 
 		GameObject currLivestock = SpawnLivestock ();
 
-		if(mode == GameModeType.ColorToText)
+		if(mode == GameModeType.TextMode)
 			currLivestock.GetComponent<LivestockController>().SetLabel(inGameColors.Random (),availableColors.Random ());
-		else if(mode == GameModeType.TextToColor)
+		else if(mode == GameModeType.ColorMode)
 			currLivestock.GetComponent<LivestockController>().SetLabel(availableColors.Random (),inGameColors.Random ());
 		currLivestock.GetComponent<LivestockController>().MoveToReadyPosition(newPos,speed);			
 
