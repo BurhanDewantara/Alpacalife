@@ -43,6 +43,7 @@ public static class GPGIds
         public const string achievement_expert_billionaire = "CgkIjYG594ESEAIQGQ"; // <GPGSID>
         public const string achievement_raaaaawr = "CgkIjYG594ESEAIQBQ"; // <GPGSID>
         public const string achievement_greeeeedy = "CgkIjYG594ESEAIQHg"; // <GPGSID>
+        public const string leaderboard_rainbow_paca_leader = "CgkIjYG594ESEAIQIg"; // <GPGSID>
         public const string achievement_jump_for_your_health = "CgkIjYG594ESEAIQEA"; // <GPGSID>
         public const string achievement_10_little_paca = "CgkIjYG594ESEAIQCQ"; // <GPGSID>
         public const string achievement_master_billionaire = "CgkIjYG594ESEAIQGg"; // <GPGSID>

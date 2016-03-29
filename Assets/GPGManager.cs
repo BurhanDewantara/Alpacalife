@@ -46,6 +46,14 @@ public class GPGManager : Singleton<GPGManager>
 
 	}
 
+	public static void PostLeaderBoardColor (long score)
+	{
+		if(!Social.localUser.authenticated)return;
+
+		Social.ReportScore (score, GPGIds.leaderboard_rainbow_paca_leader, delegate(bool success) {
+			
+		});
+	}
 
 	public static void PostLeaderBoard (long score)
 	{
@@ -83,13 +91,13 @@ public class GPGManager : Singleton<GPGManager>
 		float _50 = value.DivideWith(new BigInteger(50))*100.0f;
 
 
-		Social.ReportProgress (GPGIds.achievement_novice_billionaire, _50, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_greedy, _50, delegate(bool success) {
 		});
-		Social.ReportProgress (GPGIds.achievement_beginner_billionaire, _5K, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_greeedy, _5K, delegate(bool success) {
 		});
-		Social.ReportProgress (GPGIds.achievement_expert_billionaire, _500K, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_greeeedy, _500K, delegate(bool success) {
 		});
-		Social.ReportProgress (GPGIds.achievement_master_billionaire, _50M, delegate(bool success) {
+		Social.ReportProgress (GPGIds.achievement_greeeeedy, _50M, delegate(bool success) {
 		});
 	}
 

@@ -8,6 +8,8 @@ public class PlayerStatisticManager : Singleton<PlayerStatisticManager>
 {
 	BigInteger totalGold;
 	BigInteger totalJump;
+	BigInteger totalColorJump;
+
 	BigInteger totalBitten;
 
 	BigInteger totalGoldSpent;
@@ -69,6 +71,15 @@ public class PlayerStatisticManager : Singleton<PlayerStatisticManager>
 			Save();
 		}
 	}
+	public BigInteger TotalColorJump{
+		get{
+			return totalColorJump;
+		}
+		set{
+			totalColorJump = value;
+			Save();
+		}
+	}
 
 	public BigInteger TotalBitten{
 		get{
@@ -95,10 +106,13 @@ public class PlayerStatisticManager : Singleton<PlayerStatisticManager>
 	{
 		totalGold = GameDataManager.shared().PlayerTotalGold;
 		totalJump = GameDataManager.shared().PlayerTotalJump;
+		totalColorJump = GameDataManager.shared().PlayerColorTotalJump;
 		totalBitten = GameDataManager.shared().PlayerTotalBitten;
 		totalGoldEarn1Game = GameDataManager.shared().PlayerTotalGoldEarn1Game;
 		totalPlayTime = GameDataManager.shared().PlayerTotalGameTime;
 		totalGoldSpent = GameDataManager.shared().PlayerTotalGoldSpent;
+
+
 		if(totalGoldSpent == 0 )
 		{
 			totalGoldSpent = UpgradeManager.shared().CalculateTotalSpent();
@@ -111,6 +125,7 @@ public class PlayerStatisticManager : Singleton<PlayerStatisticManager>
 	{
 		GameDataManager.shared().PlayerTotalGold = totalGold;
 		GameDataManager.shared().PlayerTotalJump = totalJump;
+		GameDataManager.shared().PlayerColorTotalJump = totalColorJump;
 		GameDataManager.shared().PlayerTotalBitten = totalBitten;
 		GameDataManager.shared().PlayerTotalGoldEarn1Game = totalGoldEarn1Game;
 		GameDataManager.shared().PlayerTotalGameTime = totalPlayTime;

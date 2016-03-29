@@ -1,19 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
+using TMPro;
 
-public class FenceAreaHandler : MonoBehaviour {
+public class CorralAreaHandler : MonoBehaviour {
 
 	public DirectionType fencePosition;
-	private ColorSO colorObject;
+	protected ColorSO colorObject;
 
-	public void SetColor(ColorSO colorObject)
+	virtual public void SetColor(ColorSO colorObject)
 	{
-		this.colorObject =  colorObject;
+		this.colorObject = colorObject;
 		this.GetComponent<SpriteRenderer>().material.color = colorObject.color;
 	}
 
-	public bool IsEqual(ColorSO color)
+	virtual public bool IsEqual(ColorSO color)
 	{
+		
 		return (colorObject.colorType == color.colorType);
 	}
 
