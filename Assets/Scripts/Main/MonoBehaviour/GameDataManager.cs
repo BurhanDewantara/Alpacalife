@@ -8,19 +8,29 @@ public class GameDataManager : Singleton<GameDataManager>
 {
 	public const string PLAYER_ENV_UPGRADE_LEVEL_KEY = "PLAYER_ENV_UPGRADE_LEVEL_KEY";
 	public const string PLAYER_LVS_UPGRADE_LEVEL_KEY = "PLAYER_LVS_UPGRADE_LEVEL_KEY";
-	public const string PLAYER_TUTORIAL_KEY = "PLAYER_HAS_TUTORIAL_KEY";
 
 	public const string PLAYER_CURRENCY_KEY = "PLAYER_CURRENCY_KEY";
 	public const string PLAYER_TOTAL_GOLD_KEY = "PLAYER_TOTAL_GOLD_KEY";
 	public const string PLAYER_TOTAL_GOLD_SPENT_KEY = "PLAYER_TOTAL_GOLD_SPENT_KEY";
 	public const string PLAYER_TOTAL_GOLD_1_GAME_KEY = "PLAYER_TOTAL_GOLD_1_GAME_KEY";
 
+	#region color_to_text
+	public const string PLAYER_COLOR_TUTORIAL_KEY = "PLAYER_HAS_COLOR_TUTORIAL_KEY";
+	public const string PLAYER_COLOR_BEST_KEY = "PLAYER_COLOR_BEST_KEY";
+	public const string PLAYER_COLOR_TOTAL_JUMP_KEY = "PLAYER_COLOR_TOTAL_JUMP_KEY";
+	#endregion
 
+	#region text_to_color
+	public const string PLAYER_TUTORIAL_KEY = "PLAYER_HAS_TUTORIAL_KEY";
 	public const string PLAYER_BEST_KEY = "PLAYER_BEST_KEY";
 	public const string PLAYER_TOTAL_JUMP_KEY = "PLAYER_TOTAL_JUMP_KEY";
+	#endregion
 
+	//count game play
 	public const string PLAYER_TOTAL_BITTEN_KEY = "PLAYER_TOTAL_BITTEN_KEY";
 	public const string PLAYER_TOTAL_GAME_TIME_KEY = "PLAYER_TOTAL_GAME_TIME_KEY";
+
+
 
 
 
@@ -74,31 +84,6 @@ public class GameDataManager : Singleton<GameDataManager>
 		}
 	}
 
-	public int PlayerBestScore
-	{
-		get
-		{
-			return ((data.getInt (PLAYER_BEST_KEY) != null) ? data.getInt (PLAYER_BEST_KEY).Value : 0);
-		}
-		set{ 
-			data.setInt (PLAYER_BEST_KEY, value);	
-		}
-	}
-
-
-	public bool PlayerHasTakenTutorial
-	{
-		get
-		{
-			return ((data.getBool (PLAYER_TUTORIAL_KEY) != null) ? data.getBool (PLAYER_TUTORIAL_KEY).Value : false);
-		}
-		set{ 
-			data.setBool (PLAYER_TUTORIAL_KEY, value);	
-		}
-	}
-
-
-
 
 	public BigInteger PlayerCurrency {
 		get {
@@ -118,6 +103,31 @@ public class GameDataManager : Singleton<GameDataManager>
 		}
 	}
 
+
+
+	#region text_to_color
+	public int PlayerBestScore
+	{
+		get
+		{
+			return ((data.getInt (PLAYER_BEST_KEY) != null) ? data.getInt (PLAYER_BEST_KEY).Value : 0);
+		}
+		set{ 
+			data.setInt (PLAYER_BEST_KEY, value);	
+		}
+	}
+
+	public bool PlayerHasTakenTutorial
+	{
+		get
+		{
+			return ((data.getBool (PLAYER_TUTORIAL_KEY) != null) ? data.getBool (PLAYER_TUTORIAL_KEY).Value : false);
+		}
+		set{ 
+			data.setBool (PLAYER_TUTORIAL_KEY, value);	
+		}
+	}
+
 	public BigInteger PlayerTotalJump{
 		get {
 			return (BigInteger)data.getObject (PLAYER_TOTAL_JUMP_KEY) != null ? (BigInteger)data.getObject (PLAYER_TOTAL_JUMP_KEY) : 0;
@@ -126,6 +136,43 @@ public class GameDataManager : Singleton<GameDataManager>
 			data.setObject (PLAYER_TOTAL_JUMP_KEY, value);
 		}
 	}
+	#endregion
+
+	#region color_to_text
+	public int PlayerColorBestScore
+	{
+		get
+		{
+			return ((data.getInt (PLAYER_COLOR_BEST_KEY) != null) ? data.getInt (PLAYER_COLOR_BEST_KEY).Value : 0);
+		}
+		set{ 
+			data.setInt (PLAYER_COLOR_BEST_KEY, value);	
+		}
+	}
+
+	public bool PlayerHasTakenColorTutorial
+	{
+		get
+		{
+			return ((data.getBool (PLAYER_COLOR_TUTORIAL_KEY) != null) ? data.getBool (PLAYER_COLOR_TUTORIAL_KEY).Value : false);
+		}
+		set{ 
+			data.setBool (PLAYER_COLOR_TUTORIAL_KEY, value);	
+		}
+	}
+
+	public BigInteger PlayerColorTotalJump{
+		get {
+			return (BigInteger)data.getObject (PLAYER_COLOR_TOTAL_JUMP_KEY) != null ? (BigInteger)data.getObject (PLAYER_COLOR_TOTAL_JUMP_KEY) : 0;
+		}
+		set {
+			data.setObject (PLAYER_COLOR_TOTAL_JUMP_KEY, value);
+		}
+	}
+
+	#endregion
+
+
 
 	public BigInteger PlayerTotalBitten{
 		get {

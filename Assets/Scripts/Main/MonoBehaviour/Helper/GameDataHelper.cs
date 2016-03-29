@@ -48,15 +48,25 @@ public class GameDataHelper : MonoBehaviour {
 		if(infoData[(int)infoDataType.Statistic])
 		{
 			infoDataScroll[(int)infoDataType.Statistic] = GUILayout.BeginScrollView(infoDataScroll[(int)infoDataType.Statistic],"box");
-			GUILayout.Label("Total Time Played : " + PlayerStatisticManager.shared().TotalPlayTime + " s");
-			GUILayout.Label("Total Game Played : " + PlayerStatisticManager.shared().TotalBitten);
-			GUILayout.Label("Animal Level : " + UpgradeManager.shared().LivestockLevel);
-			GUILayout.Label("Environment Level : " + UpgradeManager.shared().EnvironmentLevel);
-			GUILayout.Label("Highest Score : " + GameDataManager.shared().PlayerBestScore);
-			GUILayout.Label("Total animal jump : " + PlayerStatisticManager.shared().TotalJump);
-			GUILayout.Label("Total earned gold : " + PlayerStatisticManager.shared().TotalGold);
-			GUILayout.Label("Max earned gold in 1 game : " + PlayerStatisticManager.shared().TotalGoldEarn1Game);
-			GUILayout.Label("Total money spent : " + PlayerStatisticManager.shared().TotalGoldSpent);
+			string text = "";
+			text += "Total Time Played : " + PlayerStatisticManager.shared().TotalPlayTime + " s" + "\n";
+			text += "Total Game Played : " + PlayerStatisticManager.shared().TotalBitten + "\n";
+			text += "Animal Level : " + UpgradeManager.shared().LivestockLevel + "\n";
+			text += "Environment Level : " + UpgradeManager.shared().EnvironmentLevel + "\n";
+			text += "Total earned gold : " + PlayerStatisticManager.shared().TotalGold + "\n";
+			text += "Max earned gold in 1 game : " + PlayerStatisticManager.shared().TotalGoldEarn1Game + "\n";
+			text += "Total money spent : " + PlayerStatisticManager.shared().TotalGoldSpent + "\n";
+			text += "===TEXT===" + "\n";
+			text += "Highest Score TEXT : " + GameDataManager.shared().PlayerBestScore + "\n";
+			text += "Total animal jump COLOR : " + PlayerStatisticManager.shared().TotalJump + "\n";
+			text += "===COLOR===" + "\n";
+			text += "Highest Score COLOR: " + GameDataManager.shared().PlayerColorBestScore + "\n";
+			text += "Total animal jump COLOR : " + PlayerStatisticManager.shared().TotalColorJump + "\n";
+
+				
+
+
+			GUILayout.Label(text);
 			GUILayout.EndScrollView();
 		}
 		if(infoData[(int)infoDataType.Cheat])
