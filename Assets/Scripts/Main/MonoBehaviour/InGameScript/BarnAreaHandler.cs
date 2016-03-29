@@ -2,19 +2,16 @@
 using System.Collections;
 using TMPro;
 
-public class BarnAreaHandler : MonoBehaviour {
+public class BarnAreaHandler : CorralAreaHandler {
 
-	public DirectionType fencePosition;
-	private ColorSO colorObject;
 
-	public void SetColor(ColorSO colorObject)
+	override public void SetColor(ColorSO colorObject)
 	{
-		this.colorObject =  colorObject;
-		this.GetComponentInChildren<TextMeshProUGUI>().text = colorObject.color.ToString();
-//		this.GetComponent<SpriteRenderer>().material.color = colorObject.color;
+		this.colorObject = colorObject;
+		this.GetComponentInChildren<TextMeshProUGUI>().text = colorObject.colorType.ToString();
 	}
 
-	public bool IsEqual(ColorSO color)
+	override public bool IsEqual(ColorSO color)
 	{
 		return (colorObject.colorType == color.colorType);
 	}
