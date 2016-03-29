@@ -154,6 +154,7 @@ public class GameOverController : MonoBehaviour {
 
 	public void CloseGameOver()
 	{
+		AudioController.shared().PlayButtonClick();
 		this.gameObject.SetActive(false);
 		if(this.OnDisabled !=null)
 			OnDisabled();

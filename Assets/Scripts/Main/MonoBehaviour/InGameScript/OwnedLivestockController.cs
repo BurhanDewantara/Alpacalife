@@ -77,7 +77,7 @@ public class OwnedLivestockController : CharacterCanvasController,IInputManagerD
 		if(!IsActivated) return;
 
 		if (!isWaiting) {
-			if (Vector3 .Distance (targetPos, this.transform.position) < 0.1) {
+			if (Vector3.Distance (targetPos, this.transform.position) < 0.1) {
 				Wait();
 			}
 		} else {
@@ -87,8 +87,9 @@ public class OwnedLivestockController : CharacterCanvasController,IInputManagerD
 				targetPos = Helper.RandomWithinArea (obj.GetComponents<BoxCollider2D> ());
 				velocity = targetPos - this.transform.position;
 //				velocity *= Time.deltaTime;
-				velocity = velocity.normalized * Time.deltaTime;
+				velocity = velocity.normalized * 0.01f;
 				isWaiting = false;
+				waitTime = 0;
 			} 
 		}
 	}

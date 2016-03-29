@@ -45,13 +45,17 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 		newLivestock.name = livestockCounter.ToString();
 		newLivestock.transform.SetParent (this.transform, false);
 		newLivestock.GetComponent<LivestockController>().SetLivestock(UpgradeManager.shared().ownedLivestockList.Random());
-		newLivestock.GetComponent<LivestockController>().OnLivestockReceivedOrder += delegate(GameObject sender) {
-			queueLivestock.Remove(sender);
-		};
+		newLivestock.GetComponent<LivestockController>().OnLivestockReceivedOrder += OnLivestockRecievedOrder;
 		return newLivestock;
 	}
 
-	public void Spawn()
+	void OnLivestockRecievedOrder(GameObject sender)
+	{
+		sender.GetComponent<LivestockController>().OnLivestockReceivedOrder -= OnLivestockRecievedOrder;
+		queueLivestock.Remove(sender);
+	}
+
+	public void Spawn(GameModeType mode)
 	{
 		 
 		Vector3 newPos = Helper.RandomWithinArea (gatheringPoint.GetComponents<BoxCollider2D>());
@@ -59,7 +63,10 @@ public class LivestockManager : SingletonMonoBehaviour<LivestockManager> {
 
 		GameObject currLivestock = SpawnLivestock ();
 
-		currLivestock.GetComponent<LivestockController>().SetLabel(inGameColors.Random (),availableColors.Random ());
+		if(mode == GameModeType.ColorToText)
+			currLivestock.GetComponent<LivestockController>().SetLabel(inGameColors.Random (),availableColors.Random ());
+		else if(mode == GameModeType.TextToColor)
+			currLivestock.GetComponent<LivestockController>().SetLabel(availableColors.Random (),inGameColors.Random ());
 		currLivestock.GetComponent<LivestockController>().MoveToReadyPosition(newPos,speed);			
 
 		queueLivestock.Add (currLivestock);

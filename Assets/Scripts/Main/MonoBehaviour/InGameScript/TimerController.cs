@@ -31,6 +31,7 @@ public class TimerController : MonoBehaviour {
 		timerSlider.minValue = 0;
 		timerSlider.maxValue = maxValue;
 		timerSlider.value = maxValue;
+		OnTimeReachZero = null;
 	}
 
 	private IEnumerator Blink()
